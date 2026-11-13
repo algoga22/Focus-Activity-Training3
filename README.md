@@ -13,11 +13,11 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | # | Challenge | Folder | Status |
 |---|---|---|---|
 | 1 | Training plan | [`01-training-plan/`](01-training-plan/) | Draft |
-| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/) | To do |
+| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/) | First draft |
 | 3 | Serious game | [`03-serious-game/`](03-serious-game/) | To do |
 | 4 | Learning by doing (also measures what participants have learned) | [`04-learning-by-doing/`](04-learning-by-doing/) | To do |
 | 5 | Take-home cheat sheet | [`05-take-home/`](05-take-home/) | To do |
-| – | Slides | [`slides/`](slides/) | To do |
+| – | Slides | [`slides/`](slides/) | First draft |
 
 **Final submission:** Monday 16 November 2026, 12:00.
 **Presentation:** 5 minutes + 5 minutes Q&A.
@@ -47,6 +47,7 @@ The full plan is in [`01-training-plan/`](01-training-plan/).
 slides/                 Presentation slides
 docs/                   Evaluation criteria and team notes
 reference/              Bootcamp briefing material
+tools/                  Scripts that generate the PDFs and slides
 ```
 
 ## Open questions for the organisers
