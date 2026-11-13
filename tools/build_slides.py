@@ -1,7 +1,11 @@
 """Build slides/Training3_Slides.pptx (first draft).
 
-Usage: python build_slides.py <output.pptx>   (requires python-pptx)
+Usage: python build_slides.py <output.pptx>   (requires python-pptx and Pillow, macOS for the emoji font)
+Icons are emoji rendered to PNG images, so they look the same in PowerPoint, Keynote and PDF exports.
 """
+import os
+import tempfile
+from PIL import Image, ImageDraw, ImageFont
 import sys
 from pptx import Presentation
 from pptx.util import Inches, Pt
@@ -66,6 +70,28 @@ def box(s, x, y, w, h, fill, t="", size=22, bold=True, color=WHITE, shape=MSO_SH
             r.font.size, r.font.bold, r.font.name = Pt(size), bold, FONT
             r.font.color.rgb = color
     return sh
+
+
+ICON_DIR = tempfile.mkdtemp()
+EMOJI_FONT = ImageFont.truetype("/System/Library/Fonts/Apple Color Emoji.ttc", 160)
+
+
+def emoji_png(ch):
+    path = os.path.join(ICON_DIR, "-".join(f"{ord(c):x}" for c in ch) + ".png")
+    if not os.path.exists(path):
+        im = Image.new("RGBA", (200, 200), (0, 0, 0, 0))
+        ImageDraw.Draw(im).text((100, 100), ch, font=EMOJI_FONT, embedded_color=True, anchor="mm")
+        im.crop(im.getbbox()).save(path)
+    return path
+
+
+def icons(s, x, y, w, h, chars, gap=0.25):
+    """Place one or more emoji icons (list of strings), centred in the (x, y, w, h) area."""
+    n = len(chars)
+    size = min(h, (w - gap * (n - 1)) / n)
+    x0 = x + (w - (n * size + gap * (n - 1))) / 2
+    for i, ch in enumerate(chars):
+        s.shapes.add_picture(emoji_png(ch), Inches(x0 + i * (size + gap)), Inches(y + (h - size) / 2), Inches(size), Inches(size))
 
 
 def title(s, t, color=NAVY):
@@ -155,7 +181,7 @@ cw = 2.75
 for i, (ico, lab) in enumerate(signs):
     x = 0.7 + i * (cw + 0.3)
     box(s, x, 1.9, cw, 3.9, WHITE, "")
-    text(s, x, 2.2, cw, 1.5, ico, size=72, align=PP_ALIGN.CENTER)
+    icons(s, x, 2.35, cw, 1.2, [ico])
     text(s, x + 0.15, 4.0, cw - 0.3, 1.5, lab, size=22, bold=True, align=PP_ALIGN.CENTER)
 text(s, 0.7, 6.2, W - 1.4, 0.6, "Not sure? Treat it as an incident.", size=24, bold=True, color=ALERT, align=PP_ALIGN.CENTER)
 
@@ -163,11 +189,11 @@ text(s, 0.7, 6.2, W - 1.4, 0.6, "Not sure? Treat it as an incident.", size=24, b
 s = new_slide(notes="Analogy: a small fire in a bin is easy to put out. If you close the door and hope, the whole building burns. Incidents are the same: the sooner someone knows, the smaller the damage. Animation: show the small fire first, then the arrow and the big fire.")
 title(s, "Like a fire: act early")
 box(s, 1.2, 2.2, 3.6, 3.0, WHITE, "")
-text(s, 1.2, 2.4, 3.6, 1.6, "🔥", size=60, align=PP_ALIGN.CENTER)
+icons(s, 1.2, 2.55, 3.6, 0.7, ["🔥"])
 text(s, 1.2, 4.0, 3.6, 1.0, "Seen early:\nsmall damage", size=24, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
 box(s, 5.3, 3.3, 2.6, 0.8, SOFT, "time", size=20, color=GREY, shape=MSO_SHAPE.RIGHT_ARROW)
 box(s, 8.4, 2.2, 3.6, 3.0, WHITE, "")
-text(s, 8.4, 2.4, 3.6, 1.6, "🔥🔥🔥", size=60, align=PP_ALIGN.CENTER)
+icons(s, 8.6, 2.5, 3.2, 1.05, ["🔥", "🔥", "🔥"], gap=0.05)
 text(s, 8.4, 4.0, 3.6, 1.0, "Hidden or late:\nbig damage", size=24, bold=True, color=ALERT, align=PP_ALIGN.CENTER)
 
 # 12 – Section: act
@@ -190,10 +216,10 @@ for i, (n, name, desc) in enumerate(four):
 s = new_slide(notes="Disconnecting stops the problem from spreading to other computers and to the NGO's shared files. Don't switch the computer off: the IT helper may need what is on the screen. Demo: show where the Wi-Fi button is on a laptop and a phone.")
 title(s, "Steps 1–2: Stop and disconnect")
 box(s, 0.9, 1.9, 5.6, 4.2, WHITE, "")
-text(s, 0.9, 2.1, 5.6, 1.4, "📶 ✋", size=60, align=PP_ALIGN.CENTER)
+icons(s, 0.9, 2.2, 5.6, 1.3, ["✋", "📶"], gap=0.5)
 text(s, 1.2, 3.8, 5.0, 2.0, "Turn off the Wi-Fi\nUnplug the cable", size=28, bold=True, color=GREEN, align=PP_ALIGN.CENTER)
 box(s, 6.9, 1.9, 5.6, 4.2, WHITE, "")
-text(s, 6.9, 2.1, 5.6, 1.4, "⏻", size=60, color=ALERT, align=PP_ALIGN.CENTER)
+icons(s, 6.9, 2.2, 5.6, 1.3, ["💻", "🚫"], gap=0.5)
 text(s, 7.2, 3.8, 5.0, 2.0, "Don't switch off\nthe computer", size=28, bold=True, color=ALERT, align=PP_ALIGN.CENTER)
 
 # 15 – Report
@@ -211,7 +237,7 @@ items = [("❓", "What\nhappened?"), ("🕒", "When?"), ("👀", "What did\nyou 
 for i, (ico, lab) in enumerate(items):
     x = 0.7 + i * (cw + 0.3)
     box(s, x, 2.0, cw, 3.8, WHITE, "")
-    text(s, x, 2.3, cw, 1.5, ico, size=64, align=PP_ALIGN.CENTER)
+    icons(s, x, 2.4, cw, 1.2, [ico])
     text(s, x, 4.0, cw, 1.4, lab, size=26, bold=True, align=PP_ALIGN.CENTER)
 
 # 17 – Never
@@ -222,7 +248,7 @@ nw = 3.7
 for i, (ico, lab) in enumerate(nevers):
     x = 0.9 + i * (nw + 0.35)
     box(s, x, 1.9, nw, 4.3, WHITE, "")
-    text(s, x, 2.2, nw, 1.6, ico, size=72, align=PP_ALIGN.CENTER)
+    icons(s, x, 2.35, nw, 1.4, [ico])
     text(s, x, 4.1, nw, 1.0, "✗ " + lab, size=36, bold=True, color=ALERT, align=PP_ALIGN.CENTER)
 
 # 18 – Game
@@ -262,13 +288,15 @@ for i, (n, name, _) in enumerate(four):
     y = 1.8 + i * 1.15
     box(s, 0.9, y, 0.9, 0.9, ALERT, n, size=28, shape=MSO_SHAPE.OVAL)
     text(s, 2.0, y, 4.5, 0.9, name, size=30, bold=True, anchor=MSO_ANCHOR.MIDDLE)
-box(s, 7.2, 1.8, 5.2, 4.4, WHITE, "📄\n\nYour cheat sheet\n[Challenge 5]", size=26, color=NAVY)
+box(s, 7.2, 1.8, 5.2, 4.4, WHITE, "")
+icons(s, 7.2, 2.3, 5.2, 1.3, ["📄"])
+text(s, 7.2, 3.9, 5.2, 1.2, "Your cheat sheet\n[Challenge 5]", size=26, bold=True, align=PP_ALIGN.CENTER)
 
 # 22 – Thank you
 s = new_slide(NAVY, "Collect feedback: participants show thumbs up / middle / down (onsite) or use the call reactions (online). Ask for one thing to improve.")
 text(s, 0.9, 2.2, W - 1.8, 1.2, "Thank you!", size=60, bold=True, color=WHITE, align=PP_ALIGN.CENTER)
 text(s, 0.9, 3.6, W - 1.8, 0.8, "How was today?", size=30, color=SOFT, align=PP_ALIGN.CENTER)
-text(s, 0.9, 4.5, W - 1.8, 1.2, "👍   👌   👎", size=54, align=PP_ALIGN.CENTER)
+icons(s, 0.9, 4.6, W - 1.8, 1.0, ["👍", "👌", "👎"], gap=0.8)
 
 prs.save(sys.argv[1])
 print("slides:", len(prs.slides))
