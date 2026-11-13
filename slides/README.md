@@ -1,8 +1,8 @@
 # Slides
 
-**Version 1 (draft):** [`Training3_Slides.pptx`](Training3_Slides.pptx), 22 slides, 16:9, made for PowerPoint.
+**Version 1 (draft):** `Training3_Slides.pptx`, 22 slides, 16:9, made for PowerPoint.
 
-**PDF version (to view on GitHub):** [`Training3_Slides.pdf`](Training3_Slides.pdf). Animations are not visible in the PDF.
+> The presentation files are not stored in this repository. Ask the team for the latest version, or generate the draft with [`tools/build_slides.py`](../tools/build_slides.py).
 
 Guidelines: one slide = one idea, ~3 minutes per slide, visual over text, short sentences with action verbs, limited colour palette, purposeful animations.
 
