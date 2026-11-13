@@ -18,15 +18,15 @@
 - Players must **apply** what they learned, not just remember it.
 - Gives **objective evidence** of understanding (scores, choices made, steps in the right order…).
 
-## Challenge 3 vs Challenge 4
+## Simple examples
 
-| | **Challenge 3 – Serious game** | **Challenge 4 – Learning by doing** |
-|---|---|---|
-| Format | **A game** (rules, points, winners) | **Not a game**: realistic exercise or case study |
-| Scope | **All** learning objectives | **One** key learning objective |
-| Main goal | Check and reinforce what was learned | Practise a skill for the first time |
-| When | End of the session | Middle of the session, right after the theory |
-| Key ingredient | Emotion and fun | Realism (real NGO situation) and debrief |
-| Output | Evidence of who understood what | Participants can do the skill themselves |
+**"Incident race" (card game)**
+Each team gets an incident card (e.g. "Laptop stolen from the car"). They have 2 minutes to put the action cards in the right order (Stop, Disconnect, Report, Write down) and throw away the "wrong move" cards (e.g. "Pay the ransom", "Delete the evidence"). One point for each correct card. Fastest correct team wins.
+
+**"Escape the locked office" (mini escape game)**
+The NGO's computers are locked by a ransom message. To "escape", teams solve 4 short puzzles, one per step of the response. Each correct answer gives a digit of the final code.
+
+**"Who do you call?" (role play)**
+One player is a volunteer who has just found a problem, and the others play the coordinator, a colleague and a "hacker". The volunteer has to take the right steps while the "hacker" tries to push them into a wrong move ("Just pay, it's faster!").
 
 See [evaluation criteria](../docs/evaluation-criteria.md#challenge-3--serious-game).

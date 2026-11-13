@@ -17,6 +17,18 @@ PDF version: [`Training3_Session_Plan.pdf`](Training3_Session_Plan.pdf)
 | 55–60 | Review key points and close | 5' | Hand out the cheat sheet, recap the key messages and collect feedback | **Challenge 5** |
 | | **Total** | **60'** | | |
 
+## Simple examples
+
+**Writing a topic (start with an action verb):**
+- ✅ "Recognise that something has gone wrong"
+- ❌ "Incidents"
+- ✅ "Apply the first steps after an incident"
+- ❌ "Incident response theory"
+
+**Writing a description (say *how*, not just *what*):**
+- ✅ "Short explanation with 3 everyday examples, then participants say which ones are incidents"
+- ❌ "Explain incidents"
+
 ## Evaluation checklist (100 pts)
 
 | Criterion | Points |
