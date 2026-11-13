@@ -8,7 +8,7 @@
 - **Show the trainer clearly** who has understood and which mistakes or misconceptions remain.
 
 ## When in the session
-**38–50 min (12 minutes)**, after the theory and after the hands-on practice (Challenge 4). By this point participants know the content, and the game tests it.
+**26–38 min (12 minutes)**, right after the theory. The game lets participants use what they have just learned in a fun way, before the final case in [Challenge 4](../04-learning-by-doing/).
 
 ## Requirements
 - Covers **all** learning objectives of Training 3.

@@ -13,9 +13,9 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | # | Challenge | Folder | Status |
 |---|---|---|---|
 | 1 | Training plan | [`01-training-plan/`](01-training-plan/) | Draft |
-| 2 | Learner assessment (diagnostic quiz, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/) | To do |
+| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/) | To do |
 | 3 | Serious game | [`03-serious-game/`](03-serious-game/) | To do |
-| 4 | Learning by doing | [`04-learning-by-doing/`](04-learning-by-doing/) | To do |
+| 4 | Learning by doing (also measures what participants have learned) | [`04-learning-by-doing/`](04-learning-by-doing/) | To do |
 | 5 | Take-home cheat sheet | [`05-take-home/`](05-take-home/) | To do |
 | – | Slides | [`slides/`](slides/) | To do |
 
@@ -30,9 +30,8 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | 5–10 | Assess what participants already know | Challenge 2 |
 | 10–18 | Recognise that something has gone wrong | Slides |
 | 18–26 | Apply the first steps | Slides |
-| 26–38 | Practise with a real NGO case | Challenge 4 |
-| 38–50 | Play an incident response game | Challenge 3 |
-| 50–55 | Measure what participants have learned | Challenge 2 |
+| 26–38 | Play an incident response game | Challenge 3 |
+| 38–55 | Practise with a real NGO case and measure what participants have learned | Challenge 4 |
 | 55–60 | Review key points and close | Challenge 5 |
 
 The full plan is in [`01-training-plan/`](01-training-plan/).
@@ -41,9 +40,9 @@ The full plan is in [`01-training-plan/`](01-training-plan/).
 
 ```
 01-training-plan/       Challenge 1 – session plan (what / how long / how)
-02-learner-assessment/  Challenge 2 – diagnostic quiz (before and after)
+02-learner-assessment/  Challenge 2 – diagnostic quiz (start of session)
 03-serious-game/        Challenge 3 – game covering all learning objectives
-04-learning-by-doing/   Challenge 4 – hands-on activity for one key objective
+04-learning-by-doing/   Challenge 4 – hands-on case + measuring learning
 05-take-home/           Challenge 5 – cheat sheet
 slides/                 Presentation slides
 docs/                   Evaluation criteria and team notes

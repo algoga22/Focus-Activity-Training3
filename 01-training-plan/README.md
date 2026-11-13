@@ -11,9 +11,8 @@ PDF version: [`Training3_Session_Plan.pdf`](Training3_Session_Plan.pdf)
 | 5–10 | Assess what participants already know | 5' | Short quiz with 4–5 real-life situations ("What would you do if…?") | **Challenge 2** |
 | 10–18 | Recognise that something has gone wrong | 8' | Explanation with everyday examples (hacked account, virus, email sent to the wrong person, lost laptop) and an analogy: it's like a fire, the sooner you spot it, the less damage it does | Slides |
 | 18–26 | Apply the first steps | 8' | One easy-to-remember rule, e.g. **Stop, Disconnect, Report, Write down**. What to do and what NOT to do (don't delete anything, don't hide it, don't pay) | Slides |
-| 26–38 | Practise with a real NGO case | 12' | In groups: one concrete case, they decide the steps, then share with everyone (8' group work + 4' debrief) | **Challenge 4** |
-| 38–50 | Play an incident response game | 12' | The game that brings together all the learning objectives | **Challenge 3** |
-| 50–55 | Measure what participants have learned | 5' | Run the same quiz again to compare with the start | **Challenge 2** |
+| 26–38 | Play an incident response game | 12' | The game that brings together all the learning objectives | **Challenge 3** |
+| 38–55 | Practise with a real NGO case and measure what participants have learned | 17' | Each participant first answers a realistic case alone on a short sheet (this shows what they have learned), then groups compare answers and the trainer runs the debrief (5' alone + 6' in groups + 6' debrief) | **Challenge 4** |
 | 55–60 | Review key points and close | 5' | Hand out the cheat sheet, recap the key messages and collect feedback | **Challenge 5** |
 | | **Total** | **60'** | | |
 

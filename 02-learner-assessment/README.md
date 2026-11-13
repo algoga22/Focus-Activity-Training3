@@ -1,6 +1,8 @@
 # Challenge 2 – Learner assessment
 
-Diagnostic quiz measuring what participants already know, their misconceptions and what they can do, against ALL learning objectives. Max 5 minutes. Must work online and onsite. Run it again at the end to measure progress.
+Diagnostic quiz measuring what participants already know, their misconceptions and what they can do, against ALL learning objectives. Max 5 minutes. Must work online and onsite.
+
+It is run **once, at the start of the session (5–10 min)**. What participants have learned is measured at the end with the case in [Challenge 4](../04-learning-by-doing/).
 
 ## Simple examples
 
