@@ -12,3 +12,12 @@ slides/latex/*.out
 slides/latex/*.snm
 slides/latex/*.toc
 slides/latex/*.vrb
+03-serious-game/concept/*.aux
+03-serious-game/concept/*.fdb_latexmk
+03-serious-game/concept/*.fls
+03-serious-game/concept/*.log
+03-serious-game/concept/*.nav
+03-serious-game/concept/*.out
+03-serious-game/concept/*.snm
+03-serious-game/concept/*.toc
+03-serious-game/concept/*.vrb

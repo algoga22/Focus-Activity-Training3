@@ -1,0 +1,388 @@
+% "Put out the fire" – concept deck for Challenge 3 (serious game)
+% Reuses the theme of the main slides. Build from this folder:
+%   latexmk -lualatex game-concept.tex
+\documentclass[aspectratio=169,11pt,t]{beamer}
+\usepackage{../../slides/latex/beamerthemefocus}
+\usetikzlibrary{arrows.meta}
+
+\sessionpart{5}{26}{41}
+
+% ---- Helpers ----
+% \statement{<colour>}{<icon>}{<text>}: card with an icon badge (same as in the main slides)
+\newcommand\statement[3]{%
+  \begin{card}[left=2.5mm, top=1.4mm, bottom=1.4mm]
+    \iconbadge[7mm]{#1}{\small#2}\hspace{2.5mm}\begin{minipage}[c]{\dimexpr\linewidth-10mm\relax}\raggedright\mediumfont\scriptsize #3\end{minipage}
+  \end{card}\vspace{-1.5mm}}
+% \bigicon{<size pt>}{<colour>}{<icon>}
+\newcommand\bigicon[3]{{\fontsize{#1}{#1}\selectfont\color{#2}#3}}
+% \kicker{<colour>}{<text>}: small uppercase label
+\newcommand\kicker[2]{{\kickerfont\fontsize{6.5}{8}\selectfont\color{#1}\MakeUppercase{#2}}}
+% \firebar{<width mm>}{<level 0-100>}: fire meter
+\newcommand\firebar[2]{%
+  \tikz[x=1mm,y=1mm,baseline=-.5mm]{
+    \fill[soft, rounded corners=.7mm] (0,0) rectangle (#1,1.8);
+    \fill[alert, rounded corners=.7mm] (0,0) rectangle ({#1*#2/100},1.8);}}
+% \room{<x>}{<y>}{<icon>}{<name>}{<level>}{<incident>}: one room of the NGO map (inside a tikzpicture in mm)
+\newcommand\room[6]{%
+  \pgfmathsetmacro\lvl{#5}
+  \ifdim\lvl pt>99pt
+    \draw[alert, fill=alert!12, rounded corners=2mm, line width=.6mm] (#1,#2) rectangle ++(36,23);
+    \node[text=alert, font=\fontsize{15}{15}\selectfont] at ({#1+30},{#2+17}) {\faFire};
+  \else
+    \draw[softdark, fill=white, rounded corners=2mm, line width=.6mm] (#1,#2) rectangle ++(36,23);
+  \fi
+  \node[text=navy, font=\Large] at ({#1+18},{#2+16.5}) {#3};
+  \node[font=\headfont\scriptsize, text=navy] at ({#1+18},{#2+10.5}) {#4};
+  \node[font=\tiny, text=muted] at ({#1+18},{#2+7}) {#6};
+  \fill[soft, rounded corners=.6mm] ({#1+5},{#2+2.5}) rectangle ++(26,1.8);
+  \ifdim\lvl pt>0pt \fill[alert, rounded corners=.6mm] ({#1+5},{#2+2.5}) rectangle ++({26*#5/100},1.8);\fi}
+% \phasecard{<n>}{<colour>}{<icon>}{<name>}{<objective>}{<example>}
+\newcommand\phasecard[6]{%
+  \begin{card}[equal height group=phases, before upper=\centering, left=2mm, right=2mm, top=1.8mm, bottom=1.8mm]
+    \iconbadge[6.5mm]{#2}{\small#3}\hspace{1.5mm}\kicker{#2}{Phase #1}\par\vspace{1mm}
+    {\headfont\small\color{navy}#4\par}\vspace{1mm}
+    \pill{#2}{\scriptsize #5}\par\vspace{1mm}
+    {\scriptsize\color{muted}#6\par}
+  \end{card}}
+% \trap{<icon>}{<text>}{<rotation>}: one "petrol" card
+\newcommand\trap[3]{%
+  \tikz{\node[rotate=#3, draw=alert, line width=.5mm, fill=white, rounded corners=2mm,
+     minimum width=19mm, minimum height=27mm, align=center, inner sep=1mm]
+     {\bigicon{8}{alert}{\faGasPump}\\[2mm]\bigicon{16}{navy}{#1}\\[2mm]
+      \parbox{17mm}{\centering\scriptsize\mediumfont\color{navy}#2}};}}
+% \criterion{<colour>}{<icon>}{<criterion>}{<how>}: one column card
+\newcommand\criterion[4]{%
+  \begin{card}[equal height group=criteria, before upper=\centering, left=1.8mm, right=1.8mm, top=2.5mm, bottom=2.5mm]
+    \iconbadge[8mm]{#1}{#2}\par\vspace{2mm}
+    {\headfont\scriptsize\color{navy}#3\par}\vspace{1.5mm}
+    {\scriptsize\color{muted}#4\par}
+  \end{card}}
+% \cardtitle{<colour>}{<icon>}{<title>}: icon badge with the title next to it (no odd wrapping)
+\newcommand\cardtitle[3]{%
+  \iconbadge[8mm]{#1}{#2}\hspace{2mm}\begin{minipage}[c]{\dimexpr\linewidth-11mm\relax}\raggedright\headfont\color{navy}#3\end{minipage}}
+
+\title{Put out the fire}
+
+\begin{document}
+
+% ---------- 1 · Title ----------
+{\darkslide
+\begin{frame}[plain,c]
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}CHALLENGE 3 \textbullet{} SERIOUS GAME \textbullet{} CONCEPT}\par\vspace{4mm}
+  \begin{minipage}{105mm}\raggedright
+    {\headfont\fontsize{32}{37}\selectfont Put out\\ the fire\par}\par\vspace{4mm}
+    {\lightfont\fontsize{14}{18}\selectfont\color{soft} An incident is like a fire.\\In this game, it really is one.}\par\vspace{8mm}
+    \pill{alert}{\faClock[regular]\ 15 minutes}\hspace{1.5mm}%
+    \pill{white!15!navy}{\faMobile*\ Phone + trainer screen}\hspace{1.5mm}%
+    \pill{white!15!navy}{\faUserSlash\ No accounts}
+  \end{minipage}
+\end{frame}
+}
+
+% ---------- 2 · The idea ----------
+\begin{frame}{The analogy becomes the rule}{The idea in one slide}
+  \vspace{7mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.42\textwidth}
+    {\mediumfont\color{muted}In the slides we say:}\par\vspace{1mm}
+    {\headfont\large\color{navy}“The sooner you spot it, the less damage it does.”}\par\vspace{5mm}
+    {\mediumfont\color{muted}In the game:}\par\vspace{1mm}
+    {\headfont\large\color{alert}Every second you wait, the fire grows.}\par\vspace{4mm}
+    {\small Players do not memorise the lesson: they \textbf{feel} it.}
+    \column{.54\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1mm,y=1mm]
+      \draw[softdark, line width=.8mm, -{Stealth[length=3mm]}] (0,0) -- (70,0);
+      \foreach \x/\s/\t/\d in {8/14/1 minute/Small damage, 33/28/1 hour/More damage, 60/46/Monday/Big damage}{
+        \node[anchor=south, text=alert, font=\fontsize{\s}{\s}\selectfont] at (\x,1.5) {\faFire};
+        \node[font=\headfont\scriptsize, text=navy] at (\x,-4) {\t};
+        \node[font=\tiny, text=muted] at (\x,-7.5) {\d};
+      }
+      \node[font=\scriptsize, text=muted, anchor=west] at (0,-13) {\faClock[regular]\ time since the incident started};
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ---------- 3 · Set-up ----------
+\begin{frame}{Zero set-up}{How people join}
+  \vspace{5mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.5\textwidth}
+    \centering
+    \begin{tikzpicture}[x=.78mm,y=.78mm]
+      % trainer screen
+      \draw[navy, fill=navydark, rounded corners=2mm, line width=.6mm] (0,8) rectangle (52,40);
+      \fill[navy] (22,8) rectangle (30,4); \fill[navy, rounded corners=1mm] (16,3) rectangle (36,5);
+      \foreach \x/\y/\l in {4/25/20, 27/25/60, 4/12/0, 27/12/100}{
+        \fill[white, opacity=.12, rounded corners=1mm] (\x,\y) rectangle ++(21,11);
+        \fill[white, opacity=.25, rounded corners=.4mm] ({\x+2},{\y+1.5}) rectangle ++(17,1.2);
+        \ifnum\l>0 \fill[alert, rounded corners=.4mm] ({\x+2},{\y+1.5}) rectangle ++({17*\l/100},1.2);\fi
+      }
+      \node[text=alert, font=\large] at (37.5,19) {\faFire};
+      \node[text=white, font=\small] at (14.5,31) {\faLaptop};
+      \node[text=white, font=\small] at (37.5,31) {\faMobile*};
+      \node[text=white, font=\small] at (14.5,18) {\faAddressBook};
+      \node[font=\headfont\scriptsize, text=navy] at (26,-1) {Trainer screen};
+      % phones
+      \foreach \x/\y in {62/30, 74/20, 62/8}{
+        \draw[navy, fill=white, rounded corners=1.5mm, line width=.5mm] (\x,\y) rectangle ++(9,15);
+        \fill[alert, rounded corners=.3mm] ({\x+1.5},{\y+11.5}) rectangle ++(4,1);
+        \foreach \k in {0,1,2} \fill[soft, rounded corners=.3mm] ({\x+1.5},{\y+2.5+\k*2.8}) rectangle ++(6,2);
+        \draw[softdark, dashed, line width=.3mm, -{Stealth}] ({\x-1},{\y+7.5}) -- (54,24);
+      }
+      \node[font=\headfont\scriptsize, text=navy] at (73,3) {Players' phones};
+    \end{tikzpicture}
+    \column{.47\textwidth}
+    \statement{navy}{\faQrcode}{Scan the QR code \textbf{(same app as the quiz)}; online, the link goes in the chat}
+    \statement{good}{\faUserSlash}{No account, no download, no login}
+    \statement{alert}{\faStopwatch}{Rules in 30 seconds: \textit{“Put out the fire before it spreads.”}}
+  \end{columns}
+\end{frame}
+
+% ---------- 4 · The NGO map ----------
+\begin{frame}{Our NGO is on fire}{The board}
+  \vspace{6mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.6\textwidth}
+    \centering
+    \begin{tikzpicture}[x=.94mm,y=.8mm]
+      \draw[navy, line width=.9mm, rounded corners=3mm] (-3,-3) rectangle (79,52);
+      \node[fill=paper, inner xsep=2mm, font=\headfont\scriptsize, text=navy] at (38,52) {\faHome\ \ OUR NGO};
+      \room{0}{26}{\faLaptop}{Office computers}{0}{Ransom message}
+      \room{40}{26}{\faMobile*}{Work phones}{100}{Phone lost on the bus}
+      \room{0}{0}{\faFacebookF}{Social media}{35}{Strange posts}
+      \room{40}{0}{\faAddressBook}{Beneficiary data}{0}{List sent to the wrong person}
+    \end{tikzpicture}
+    \column{.36\textwidth}
+    \statement{navy}{\faMapMarked*}{\textbf{4 rooms = 4 rounds}, one real NGO incident in each}\vspace{1mm}
+    \statement{alert}{\faFire}{Each room has a \textbf{fire meter}}\vspace{1mm}
+    \statement{good}{\faTrophy}{Goal: \textbf{save as many rooms as possible}}
+  \end{columns}
+\end{frame}
+
+% ---------- 5 · One round = 4 phases ----------
+\begin{frame}{One round = the 4 steps}{How a round works}
+  \vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.235\textwidth}\phasecard{1}{navy}{\faSearch}{Is it a fire?}{Recognise}{Which of these 3 situations are incidents?}
+    \column{.235\textwidth}\phasecard{2}{alert}{\faPlug}{Cut the fire}{Stop \& disconnect}{What do you do in the first minute?}
+    \column{.235\textwidth}\phasecard{3}{navy}{\faPhoneVolume}{Call the firefighters}{Report}{Friday 18:00, the coordinator has gone. Who now?}
+    \column{.235\textwidth}\phasecard{4}{good}{\faClipboardList}{Fire report}{Write down}{Tick what is useful to write down}
+  \end{columns}
+  \vspace{2mm}
+  \centering
+  \tikz\node[fill=alert!12, rounded corners=2mm, inner xsep=4mm, inner ysep=1.6mm, font=\small, text=navy]
+    {\textcolor{alert}{\faGasPump}\ \ Every phase hides \textbf{trap cards} \(\rightarrow\) objective 5: \textbf{avoid the classic mistakes}};
+\end{frame}
+
+% ---------- 6 · The fire meter ----------
+\begin{frame}{The fire meter}{The core mechanic}
+  \vspace{5mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.58\textwidth}
+    \begin{tikzpicture}[x=.9mm,y=.74mm]
+      % axes
+      \draw[softdark, line width=.4mm, -{Stealth}] (0,0) -- (78,0) node[below left, font=\tiny, text=muted] {seconds};
+      \draw[softdark, line width=.4mm, -{Stealth}] (0,0) -- (0,48) node[above right, font=\tiny, text=muted] {fire};
+      \draw[alert, dashed, line width=.3mm] (0,42) -- (74,42) node[above left, font=\headfont\tiny, text=alert] {100\% = the room burns};
+      % "do nothing" line
+      \draw[softdark, dashed, line width=.5mm] (0,4) -- (60,42);
+      \node[font=\tiny, text=muted, rotate=30] at (46,37.5) {if you wait\dots};
+      % real game
+      \draw[navy, line width=.8mm, line join=round]
+        (0,4) -- (14,12) -- (14,4) -- (26,11) -- (26,26) -- (38,33) -- (38,20) -- (52,28) -- (52,16) -- (72,25);
+      \node[circle, fill=good, text=white, inner sep=.6mm, font=\tiny] at (14,-4) {\faCheck};
+      \node[circle, fill=alert, text=white, inner sep=.6mm, font=\tiny] at (26,-4) {\faGasPump};
+      \node[circle, fill=good, text=white, inner sep=.6mm, font=\tiny] at (38,-4) {\faCheck};
+      \node[circle, fill=good, text=white, inner sep=.6mm, font=\tiny] at (52,-4) {\faCheck};
+      \foreach \x in {14,26,38,52} \draw[soft, line width=.3mm] (\x,-1.5) -- (\x,0);
+      \node[font=\tiny, text=muted] at (36,-10) {\textcolor{good}{\faCheckCircle}\ right answer\qquad\textcolor{alert}{\faGasPump}\ trap card};
+    \end{tikzpicture}
+    \column{.38\textwidth}
+    \statement{alert}{\faClock[regular]}{The fire \textbf{grows every second}: waiting costs}\vspace{1mm}
+    \statement{good}{\faFireExtinguisher}{Right answer: \textbf{the fire goes down}}\vspace{1mm}
+    \statement{alert}{\faGasPump}{Trap card: \textbf{petrol}, the fire jumps up}
+  \end{columns}
+\end{frame}
+
+% ---------- 7 · Trap cards ----------
+\begin{frame}{Trap cards = petrol}{Objective 5: avoid the classic mistakes}
+  \vspace{6mm}
+  \centering
+  \trap{\faMoneyBillWave}{Pay the ransom}{4}\hspace{1mm}%
+  \trap{\faRedo}{Restart and see}{-3}\hspace{1mm}%
+  \trap{\faTrash*}{Delete the email}{2}\hspace{1mm}%
+  \trap{\faCalendar*}{Wait until Monday}{-4}\hspace{1mm}%
+  \trap{\faShare}{Forward it to everyone}{3}\hspace{1mm}%
+  \trap{\faEyeSlash}{Say nothing}{-2}
+  \par\vspace{4mm}
+  {\small They look like the right move.\\
+  \textbf{They are the same misconceptions as in the quiz (Challenge 2):}\\
+  if someone still picks them, the trainer sees it straight away.\par}
+\end{frame}
+
+% ---------- 8 · Surprises ----------
+\begin{frame}{Two surprises}{Keep the tension up}
+  \vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \begin{card}[equal height group=surprise, top=2.5mm, bottom=2.5mm]
+      \cardtitle{alert}{\faFire}{The fire spreads}\par\vspace{1.5mm}
+      {\footnotesize If a room reaches 100\,\%, the next round \textbf{starts with its fire at 30\,\%}.\par}\vspace{1.5mm}
+      \centering
+      \begin{tikzpicture}[x=1mm,y=1mm]
+        \foreach \x/\i/\l in {0/\faFacebookF/100, 22/\faEnvelope/30, 44/\faAddressBook/30}{
+          \node[circle, fill=navy, text=white, minimum size=9mm] at (\x,0) {\i};
+          \node at (\x,-8) {\firebar{12}{\l}};
+        }
+        \draw[alert, line width=.6mm, -{Stealth}] (6,0) -- (16,0);
+        \draw[alert, line width=.6mm, -{Stealth}] (28,0) -- (38,0);
+      \end{tikzpicture}\par
+      {\tiny\color{muted}Hacked Facebook \(\rightarrow\) email \(\rightarrow\) beneficiary data}
+    \end{card}
+    \column{.48\textwidth}
+    \begin{card}[equal height group=surprise, top=2.5mm, bottom=2.5mm]
+      \cardtitle{navy}{\faUserSecret}{The “hacker” calls}\par\vspace{1.5mm}
+      {\footnotesize Mid-round, this pops up on the phone:\par}\vspace{1.5mm}
+      \tikz\node[fill=soft, rounded corners=2mm, inner sep=2mm, text width=52mm, font=\footnotesize\itshape, text=navy]
+        {\faCommentDots\ “Hi, it's Anna from management. Pay now and don't tell anyone.”\par};\par\vspace{1.5mm}
+      {\footnotesize\textcolor{good}{\faCheckCircle}\ \textbf{Report it:} fire goes down\par
+       \textcolor{alert}{\faGasPump}\ \textbf{Obey:} petrol\par}
+    \end{card}
+  \end{columns}
+\end{frame}
+
+% ---------- 9 · What each person sees ----------
+\begin{frame}{What each person sees}{Phone and trainer screen}
+  \vspace{5mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.36\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1mm,y=.8mm]
+      \draw[navy, fill=white, rounded corners=4mm, line width=.9mm] (0,0) rectangle (36,52);
+      \fill[navy, rounded corners=.8mm] (14,49.5) rectangle (22,50.7);
+      \node[anchor=west, font=\tiny, text=alert] at (3,45.5) {\faFire};
+      \node[anchor=west] at (6.5,45.5) {\firebar{25}{55}};
+      \node[anchor=west] at (3,40.5) {\kicker{alert}{Phase 2}};
+      \node[anchor=north west, text width=31mm, font=\tiny\mediumfont, text=navy] at (2.5,37.5)
+        {A ransom message fills the screen. What do you do first?};
+      \foreach \y/\t/\c in {23/Pay the €500/soft, 15.5/Disconnect and stop/soft, 8/Restart the computer/soft}
+        \node[fill=\c, rounded corners=1.5mm, minimum width=30mm, minimum height=4.5mm, font=\tiny, text=navy] at (18,\y) {\t};
+      \node[font=\tiny, text=muted] at (18,3) {\faClock[regular]\ 0:12};
+    \end{tikzpicture}\par
+    {\headfont\scriptsize\color{navy}Each player's phone}
+    \column{.6\textwidth}
+    \centering
+    \begin{tikzpicture}[x=.9mm,y=.82mm]
+      \draw[navy, fill=navydark, rounded corners=2mm, line width=.8mm] (0,0) rectangle (84,50);
+      \node[anchor=west, font=\headfont\scriptsize, text=white] at (4,45) {Round 2 \textbullet{} Work phones};
+      \node[anchor=east, font=\headfont\scriptsize, text=alert] at (80,45) {\faFire\ 55\,\%};
+      % mini map
+      \foreach \x/\y/\i/\l in {4/22/\faLaptop/0, 26/22/\faMobile*/55, 4/4/\faFacebookF/20, 26/4/\faAddressBook/0}{
+        \fill[white, opacity=.12, rounded corners=1.5mm] (\x,\y) rectangle ++(20,16);
+        \node[text=white] at ({\x+10},{\y+10}) {\i};
+        \fill[white, opacity=.25, rounded corners=.4mm] ({\x+3},{\y+3}) rectangle ++(14,1.4);
+        \ifnum\l>0 \fill[alert, rounded corners=.4mm] ({\x+3},{\y+3}) rectangle ++({14*\l/100},1.4);\fi
+      }
+      % live panel
+      \fill[white, opacity=.08, rounded corners=1.5mm] (50,4) rectangle (80,38);
+      \node[anchor=west, font=\tiny, text=soft] at (52,34.5) {LIVE ANSWERS};
+      \node[anchor=west, font=\headfont\large, text=white] at (52,28.5) {14\,/\,18};
+      \foreach \y/\t/\n/\c in {21/Disconnect/10/good, 15/Restart/3/alert, 9/Pay/1/alert}{
+        \node[anchor=west, font=\tiny, text=white] at (52,\y+2.6) {\t};
+        \fill[\c, rounded corners=.4mm] (52,\y-1) rectangle ++({2.1*\n},1.6);
+        \node[anchor=west, font=\tiny, text=white] at ({53+2.1*\n},\y-.2) {\n};
+      }
+    \end{tikzpicture}\par
+    {\headfont\scriptsize\color{navy}Trainer screen (projected or shared)}
+  \end{columns}
+\end{frame}
+
+% ---------- 10 · Evidence ----------
+\begin{frame}{Objective evidence}{What the trainer gets at the end}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.56\textwidth}
+    {\headfont\small\color{navy}\% correct per objective}\par\vspace{1mm}
+    \begin{tikzpicture}[x=1mm,y=.32mm]
+      \draw[softdark, line width=.3mm] (0,0) -- (72,0);
+      \foreach \i/\lab/\q/\g in {0/Recognise/45/85, 1/Disconnect/50/90, 2/Report/40/80, 3/Write down/35/70, 4/Avoid traps/55/85}{
+        \pgfmathsetmacro\x{\i*14+3}
+        \fill[softdark] (\x,0) rectangle ++(4.5,\q);
+        \fill[navy] ({\x+5},0) rectangle ++(4.5,\g);
+        \node[font=\tiny, text=muted] at ({\x+4.75},-7) {\lab};
+        \node[font=\tiny, text=navy, anchor=south] at ({\x+7.25},\g) {\g};
+      }
+    \end{tikzpicture}\par\vspace{1mm}
+    {\tiny\textcolor{softdark}{\faSquare}\ Quiz at the start (Ch.~2)\quad \textcolor{navy}{\faSquare}\ Game\quad \color{muted}\textit{(sample data)}}
+    \column{.4\textwidth}
+    {\headfont\small\color{navy}Most chosen trap cards}\par\vspace{2mm}
+    \begin{tikzpicture}[x=1mm,y=1mm]
+      \foreach \y/\t/\n in {0/Restart and see/6, -10/Wait until Monday/4, -20/Delete the email/2}{
+        \node[anchor=west, font=\scriptsize, text=navy] at (0,\y+3.5) {\textcolor{alert}{\faGasPump}\ \t};
+        \fill[alert, rounded corners=.5mm] (0,\y-1) rectangle ++({5*\n},2);
+        \node[anchor=west, font=\tiny, text=alert] at ({1+5*\n},\y) {\n\ people};
+      }
+    \end{tikzpicture}\par\vspace{3mm}
+    \statement{good}{\faChartLine}{Same objectives as the quiz: \textbf{progress is visible}}
+  \end{columns}
+\end{frame}
+
+% ---------- 11 · Individual or the whole room? ----------
+\begin{frame}{Individual or the whole room?}{To decide}
+  \vspace{6mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \begin{card}[equal height group=modes, top=2.5mm, bottom=2mm]
+      \cardtitle{navy}{\faUser}{Everyone has their own fire}\par\vspace{2mm}
+      \begin{itemize}\scriptsize\setlength\itemsep{0pt}
+        \item Each phone shows the player's own fire meter
+        \item Leaderboard: who saved the most rooms
+        \item[\textcolor{good}{\faPlus}] More competition and adrenaline
+        \item[\textcolor{alert}{\faMinus}] Weaker players may switch off
+      \end{itemize}
+    \end{card}
+    \column{.48\textwidth}
+    \begin{card}[equal height group=modes, top=2.5mm, bottom=2mm]
+      \cardtitle{alert}{\faUsers}{One fire for the whole room}\par\vspace{2mm}
+      \begin{itemize}\scriptsize\setlength\itemsep{0pt}
+        \item The fire goes down with the share of right answers
+        \item Every trap card picked is petrol for everyone
+        \item[\textcolor{good}{\faPlus}] Fits the quiz's “response team” idea
+        \item[\textcolor{alert}{\faMinus}] Less individual pressure
+      \end{itemize}
+    \end{card}
+  \end{columns}
+  \vspace{3mm}\centering
+  {\scriptsize\color{muted}\faInfoCircle\ Both modes record \textbf{each person's answers}: same evidence.}
+\end{frame}
+
+% ---------- 12 · 15 minutes ----------
+\begin{frame}{It fits in 15 minutes}{Timing}
+  \vspace{8mm}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \def\L{132}
+    \foreach \s/\e/\c/\t in {0/1/softdark/\faBook, 1/3.5/alert/Round 1, 3.5/6/alert/Round 2, 6/8.5/alert/Round 3, 8.5/11/alert/Round 4, 11/15/navy/Debrief}{
+      \fill[\c, rounded corners=1.2mm] ({\s*\L/15+.5},0) rectangle ({\e*\L/15-.5},9);
+      \node[font=\headfont\scriptsize, text=white] at ({(\s+\e)/2*\L/15},4.5) {\t};
+    }
+    \foreach \t in {0,1,3.5,6,8.5,11,15} \node[font=\tiny, text=muted] at ({\t*\L/15},-3) {\t'};
+    \node[anchor=north, align=center, font=\scriptsize, text=navy] at ({.5*\L/15},-7) {\textbf{Rules}\\30 s +\\example};
+    \node[anchor=north, align=center, font=\scriptsize, text=navy] at ({6*\L/15},-7) {\faStopwatch\ 4 phases \texttimes{} \(\sim\)35 s each\\(+ surprises)};
+    \node[anchor=north, align=center, font=\scriptsize, text=navy] at ({13*\L/15},-7) {\faChartBar\ Show the results\\and explain the traps};
+  \end{tikzpicture}
+\end{frame}
+
+% ---------- 13 · Evaluation criteria ----------
+\begin{frame}{How it scores on the criteria}{Challenge 3 \textbullet{} 5 \texttimes{} 20 points}
+  \vspace{5mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.188\textwidth}\criterion{navy}{\faBullseye}{Applies the objectives}{Players act on the 4 steps in real NGO incidents}
+    \column{.188\textwidth}\criterion{good}{\faEye}{Observable evidence}{Fire meter and rooms saved, live for everyone}
+    \column{.188\textwidth}\criterion{alert}{\faLightbulb}{Originality}{The training's fire analogy becomes the mechanic}
+    \column{.188\textwidth}\criterion{navy}{\faStopwatch}{Clear rules, quick set-up}{Rules in 30 s; same QR app as the quiz}
+    \column{.188\textwidth}\criterion{good}{\faChartBar}{Objective indicators}{\% correct per objective + most chosen traps}
+  \end{columns}
+\end{frame}
+
+\end{document}
