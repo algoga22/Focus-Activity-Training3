@@ -27,6 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Stamp the version on CSS/JS links (so browsers never use an old cached copy)
+        run: find quiz -type f \( -name '*.html' -o -name '*.js' \) -exec sed -i "s/__V__/${GITHUB_SHA::7}/g" {} +
       - uses: actions/upload-pages-artifact@v3
         with:
           path: quiz

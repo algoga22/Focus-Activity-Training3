@@ -1,7 +1,7 @@
-import { connect, DEMO, escapeHtml as esc } from './backend.js';
-import { QUESTIONS, normalise } from './questions.js';
-import { SCENES } from './scenes.js';
-import { wordmark, avatar, cyberName, TRAINING, BOOTCAMP } from './brand.js';
+import { connect, DEMO, escapeHtml as esc } from './backend.js?v=__V__';
+import { QUESTIONS, normalise } from './questions.js?v=__V__';
+import { SCENES } from './scenes.js?v=__V__';
+import { wordmark, avatar, cyberName, TRAINING, BOOTCAMP } from './brand.js?v=__V__';
 
 const params = new URLSearchParams(location.search);
 const app = document.getElementById('app');

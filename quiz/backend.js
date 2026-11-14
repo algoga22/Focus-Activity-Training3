@@ -1,6 +1,6 @@
 // Real-time backend: Firebase Realtime Database with anonymous sign-in (participants never see an account),
 // or a local demo backend (localStorage + BroadcastChannel) that works between tabs of the same browser.
-import { firebaseConfig } from './firebase-config.js';
+import { firebaseConfig } from './firebase-config.js?v=__V__';
 
 const params = new URLSearchParams(location.search);
 export const DEMO = params.has('demo') || !firebaseConfig.apiKey;

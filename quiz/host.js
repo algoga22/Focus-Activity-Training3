@@ -1,7 +1,7 @@
-import { connect, DEMO, escapeHtml as esc } from './backend.js';
-import { QUESTIONS, MAX_POINTS, score } from './questions.js';
-import { SCENES } from './scenes.js';
-import { wordmark, avatar, TRAINERS, TRAINING, BOOTCAMP } from './brand.js';
+import { connect, DEMO, escapeHtml as esc } from './backend.js?v=__V__';
+import { QUESTIONS, MAX_POINTS, score } from './questions.js?v=__V__';
+import { SCENES } from './scenes.js?v=__V__';
+import { wordmark, avatar, TRAINERS, TRAINING, BOOTCAMP } from './brand.js?v=__V__';
 
 const QUESTION_SECONDS = 60;
 const HURRY_SECONDS = 10;
