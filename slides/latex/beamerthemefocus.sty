@@ -60,8 +60,8 @@
       at (148,80.5) {\textcolor{alert}{\faClock[regular]}\ \focus@from\textendash\focus@to\ min};
     % segmented progress bar of the whole session
     \foreach \s/\e/\c [count=\i] in \focus@parts {
-      \pgfmathsetmacro\xa{12+\s*126/60+0.35}
-      \pgfmathsetmacro\xb{12+\e*126/60-0.35}
+      \pgfmathsetmacro\xa{12+\s*130/60+0.35}
+      \pgfmathsetmacro\xb{12+\e*130/60-0.35}
       \ifnum\i<\focus@current
         \fill[navy!70, rounded corners=.5mm] (\xa,5) rectangle (\xb,6.2);
       \else\ifnum\i=\focus@current
