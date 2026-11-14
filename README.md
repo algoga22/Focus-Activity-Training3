@@ -30,8 +30,8 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | 5–10 | Assess what participants already know | Challenge 2 |
 | 10–18 | Recognise that something has gone wrong | Slides |
 | 18–26 | Apply the first steps | Slides |
-| 26–38 | Play an incident response game | Challenge 3 |
-| 38–55 | Practise with a real NGO case and measure what participants have learned | Challenge 4 |
+| 26–41 | Play an incident response game | Challenge 3 |
+| 41–55 | Practise with a real NGO case and measure what participants have learned | Challenge 4 |
 | 55–60 | Review key points and close | Challenge 5 |
 
 The full plan is in [`01-training-plan/`](01-training-plan/).

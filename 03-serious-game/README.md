@@ -8,7 +8,7 @@
 - **Show the trainer clearly** who has understood and which mistakes or misconceptions remain.
 
 ## When in the session
-**26–38 min (12 minutes)**, right after the theory. The game lets participants use what they have just learned in a fun way, before the final case in [Challenge 4](../04-learning-by-doing/).
+**26–41 min (15 minutes)**, right after the theory. The game lets participants use what they have just learned in a fun way, before the final case in [Challenge 4](../04-learning-by-doing/).
 
 ## Requirements
 - Covers **all** learning objectives of Training 3.

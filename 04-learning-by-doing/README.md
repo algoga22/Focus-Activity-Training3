@@ -9,10 +9,10 @@
 - **Build autonomy:** after the exercise they can do it alone in real life.
 
 ## When in the session
-**38–55 min (17 minutes)**, after the theory and the game ([Challenge 3](../03-serious-game/)):
+**41–55 min (14 minutes)**, after the theory and the game ([Challenge 3](../03-serious-game/)):
 - **5'** alone: each participant answers the case on a short sheet
-- **6'** in groups: compare answers and agree on the best response
-- **6'** debrief: correct steps, common mistakes and comparison with the start
+- **5'** in groups: compare answers and agree on the best response
+- **4'** debrief: correct steps, common mistakes and comparison with the start
 
 ## Requirements
 - **Not a game.** Use a group debate, an exercise or a case analysis.

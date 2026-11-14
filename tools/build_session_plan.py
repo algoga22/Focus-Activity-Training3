@@ -18,8 +18,8 @@ rows = [
  ("5–10","Assess what participants already know","5'","Short quiz with 4–5 real-life situations (\"What would you do if…?\")","<b>Challenge 2</b>"),
  ("10–18","Recognise that something has gone wrong","8'","Explanation with everyday examples (hacked account, virus, email sent to the wrong person, lost laptop) and an analogy: it's like a fire, the sooner you spot it, the less damage it does","Slides"),
  ("18–26","Apply the first steps","8'","One easy-to-remember rule, e.g. <b>Stop, Disconnect, Report, Write down</b>. What to do and what NOT to do (don't delete anything, don't hide it, don't pay)","Slides"),
- ("26–38","Play an incident response game","12'","The game that brings together all the learning objectives","<b>Challenge 3</b>"),
- ("38–55","Practise with a real NGO case and measure what participants have learned","17'","Each participant first answers a realistic case alone on a short sheet (this shows what they have learned), then groups compare answers and the trainer runs the debrief (5' alone + 6' in groups + 6' debrief)","<b>Challenge 4</b>"),
+ ("26–41","Play an incident response game","15'","The game that brings together all the learning objectives","<b>Challenge 3</b>"),
+ ("41–55","Practise with a real NGO case and measure what participants have learned","14'","Each participant first answers a realistic case alone on a short sheet (this shows what they have learned), then groups compare answers and the trainer runs the debrief (5' alone + 5' in groups + 4' debrief)","<b>Challenge 4</b>"),
  ("55–60","Review key points and close","5'","Hand out the cheat sheet, recap the key messages and collect feedback","<b>Challenge 5</b>"),
 ]
 data = [[P(h, head) for h in ("Min","Topic (What?)","Duration","Description (How?)","Challenge")]]
