@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "rooms": {
+      "$code": {
+        ".read": "auth != null && $code.matches(/^[0-9]{4}$/)",
+        ".write": "auth != null && $code.matches(/^[0-9]{4}$/) && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || data.child('hostUid').val() === auth.uid)",
+        "players": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists()",
+            ".validate": "newData.hasChildren(['nick', 'joinedAt']) && newData.child('nick').isString() && newData.child('nick').val().length >= 1 && newData.child('nick').val().length <= 20"
+          }
+        },
+        "answers": {
+          "$q": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && root.child('rooms/' + $code + '/players/' + $uid).exists() && root.child('rooms/' + $code + '/state/phase').val() === 'question' && root.child('rooms/' + $code + '/state/qKey').val() === $q",
+              ".validate": "newData.hasChildren(['choice', 'at']) && newData.child('choice').isString() && newData.child('choice').val().matches(/^[A-D]{1,4}$/)"
+            }
+          }
+        }
+      }
+    }
+  }
+}

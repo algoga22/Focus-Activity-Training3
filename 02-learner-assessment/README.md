@@ -1,6 +1,6 @@
 # Challenge 2 – Learner assessment
 
-**Version 1 (draft)**
+**Version 2:** quiz app with QR code ([`quiz/`](../quiz/)), paper sheet as backup
 
 A 5-minute diagnostic quiz at the start of the session. It measures what participants already know, the misconceptions they have and what they would actually do, against **all** the learning objectives. It works online and onsite.
 
@@ -62,22 +62,27 @@ Every question is a real situation ("What would you do?"), with no tricks.
 
 **Maximum score: 10 points per participant.** The trainer also notes **which questions most people got wrong**, to spend more time on those topics during the session.
 
-## Tool choice: paper sheet onsite, chat online
+## Tool choice: our own QR quiz app (paper sheet as backup)
+
+We built a small Kahoot-style web app: [`quiz/`](../quiz/). The trainer projects the host screen; participants scan the QR code and answer on their phone.
 
 | | Onsite | Online |
 |---|---|---|
-| **Questions** | Shown on the slides (one per slide) | Shown on the slides (screen share) |
-| **Answers** | Each participant ticks a small paper answer sheet and writes their nickname on it | Each participant types their answer in the video-call chat (e.g. "Q2: B") |
+| **Questions** | On the projected host screen (and on each phone) | On the shared host screen (and on each phone or computer) |
+| **Answers** | Scan the QR code, choose a nickname, tap the answer | Open the link pasted in the call chat, same steps |
+| **No internet?** | Paper [answer sheet](answer-sheet.pdf) with the same questions | – |
 
 **Why this tool:**
-1. **Nothing to install and no accounts.** The bootcamp guidelines say to avoid account creation, and connecting to an online tool takes around 10 minutes, which is twice the time available for the whole quiz.
-2. **Suitable for the audience.** Participants have little or no technical background, so a paper sheet or the chat they already use for the call adds no new technology to learn.
-3. **Works without internet onsite.** NGO venues don't always have reliable Wi-Fi.
-4. **Individual results.** Unlike a show of hands, each answer is linked to one person (by nickname), so the trainer can compare it with that person's answers at the end of the session.
-5. **Quick to score.** With 5 multiple-choice questions and a fixed answer key, scoring takes less than 1 minute per sheet, or can be done at a glance in the chat.
-6. **Same format online and onsite.** The trainer uses the same slides and the same answer key in both cases.
+1. **No install and no account for participants.** The bootcamp guidelines say to avoid account creation. Joining is: scan the QR, type a nickname (about 30 seconds), and people can join while the trainers introduce themselves, so the 5 minutes stay for the questions.
+2. **Same tool online and onsite.** A QR code in the room and a link in the chat open the same page, and the trainer uses the same screen and the same answer key.
+3. **Suitable for the audience.** Everyone can scan a QR code with the phone camera; the page shows one question with big coloured buttons (with letters, so colour is never the only cue) and nothing else to learn.
+4. **Instant, automatic scoring.** The app applies the answer key (2/1/0 points) as people answer. At the end the trainer sees, for each learning objective, how many got it right, and the misconception behind the most common wrong answer, so the next 50 minutes can focus on those topics.
+5. **Individual results to measure progress.** Each answer is linked to a nickname. The trainer downloads a CSV and compares each person with their answers to the Challenge 4 case. The same quiz can also be run again at the end without any change.
+6. **Independent and free.** It is our own code on free hosting: no licence, no ads, no player limit, no dependence on a commercial quiz platform changing its free plan.
+7. **Privacy-friendly.** Only a nickname and the answers are stored, on EU servers (Belgium), and the trainer deletes the data after the session with one button.
+8. **A backup that always works.** NGO venues don't always have reliable Wi-Fi: the paper answer sheet uses the same questions and the same scoring.
 
-Answer sheet to print: [`answer-sheet.pdf`](answer-sheet.pdf)
+Set-up and use on the day: [`quiz/README.md`](../quiz/README.md).
 
 ## Measuring progress
 

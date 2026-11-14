@@ -13,7 +13,7 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | # | Challenge | Folder | Status |
 |---|---|---|---|
 | 1 | Training plan | [`01-training-plan/`](01-training-plan/) | Draft |
-| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/) | First draft |
+| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/), app in [`quiz/`](quiz/) | Quiz app ready (Firebase set-up pending) |
 | 3 | Serious game | [`03-serious-game/`](03-serious-game/) | To do |
 | 4 | Learning by doing (also measures what participants have learned) | [`04-learning-by-doing/`](04-learning-by-doing/) | To do |
 | 5 | Take-home cheat sheet | [`05-take-home/`](05-take-home/) | To do |
@@ -44,10 +44,11 @@ The full plan is in [`01-training-plan/`](01-training-plan/).
 03-serious-game/        Challenge 3 – game covering all learning objectives
 04-learning-by-doing/   Challenge 4 – hands-on case + measuring learning
 05-take-home/           Challenge 5 – cheat sheet
+quiz/                   QR quiz app for Challenge 2 (trainer screen + phone page)
 slides/                 Presentation slides
 docs/                   Evaluation criteria and team notes
 reference/              Bootcamp briefing material
-tools/                  Scripts that generate the PDFs and slides
+tools/                  Scripts that generate the PDFs
 ```
 
 ## Open questions for the organisers

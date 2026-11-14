@@ -15,7 +15,7 @@ P = lambda t, s=cell: Paragraph(t, s)
 
 rows = [
  ("0–5","Welcome participants and introduce the session","5'","Introductions, agenda and what they'll take home at the end","Slides"),
- ("5–10","Assess what participants already know","5'","Short quiz with 4–5 real-life situations (\"What would you do if…?\")","<b>Challenge 2</b>"),
+ ("5–10","Assess what participants already know","5'","Short quiz with 5 real-life situations (\"What would you do if…?\"), answered on the phone after scanning a QR code (paper sheet as backup)","<b>Challenge 2</b>"),
  ("10–18","Recognise that something has gone wrong","8'","Explanation with everyday examples (hacked account, virus, email sent to the wrong person, lost laptop) and an analogy: it's like a fire, the sooner you spot it, the less damage it does","Slides"),
  ("18–26","Apply the first steps","8'","One easy-to-remember rule, e.g. <b>Stop, Disconnect, Report, Write down</b>. What to do and what NOT to do (don't delete anything, don't hide it, don't pay)","Slides"),
  ("26–41","Play an incident response game","15'","The game that brings together all the learning objectives","<b>Challenge 3</b>"),
