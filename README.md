@@ -47,7 +47,6 @@ The full plan is in [`01-training-plan/`](01-training-plan/).
 quiz/                   QR quiz app for Challenge 2 (trainer screen + phone page)
 slides/                 Presentation slides
 docs/                   Evaluation criteria and team notes
-reference/              Bootcamp briefing material
 tools/                  Scripts that generate the PDFs
 ```
 

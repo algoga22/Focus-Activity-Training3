@@ -1,6 +1,6 @@
 # Evaluation criteria
 
-Each deliverable is worth 100 points (600 in total). Source: bootcamp briefing in [`reference/`](../reference/).
+Each deliverable is worth 100 points (600 in total). Source: bootcamp briefing (not stored in this repository).
 
 ## Challenge 1 – Training plan
 | Criterion | Pts |

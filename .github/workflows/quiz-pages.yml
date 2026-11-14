@@ -1,5 +1,6 @@
 # Publishes the quiz/ folder to GitHub Pages on every push that changes it.
 # One-time setup: Settings > Pages > Build and deployment > Source: "GitHub Actions".
+# Published at https://algoga22.github.io/Focus-Activity-Training3/ (trainer screen: host.html)
 name: Deploy quiz to GitHub Pages
 
 on:
