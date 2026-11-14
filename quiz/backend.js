@@ -48,6 +48,7 @@ function localBackend() {
   const watchers = new Set();
   const notify = () => { const db = load(); watchers.forEach((w) => w(db)); };
   channel.onmessage = notify;
+  addEventListener('storage', (e) => { if (e.key === KEY) notify(); }); // second channel: background tabs can miss broadcasts
 
   function write(path, value) {
     const db = load();

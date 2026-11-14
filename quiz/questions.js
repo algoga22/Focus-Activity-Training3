@@ -1,9 +1,9 @@
 // Challenge 2 – diagnostic quiz. Single source for the questions, the answer key and the scoring.
-// Keep in sync with 02-learner-assessment/README.md.
+// Keep in sync with 02-learner-assessment/README.md. Icons: Font Awesome 6 (free, solid) names.
 
 export const QUESTIONS = [
   {
-    key: 'q1', lo: 'LO1 Recognise', multi: true,
+    key: 'q1', lo: 'LO1 Recognise', loIcon: 'magnifying-glass', multi: true,
     text: 'Which of these situations are security incidents?',
     hint: 'Choose all that apply',
     options: {
@@ -12,50 +12,55 @@ export const QUESTIONS = [
       C: "Your email account sends messages that you didn't write",
       D: "You send the list of volunteers' addresses to the wrong person",
     },
+    icons: { A: 'mobile-screen-button', B: 'key', C: 'envelopes-bulk', D: 'address-book' },
     correct: 'ACD',
     misconception: '"An incident is only a virus or a hacker"',
   },
   {
-    key: 'q2', lo: 'LO2 First steps',
+    key: 'q2', lo: 'LO2 First steps', loIcon: 'power-off',
     text: 'A message fills your screen: "Your files are locked. Pay €500 to get them back." What do you do first?',
     options: {
       A: "Pay quickly so the NGO doesn't lose its files",
       B: 'Turn off the Wi-Fi or unplug the cable, and stop using the computer',
       C: 'Restart the computer to see if the message goes away',
     },
+    icons: { A: 'money-bill-wave', B: 'plug-circle-xmark', C: 'rotate-right' },
     correct: 'B',
     misconception: '"Paying fixes it" / "Restarting fixes it"',
   },
   {
-    key: 'q3', lo: 'LO3 Report',
+    key: 'q3', lo: 'LO3 Report', loIcon: 'phone-volume',
     text: "It's Friday at 18:00. You clicked a strange link and now your computer is acting oddly. Your coordinator has gone home. What do you do?",
     options: {
       A: 'Wait until Monday and tell the coordinator then',
       B: 'Call the backup contact person now',
       C: 'Say nothing if everything looks normal again after a while',
     },
+    icons: { A: 'calendar-days', B: 'phone-volume', C: 'eye-slash' },
     correct: 'B',
     misconception: '"It can wait" / "If it looks fine, it is fine"',
   },
   {
-    key: 'q4', lo: 'LO4 Write down',
+    key: 'q4', lo: 'LO4 Write down', loIcon: 'pen-to-square',
     text: 'What is the most useful thing to write down after an incident?',
     options: {
       A: 'Nothing: the IT person will find out what happened',
       B: 'What happened, when, and what you saw (with a photo of the screen)',
       C: 'Only your name and your department',
     },
+    icons: { A: 'user-gear', B: 'camera', C: 'id-badge' },
     correct: 'B',
     misconception: '"Documenting is the IT person\'s job"',
   },
   {
-    key: 'q5', lo: 'LO5 Avoid mistakes',
+    key: 'q5', lo: 'LO5 Avoid mistakes', loIcon: 'ban',
     text: 'A colleague says: "Just delete that strange email and forget about it." What do you do?',
     options: {
       A: "Delete it: once it's gone, the danger is gone",
       B: "Keep it, don't click anything and report it",
       C: 'Forward it to the whole team to warn them',
     },
+    icons: { A: 'trash-can', B: 'flag', C: 'share-from-square' },
     correct: 'B',
     misconception: '"Deleting = safe" / "Forwarding helps"',
   },

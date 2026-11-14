@@ -7,6 +7,8 @@ Our own Kahoot-style quiz for the diagnostic quiz of [Challenge 2](../02-learner
 | `host.html` | Trainer (projected) | Creates a room with a 4-digit code and QR, shows who joined, the questions, a timer, the answer distribution, then the class results per learning objective, CSV export and data deletion |
 | `index.html` | Participants (phone) | Join with the QR or the code, choose a nickname, answer. Q1 allows several answers. Answers can be changed until the trainer closes the question |
 
+**Look and feel:** Digital Learning Hub branding and an "incident response team" theme for Training 3. Each question is an *incident* with its own animated illustration ([`scenes.js`](scenes.js)): a radar, a ransom screen, Friday 18:00, incident notes, a suspicious email. Every option has a colour, a letter and an icon; every participant gets an avatar and can ask for a random "cyber name"; the results end with a *mission debrief*. Branding and trainer names are in [`brand.js`](brand.js).
+
 The questions, the answer key and the scoring (2 / 1 / 0, max 10) are in [`questions.js`](questions.js), the same as in the [Challenge 2 README](../02-learner-assessment/README.md).
 
 **Correct answers are not shown to participants**: the quiz is a diagnostic and the answers are covered during the session. The trainer can still reveal them on the main screen (*Show correct answer*).
