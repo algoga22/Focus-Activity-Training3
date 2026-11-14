@@ -100,16 +100,18 @@ button { font: inherit; cursor: pointer; border: 0; color: inherit; }
 
 /* Question */
 .q-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1em; }
-.q-layout { flex: 1; display: grid; grid-template-columns: 1fr minmax(14em, 30%); gap: 3vw; align-items: start; }
-.question { font-size: 1.85em; max-width: 26em; margin-bottom: 1em; }
-.options { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; }
-.option { display: flex; align-items: center; gap: .8em; border-radius: var(--radius); padding: .95em 1.1em; color: #fff; font-weight: 600;
+.q-layout { flex: 1; display: grid; grid-template-columns: 1fr minmax(13em, 25%); gap: 3vw; align-items: start; }
+.side { display: flex; flex-direction: column; gap: 2.2vh; }
+.side .scene { aspect-ratio: 1 / .8; }
+.question { font-size: 1.65em; max-width: 30em; margin-bottom: .9em; }
+.options { display: flex; flex-direction: column; gap: 1.3vh; }
+.option { display: flex; align-items: center; gap: .8em; border-radius: var(--radius); padding: .6em 1em; color: #fff; font-weight: 600; font-size: 1.2em; line-height: 1.25;
   background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 70%, black)); box-shadow: 0 8px 24px color-mix(in srgb, var(--c) 35%, transparent);
   animation: rise .5s both; }
 .option:nth-child(2) { animation-delay: .08s; } .option:nth-child(3) { animation-delay: .16s; } .option:nth-child(4) { animation-delay: .24s; }
 .option .ico { font-size: 1.5em; opacity: .9; width: 1.4em; text-align: center; }
 @keyframes rise { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
-.status-row { display: flex; align-items: center; gap: 1.4em; margin-top: auto; }
+.status-row { display: flex; align-items: center; gap: 1em; }
 .timer { --p: 1; width: 3.6em; height: 3.6em; border-radius: 50%; display: grid; place-items: center; font-family: var(--head); font-weight: 800; font-size: 1.1em;
   background: radial-gradient(var(--bg) 60%, transparent 62%), conic-gradient(var(--purple) calc(var(--p) * 360deg), var(--panel-2) 0); }
 .timer.hurry { background: radial-gradient(var(--bg) 60%, transparent 62%), conic-gradient(var(--alert) calc(var(--p) * 360deg), var(--panel-2) 0); color: var(--alert); animation: beat 1s infinite; }

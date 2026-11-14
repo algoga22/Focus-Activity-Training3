@@ -151,13 +151,15 @@ function buildQuestion() {
     ${qHead(q, Q.multi ? ' · ' + Q.hint : '')}
     <section class="q-layout">
       <div><h1 class="question">${esc(Q.text)}</h1><div class="options">${optionTiles(Q)}</div></div>
-      ${SCENES[Q.key]}
-    </section>
-    <div class="status-row">
-      <div class="timer" id="timer"></div>
-      <div><span class="count" id="answered">0</span> <span class="muted">/ <span id="joined">0</span> answered</span></div>
-      <div class="answered-avatars" id="answered-avatars"></div>
-    </div>`;
+      <aside class="side">
+        ${SCENES[Q.key]}
+        <div class="status-row">
+          <div class="timer" id="timer"></div>
+          <div><span class="count" id="answered">0</span> <span class="muted">/ <span id="joined">0</span> answered</span></div>
+        </div>
+        <div class="answered-avatars" id="answered-avatars"></div>
+      </aside>
+    </section>`;
   const tick = () => {
     const left = Math.max(0, QUESTION_SECONDS - Math.floor((Date.now() - startedAt) / 1000));
     const t = $('#timer'); if (!t) return;
