@@ -1,0 +1,155 @@
+% When something goes wrong – Training 3 slides
+% Build: latexmk -lualatex slides.tex   (or: lualatex slides.tex)
+% Authors: Divya Ravichandran, Álvaro Gómez García, Mohammed Krayem (University of Luxembourg)
+% Speaker notes: change "hide notes" to "show notes on second screen=right" below.
+\documentclass[aspectratio=169,11pt,t]{beamer}
+\usetheme{focus}
+\setbeameroption{hide notes}
+
+% ---- Slide helpers ----
+% \statement{<colour>}{<icon>}{<text>}: one card of the warm-up list
+\newcommand\statement[3]{%
+  \begin{card}[left=3mm, top=1.6mm, bottom=1.6mm]
+    \iconbadge[8mm]{#1}{#2}\hspace{3mm}\begin{minipage}[c]{.84\linewidth}\raggedright\mediumfont\small #3\end{minipage}
+  \end{card}\vspace{-1.5mm}}
+% \trainer{<colour>}{<initials>}{<name>}: one card of "Who we are" (no photo, initials avatar)
+\newcommand\trainer[3]{%
+  \begin{card}[equal height group=trainers, before upper=\centering, top=3mm, bottom=3mm]
+    \tikz\node[circle, fill=#1, text=white, minimum size=12mm, font=\headfont\large]{#2};\par\vspace{2mm}
+    {\headfont\color{navy}#3}
+  \end{card}}
+% \takeaway{<colour>}{<icon>}{<title>}{<text>}: one card of "what you will take home"
+\newcommand\takeaway[4]{%
+  \begin{card}[equal height group=takeaway, before upper=\centering, top=3mm, bottom=3mm]
+    \iconbadge[10mm]{#1}{#2}\par\vspace{2mm}
+    {\headfont\large\color{navy}#3}\par\vspace{1.5mm}
+    {\small\color{muted}#4}
+  \end{card}}
+
+\title{When something goes wrong}
+\subtitle{A simple incident response for NGOs}
+\author{Divya Ravichandran \and Álvaro Gómez García \and Mohammed Krayem}
+\institute{University of Luxembourg}
+
+\begin{document}
+
+% =====================================================================
+% PART 1 · Welcome (0–5 min)
+% =====================================================================
+\sessionpart{1}{0}{5}
+
+% ---------- 1 · Title ----------
+{\darkslide
+\begin{frame}[plain,c]
+  \vspace*{-2mm}
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}CYBERSECURITY FOR NGOS \textbullet{} TRAINING 3}\par\vspace{4mm}
+  \begin{minipage}{112mm}\raggedright
+    {\headfont\fontsize{30}{35}\selectfont When something\\ goes wrong\par}\par\vspace{4mm}
+    {\lightfont\fontsize{15}{19}\selectfont\color{soft} A simple incident response for NGOs}\par\vspace{9mm}
+    \pill{alert}{\faClock[regular]\ 60 minutes}\hspace{1.5mm}%
+    \pill{white!15!navy}{\faUserFriends\ No technical knowledge needed}
+  \end{minipage}
+  \note{Welcome everyone. Introduce the session in one sentence: today we learn what to do when something
+  goes wrong with computers, phones or data at the NGO. Reassure: no technical knowledge needed. (~30 s)}
+\end{frame}
+}
+
+% ---------- 2 · Who we are ----------
+\begin{frame}{Who we are}{Nice to meet you}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.31\textwidth}\trainer{navy}{DR}{Divya\\Ravichandran}
+    \column{.31\textwidth}\trainer{good}{ÁG}{Álvaro\\Gómez García}
+    \column{.31\textwidth}\trainer{alert}{MK}{Mohammed\\Krayem}
+  \end{columns}
+  \vspace{3mm}
+  \centering
+  \pill{navy}{\faUserGraduate\ Cybersecurity students \textbullet{} University of Luxembourg}\par\vspace{2mm}
+  {\mediumfont\color{navy}\faComments\ \ Ask questions at any time. There are no silly questions.}
+  \note{Each of us says our name in one sentence: we are cybersecurity students at the University of
+  Luxembourg and we created this training. Say clearly that questions are welcome at any time. (~1 min)}
+\end{frame}
+
+% ---------- 3 · Raise your hand if… ----------
+\begin{frame}{Raise your hand if\,\dots}{Warm-up}
+  \vspace{1mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.28\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \fill[soft] (0,0) circle (12mm);
+      \fill[alert] (0,0) circle (8.5mm);
+      \node[text=white, font=\fontsize{26}{26}\selectfont] at (0,0) {\faHandPaper};
+    \end{tikzpicture}\par\vspace{1.5mm}
+    {\scriptsize\color{muted}\faVideo\ Online? Use the\\\textbf{raise hand} reaction}\par\vspace{2.5mm}
+    \onslide<5->{{\headfont\color{alert}Then you are in\\ the right place.}}
+    \column{.68\textwidth}
+    \onslide<2->{\statement{navy}{\faEnvelopeOpenText}{\dots you have received a strange email asking for a password or money}}
+    \onslide<3->{\statement{navy}{\faMobile*}{\dots you (or a colleague) have lost a phone, laptop or USB stick}}
+    \onslide<4->{\statement{navy}{\faQuestion}{\dots you were not sure who to call when something went wrong}}
+  \end{columns}
+  \note{Read each statement and ask people to raise their hand (online: the raise-hand reaction). Comment
+  briefly on how many hands go up: this happens to everyone, it is normal. Last click: "Then you are in the
+  right place." (~1.5 min)}
+\end{frame}
+
+% ---------- 4 · Agenda ----------
+\begin{frame}{Our hour together}{Agenda}
+  \vspace{4mm}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,-24) rectangle (136,24);
+    \begin{scope}[xshift=5mm]   % bar from 5 to 131 mm, labels stay inside the margins
+    \def\L{126}
+    % session bar
+    \foreach \s/\e/\c in {0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/55/alert,55/60/softdark}
+      \fill[\c, rounded corners=1mm] ({\s*\L/60+.4},-1.8) rectangle ({\e*\L/60-.4},1.8);
+    \foreach \t in {0,15,30,45,60}
+      \node[font=\scriptsize, text=muted] at ({\t*\L/60},-4.5) {\t'};
+    % parts above the bar
+    \foreach \m/\c/\ic/\name/\mins in {
+        2.5/alert/\faHandshake/Welcome/{\textcolor{alert}{\faMapMarker*\ now}},
+        14/navy/\faSearch/Spot it/8 min,
+        33.5/alert/\faGamepad/Play a game/15 min,
+        57.5/muted/\faClipboardCheck/Take home/5 min} {
+      \pgfmathsetmacro\x{\m*\L/60}
+      \draw[\c, line width=.4mm] (\x,2.4) -- (\x,6);
+      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,10.5) {\ic};
+      \node[anchor=south, align=center, font=\footnotesize, text=navy] at (i.north)
+        {{\headfont\name}\\[-.5mm]{\color{muted}\mins}};
+    }
+    % parts below the bar
+    \foreach \m/\c/\ic/\name/\mins in {
+        7.5/alert/\faQuestionCircle/Quiz/5,
+        22/navy/\faFirstAid/Act on it/8,
+        48/alert/\faUsers/Practise/14} {
+      \pgfmathsetmacro\x{\m*\L/60}
+      \draw[\c, line width=.4mm] (\x,-2.4) -- (\x,-6);
+      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,-10.5) {\ic};
+      \node[anchor=north, align=center, font=\footnotesize, text=navy] at (i.south)
+        {{\headfont\name}\\[-.5mm]{\color{muted}\mins\ min}};
+    }
+    % legend
+    \node[font=\scriptsize, text=muted] at (75,-12)
+      {\textcolor{navy}{\faSquare}\ We explain\qquad\textcolor{alert}{\faSquare}\ \textbf{You do}};
+    \end{scope}
+  \end{tikzpicture}
+  \note{Walk through the hour from left to right. Stress that more than half of the time participants are
+  doing something themselves (orange): quiz, game, real case. (~1 min)}
+\end{frame}
+
+% ---------- 5 · What you'll take home ----------
+\begin{frame}{What you will take home}{By the end of this hour}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.31\textwidth}
+    \onslide<1->{\takeaway{navy}{\faSearch}{Spot it}{Recognise when something has gone wrong, even when it looks small}}
+    \column{.31\textwidth}
+    \onslide<2->{\takeaway{alert}{\faFirstAid}{Act on it}{One simple rule for the first minutes, and what never to do}}
+    \column{.31\textwidth}
+    \onslide<3->{\takeaway{good}{\faFile*}{Keep it}{A one-page cheat sheet to keep next to your computer}}
+  \end{columns}
+  \note{Three promises for the hour. Do not reveal the 4-step rule yet: just say there is one simple rule
+  that everyone will remember. Then move straight to the quiz. (~1 min)}
+\end{frame}
+
+\end{document}

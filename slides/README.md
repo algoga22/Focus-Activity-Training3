@@ -1,30 +1,27 @@
 # Slides
 
-**Version 1 (draft):** `Training3_Slides.pptx`, 22 slides, 16:9, made for PowerPoint.
+The deck is written in LaTeX (Beamer) in [`latex/`](latex/), with its own theme ([`beamerthemefocus.sty`](latex/beamerthemefocus.sty)): Montserrat + Fira Sans, Font Awesome icons and a progress bar showing which part of the 60-minute session each slide belongs to.
 
-> The presentation files are not stored in this repository. Ask the team for the latest version, or generate the draft with [`tools/build_slides.py`](../tools/build_slides.py).
+```sh
+cd slides/latex && latexmk -lualatex slides.tex
+```
 
-Guidelines: one slide = one idea, ~3 minutes per slide, visual over text, short sentences with action verbs, limited colour palette, purposeful animations.
+The PDF (`slides/latex/slides.pdf`) is not stored in this repository: build it with the command above.
 
-## Structure
+- Speaker notes are in `\note{}`: change `hide notes` to `show notes on second screen=right` to see them.
 
-| Slides | Part of the session | Challenge |
-|---|---|---|
-| 1–2 | Title and agenda | – |
-| 3–8 | Quiz: "What would you do?" (5 questions) | Challenge 2 |
-| 9–11 | 1 · Spot it: these are all incidents, act early like a fire | – |
-| 12–17 | 2 · Act on it: Stop, Disconnect, Report, Write down, and what never to do | – |
-| 18 | Game time *(placeholder)* | Challenge 3 |
-| 19–20 | Your turn: Marie's case, then the answers | Challenge 4 |
-| 21 | Keep this next to your computer *(cheat sheet placeholder)* | Challenge 5 |
-| 22 | Thank you and feedback | – |
+Guidelines: one slide = one idea, visual over text, short sentences with action verbs, limited colour palette, purposeful animations (overlays).
 
-**Colour palette:** navy `#1F3A5F` (main), orange-red `#E4572E` (alerts, "don't"), green `#2E9E5B` (correct answers), light blue-grey backgrounds.
+**Colour palette:** navy `#1F3A5F` (main), orange-red `#E4572E` (alerts, "don't", "you do"), green `#2E9E5B` (correct answers), light blue-grey backgrounds.
 
-## To do in PowerPoint / Keynote
-- [ ] **Add animations.** Each slide's speaker notes say which animation to add and why (e.g. reveal the 4 steps one by one). The generator cannot add them.
-- [ ] Replace the placeholders on slides 18 and 21 once Challenges 3 and 5 are ready.
-- [ ] Optionally replace the icons with your own images.
-- [ ] Export the PDF again after any change (PowerPoint: File > Export > PDF).
+## Progress
 
-The deck was generated with [`tools/build_slides.py`](../tools/build_slides.py). From now on it's probably easier to edit the `.pptx` directly.
+| Min | Part of the session | Challenge | Status |
+|---|---|---|---|
+| 0–5 | Welcome: title, who we are, warm-up "Raise your hand if…", agenda, what you will take home | – | Done |
+| 5–10 | Quiz: "What would you do?" (5 questions) | Challenge 2 | To do |
+| 10–18 | Spot it: recognise that something has gone wrong | – | To do |
+| 18–26 | Act on it: Stop, Disconnect, Report, Write down, and what never to do | – | To do |
+| 26–41 | Game time | Challenge 3 | To do |
+| 41–55 | Your turn: Marie's case, then the answers | Challenge 4 | To do |
+| 55–60 | Cheat sheet, recap and feedback | Challenge 5 | To do |

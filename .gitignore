@@ -1,5 +1,15 @@
 .DS_Store
 ~$*
 *.tmp
-slides/*.pptx
-slides/*.pdf
+
+# LaTeX build files
+slides/latex/*.pdf
+slides/latex/*.aux
+slides/latex/*.fdb_latexmk
+slides/latex/*.fls
+slides/latex/*.log
+slides/latex/*.nav
+slides/latex/*.out
+slides/latex/*.snm
+slides/latex/*.toc
+slides/latex/*.vrb

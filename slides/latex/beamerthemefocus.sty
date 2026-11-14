@@ -1,0 +1,120 @@
+% Beamer theme for "When something goes wrong" (Cybersecurity for NGOs, Training 3).
+% Compile with LuaLaTeX or XeLaTeX (needs fontspec). Paper size assumes aspectratio=169 (160 x 90 mm).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemefocus}
+
+\RequirePackage{fontspec}
+\RequirePackage{tikz}
+\usetikzlibrary{calc,positioning,shadows.blur}
+\RequirePackage{fontawesome5}
+\RequirePackage[most]{tcolorbox}
+
+% ---------- Fonts ----------
+\setsansfont{FiraSans}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold,
+  ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]
+\newfontfamily\headfont{Montserrat}[Extension=.otf, UprightFont=*-ExtraBold, BoldFont=*-Black]
+\newfontfamily\kickerfont{Montserrat}[Extension=.otf, UprightFont=*-Bold, LetterSpace=12]
+\newfontfamily\mediumfont{FiraSans}[Extension=.otf, UprightFont=*-Medium]
+\newfontfamily\lightfont{FiraSans}[Extension=.otf, UprightFont=*-Light]
+\usefonttheme{professionalfonts}
+% No hyphenation: short slide lines read better unbroken
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+
+% ---------- Colours (same palette as the rest of the project) ----------
+\definecolor{navy}{HTML}{1F3A5F}
+\definecolor{navydark}{HTML}{12243C}
+\definecolor{alert}{HTML}{E4572E}
+\definecolor{good}{HTML}{2E9E5B}
+\definecolor{soft}{HTML}{E3EAF3}
+\definecolor{softdark}{HTML}{B9C6D6}
+\definecolor{paper}{HTML}{F7F9FC}
+\definecolor{ink}{HTML}{22303F}
+\definecolor{muted}{HTML}{5B6778}
+
+\setbeamercolor{normal text}{fg=ink}
+\setbeamercolor{alerted text}{fg=alert}
+\setbeamercolor{structure}{fg=navy}
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=12mm, text margin right=12mm}
+
+% ---------- Session timeline (minutes) used by the footer bar and the clock chip ----------
+% start/end/colour of each part of the 60-minute session
+\def\focus@parts{0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/55/alert,55/60/softdark}
+\newcount\focus@current \focus@current=1
+\def\focus@from{0}\def\focus@to{5}
+% \sessionpart{<n>}{<from>}{<to>}: mark which part of the session the following slides belong to
+\newcommand\sessionpart[3]{\global\focus@current=#1\relax\gdef\focus@from{#2}\gdef\focus@to{#3}}
+
+% ---------- Backgrounds ----------
+\newcommand\focus@lightbg{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (160,90);
+    \fill[paper] (0,0) rectangle (160,90);
+    % decorative shapes, top right
+    \fill[soft] (163,93) circle (26);
+    \fill[soft!60] (139,96) circle (9);
+    \fill[alert] (152,70) circle (1.4);
+    % clock chip: which minutes of the session we are in
+    \node[anchor=east, fill=white, rounded corners=3mm, inner xsep=3mm, inner ysep=1.6mm,
+          font=\mediumfont\scriptsize, text=navy, blur shadow={shadow blur steps=6, shadow xshift=0, shadow yshift=-.3mm, shadow opacity=15}]
+      at (148,80.5) {\textcolor{alert}{\faClock[regular]}\ \focus@from\textendash\focus@to\ min};
+    % segmented progress bar of the whole session
+    \foreach \s/\e/\c [count=\i] in \focus@parts {
+      \pgfmathsetmacro\xa{12+\s*126/60+0.35}
+      \pgfmathsetmacro\xb{12+\e*126/60-0.35}
+      \ifnum\i<\focus@current
+        \fill[navy!70, rounded corners=.5mm] (\xa,5) rectangle (\xb,6.2);
+      \else\ifnum\i=\focus@current
+        \fill[alert, rounded corners=.5mm] (\xa,4.6) rectangle (\xb,6.6);
+      \else
+        \fill[softdark!70, rounded corners=.5mm] (\xa,5) rectangle (\xb,6.2);
+      \fi\fi
+    }
+    \node[font=\headfont\scriptsize, text=navy, anchor=east] at (148,5.6) {\insertframenumber};
+  \end{tikzpicture}}
+
+\newcommand\focus@darkbg{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (160,90);
+    \shade[top color=navy, bottom color=navydark] (0,0) rectangle (160,90);
+    % concentric rings, like a radar / ripples spreading from an incident
+    \foreach \r/\o in {14/55,26/38,38/26,50/17,62/11,74/7}
+      \draw[white, opacity=\o/100, line width=.5mm] (128,48) circle (\r);
+    \fill[alert] (128,48) circle (9);
+    \node[text=white, font=\Huge] at (128,48) {\faExclamation};
+    \fill[good] (108,9) circle (1.4);
+    \fill[white, opacity=.5] (151,20) circle (1);
+  \end{tikzpicture}}
+
+\setbeamertemplate{background}{\focus@lightbg}
+
+% Wrap a frame in {\darkslide ... } to use the navy background
+\newcommand\darkslide{%
+  \setbeamertemplate{background}{\focus@darkbg}%
+  \setbeamercolor{normal text}{fg=white}\usebeamercolor[fg]{normal text}}
+
+% ---------- Frame title: small orange kicker (subtitle) + big Montserrat title ----------
+\setbeamertemplate{frametitle}{%
+  \vspace*{5mm}%
+  \ifx\insertframesubtitle\@empty\else
+    {\kickerfont\fontsize{8}{10}\selectfont\color{alert}\MakeUppercase{\insertframesubtitle}}\par\vspace{1mm}%
+  \fi
+  {\headfont\fontsize{22}{26}\selectfont\color{navy}\insertframetitle}\par
+  \vspace{-1mm}{\color{alert}\rule{14mm}{1.2mm}}\par\vspace{-5mm}}% Beamer adds its own gap below the title
+
+% ---------- Building blocks ----------
+% Rounded white card with a soft shadow
+\newtcolorbox{card}[1][]{enhanced, colback=white, colframe=white, arc=3mm, boxrule=0pt,
+  left=4mm, right=4mm, top=3.5mm, bottom=3.5mm, before upper=\raggedright,
+  drop fuzzy shadow={black!40}, #1}
+
+% Round icon badge: \iconbadge[<size>]{<colour>}{<icon>}
+\newcommand\iconbadge[3][11mm]{%
+  \tikz[baseline=(b.base)]\node[circle, fill=#2, text=white, minimum size=#1, inner sep=0pt, font=\large](b){#3};}
+
+% Pill-shaped tag: \pill{<colour>}{<text>}
+\newcommand\pill[2]{%
+  \tikz[baseline=(p.base)]\node[fill=#1, text=white, rounded corners=2.2mm, inner xsep=2.6mm,
+    inner ysep=1.2mm, font=\mediumfont\footnotesize](p){#2};}
+
+\endinput
