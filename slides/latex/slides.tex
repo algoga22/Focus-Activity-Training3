@@ -4,6 +4,7 @@
 % Speaker notes: change "hide notes" to "show notes on second screen=right" below.
 \documentclass[aspectratio=169,11pt,t]{beamer}
 \usetheme{focus}
+\usepackage{qrcode}
 \setbeameroption{hide notes}
 
 % ---- Slide helpers ----
@@ -26,6 +27,11 @@
     {\small\color{muted}#4}
   \end{card}}
 
+% \step{<colour>}{<n>}{<text>}: numbered step card
+\newcommand\step[3]{%
+  \begin{card}[left=3mm, top=1.3mm, bottom=1.3mm, before skip=0pt, after skip=2.2mm]
+    \iconbadge[7.5mm]{#1}{\headfont #2}\hspace{3mm}\begin{minipage}[c]{.84\linewidth}\raggedright\mediumfont\small #3\end{minipage}
+  \end{card}}
 \title{When something goes wrong}
 \subtitle{A simple incident response for NGOs}
 \author{Divya Ravichandran \and Álvaro Gómez García \and Mohammed Krayem}
@@ -150,6 +156,38 @@
   \end{columns}
   \note{Three promises for the hour. Do not reveal the 4-step rule yet: just say there is one simple rule
   that everyone will remember. Then move straight to the quiz. (~1 min)}
+\end{frame}
+
+% =====================================================================
+% PART 2 · Quiz: what do you already know? (5–10 min) – Challenge 2
+% The quiz runs in our web app: https://algoga22.github.io/Focus-Activity-Training3/host.html
+% =====================================================================
+\sessionpart{2}{5}{10}
+
+% ---------- 6 · Quiz: how to join ----------
+\begin{frame}{What would you do?}{Quiz \textbullet{} 5 questions \textbullet{} 5 minutes}
+  \vspace{7mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.6\textwidth}
+    \step{navy}{1}{Open your phone camera and \textbf{scan the QR code}}
+    \step{navy}{2}{Type the \textbf{room code} and pick a \textbf{nickname}}
+    \step{alert}{3}{\textbf{Tap your answer}: about 1 minute each}
+    \vspace{1mm}
+    \pill{good}{\faSmile[regular]\ Not an exam}\hspace{1mm}%
+    \pill{navy}{\faUserSecret\ No real names}
+    \column{.36\textwidth}
+    \centering
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
+      {\color{navy}\qrcode[height=25mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\par\vspace{2mm}
+      {\scriptsize\mediumfont\color{navy}algoga22.github.io/\\Focus-Activity-Training3\par}\vspace{1.5mm}
+      {\scriptsize\color{muted}\faVideo\ Online: link in the chat\par}
+    \end{card}
+  \end{columns}
+  \note{Ask everyone to take out their phone. Then switch to the quiz screen (host.html, opened before the
+  session): it shows the QR code with the room code, and who has joined. Reassure: it is not an exam, there
+  are no bad marks, and only a nickname is stored. Online: click "Copy link for the chat".
+  About 1 minute per question; do NOT give the right answers yet. No internet? Use the paper answer sheet
+  (02-learner-assessment/answer-sheet.pdf).}
 \end{frame}
 
 \end{document}

@@ -19,7 +19,7 @@ Guidelines: one slide = one idea, visual over text, short sentences with action 
 | Min | Part of the session | Challenge | Status |
 |---|---|---|---|
 | 0–5 | Welcome: title, who we are, warm-up "Raise your hand if…", agenda, what you will take home | – | Done |
-| 5–10 | Quiz: "What would you do?" (5 questions) | Challenge 2 | To do |
+| 5–10 | Quiz: how to join (QR). The quiz itself runs in the [quiz app](../quiz/) | Challenge 2 | Done |
 | 10–18 | Spot it: recognise that something has gone wrong | – | To do |
 | 18–26 | Act on it: Stop, Disconnect, Report, Write down, and what never to do | – | To do |
 | 26–41 | Game time | Challenge 3 | To do |
