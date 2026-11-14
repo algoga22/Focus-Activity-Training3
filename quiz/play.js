@@ -107,33 +107,46 @@ function showQuestion(q, me) {
     ${SCENES[Q.key]}
     <div class="q-text">${esc(Q.text)}</div>
     ${Q.multi ? `<div><span class="pill purple"><i class="fa-solid fa-list-check"></i> ${esc(Q.hint)}</span></div>` : ''}
-    <div class="choices">${Object.entries(Q.options).map(([l, t]) =>
-      `<button class="choice opt-${l}" data-l="${l}" aria-pressed="false"><span class="letter">${l}</span><i class="ico fa-solid fa-${Q.icons[l]}"></i><span>${esc(t)}</span></button>`).join('')}</div>
-    ${Q.multi ? '<button class="btn alert" id="send"><i class="fa-solid fa-paper-plane"></i> Send answer</button>' : ''}
-    <div id="status"></div>`;
+    <div class="choices ${Q.multi ? 'multi' : 'single'}">${Object.entries(Q.options).map(([l, t]) =>
+      `<button type="button" class="choice opt-${l}" data-l="${l}" aria-pressed="false"><span class="letter">${l}</span><i class="ico fa-solid fa-${Q.icons[l]}"></i><span>${esc(t)}</span></button>`).join('')}</div>
+    <div id="status" aria-live="polite"></div>`;
   const list = app.querySelector('.choices');
   const paint = () => {
     list.classList.toggle('has-selection', selected.size > 0);
     list.querySelectorAll('.choice').forEach((b) => { const on = selected.has(b.dataset.l); b.classList.toggle('selected', on); b.setAttribute('aria-pressed', on); });
   };
   paint();
-  if (previous) sent();
+  if (previous) saved(Q);
 
-  list.onclick = async (e) => {
+  // A tap is the answer: no "send" button. The screen updates at once; the saves run one after another.
+  list.addEventListener('click', (e) => {
     const b = e.target.closest('.choice'); if (!b) return;
     const l = b.dataset.l;
-    if (Q.multi) { selected.has(l) ? selected.delete(l) : selected.add(l); paint(); status(''); }
-    else { selected = new Set([l]); paint(); await send(Q); }
-  };
-  if (Q.multi) document.getElementById('send').onclick = () => (selected.size ? send(Q) : status('<p class="error">Choose at least one option.</p>'));
+    if (Q.multi) { if (selected.has(l)) selected.delete(l); else selected.add(l); }
+    else selected = new Set([l]);
+    paint();
+    save(Q, normalise(selected));
+  });
 }
 
-async function send(Q) {
-  try { await be.answer(code, Q.key, normalise(selected)); sent(); navigator.vibrate?.(30); }
-  catch { status('<p class="error">Answers are closed for this question.</p>'); }
+let queue = Promise.resolve();
+function save(Q, choice) {
+  queue = queue.then(() => be.answer(code, Q.key, choice))
+    .then(() => { if (choice === normalise(selected)) saved(Q); navigator.vibrate?.(20); })
+    .catch(() => status('<p class="error">Answers are closed for this question.</p>'));
 }
 const status = (html) => { const s = document.getElementById('status'); if (s) s.innerHTML = html; };
-const sent = () => status('<div class="toast"><i class="fa-solid fa-lock"></i> Answer locked in! You can change it until time is up.</div>');
+function saved(Q) {
+  const text = !selected.size
+    ? null
+    : Q.multi
+      ? `Saved: ${[...normalise(selected)].join(' + ')}. Tap to add or remove an answer.`
+      : 'Answer saved! Tap another option to change it.';
+  if (!text) return status('<p class="muted" style="text-align:center">No answer selected yet.</p>');
+  const toast = document.querySelector('#status .toast span');
+  if (toast) toast.textContent = text;   // update in place, no flicker
+  else status(`<div class="toast"><i class="fa-solid fa-check"></i> <span>${text}</span></div>`);
+}
 
 function confetti() {
   const box = document.createElement('div'); box.className = 'confetti';

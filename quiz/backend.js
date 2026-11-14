@@ -32,7 +32,8 @@ async function firebaseBackend() {
     watchRoom(code, cb) { return onValue(r(`rooms/${code}`), (s) => cb(s.val())); },
     setState(code, state) { return set(r(`rooms/${code}/state`), state); },
     join(code, nick) { return set(r(`rooms/${code}/players/${user.uid}`), { nick, joinedAt: Date.now() }); },
-    answer(code, qKey, choice) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), { choice, at: Date.now() }); },
+    // choice '' removes the answer (Q1: everything unticked)
+    answer(code, qKey, choice) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), choice ? { choice, at: Date.now() } : null); },
     deleteRoom(code) { return remove(r(`rooms/${code}`)); },
     // Back to the lobby: answers are deleted, participants stay in the room
     resetRoom(code) { return update(r(`rooms/${code}`), { state: LOBBY, answers: null }); },
@@ -79,7 +80,7 @@ function localBackend() {
     async answer(code, qKey, choice) {
       const room = getPath(load(), `rooms/${code}`);
       if (room?.state?.phase !== 'question' || room.state.qKey !== qKey) throw new Error('closed'); // same as the Firebase rules
-      write(`rooms/${code}/answers/${qKey}/${uid}`, { choice, at: Date.now() });
+      write(`rooms/${code}/answers/${qKey}/${uid}`, choice ? { choice, at: Date.now() } : null);
     },
     async deleteRoom(code) { write(`rooms/${code}`, null); },
     async resetRoom(code) { write(`rooms/${code}/answers`, null); write(`rooms/${code}/state`, LOBBY); },
