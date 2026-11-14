@@ -6,7 +6,7 @@ The deck is written in LaTeX (Beamer) in [`latex/`](latex/), with its own theme 
 cd slides/latex && latexmk -lualatex slides.tex
 ```
 
-The PDF (`slides/latex/slides.pdf`) is not stored in this repository: build it with the command above.
+The compiled PDF is [`latex/slides.pdf`](latex/slides.pdf). Rebuild it with the command above after any change.
 
 - Speaker notes are in `\note{}`: change `hide notes` to `show notes on second screen=right` to see them.
 

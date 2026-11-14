@@ -3,7 +3,6 @@
 *.tmp
 
 # LaTeX build files
-slides/latex/*.pdf
 slides/latex/*.aux
 slides/latex/*.fdb_latexmk
 slides/latex/*.fls
