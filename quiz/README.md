@@ -45,6 +45,7 @@ The config values in `firebase-config.js` are public by design; the [rules](data
 1. Open `host.html` on the trainer laptop a few minutes before (it keeps the same room if you reload).
 2. Show the QR while you introduce yourselves, so people join before the quiz starts. Online: **Copy link for the chat**.
 3. Keyboard: `→`, `Space` or `Enter` = main button (start, close answers, next).
+   **Restart** (during or after the quiz) goes back to the waiting room and deletes all answers; participants stay connected and do not need to scan again.
 4. At the end: **Download CSV** (to compare with the Challenge 4 case), then **Delete data**.
 
 **No internet at the venue?** Use the paper [answer sheet](../02-learner-assessment/answer-sheet.pdf) and the same questions on the slides.

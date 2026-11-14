@@ -4,6 +4,7 @@ import { firebaseConfig } from './firebase-config.js';
 
 const params = new URLSearchParams(location.search);
 export const DEMO = params.has('demo') || !firebaseConfig.apiKey;
+const LOBBY = { phase: 'lobby', q: -1, qKey: '' };
 
 export function connect() {
   return DEMO ? localBackend() : firebaseBackend();
@@ -15,7 +16,7 @@ async function firebaseBackend() {
   const base = `https://www.gstatic.com/firebasejs/${V}`;
   const { initializeApp } = await import(`${base}/firebase-app.js`);
   const { getAuth, signInAnonymously } = await import(`${base}/firebase-auth.js`);
-  const { getDatabase, ref, get, set, onValue, remove } = await import(`${base}/firebase-database.js`);
+  const { getDatabase, ref, get, set, update, onValue, remove } = await import(`${base}/firebase-database.js`);
 
   const app = initializeApp(firebaseConfig);
   const { user } = await signInAnonymously(getAuth(app));
@@ -26,13 +27,15 @@ async function firebaseBackend() {
     uid: user.uid,
     async roomExists(code) { return (await get(r(`rooms/${code}/hostUid`))).exists(); },
     createRoom(code) {
-      return set(r(`rooms/${code}`), { hostUid: user.uid, createdAt: Date.now(), state: { phase: 'lobby', q: -1, qKey: '' } });
+      return set(r(`rooms/${code}`), { hostUid: user.uid, createdAt: Date.now(), state: LOBBY });
     },
     watchRoom(code, cb) { return onValue(r(`rooms/${code}`), (s) => cb(s.val())); },
     setState(code, state) { return set(r(`rooms/${code}/state`), state); },
     join(code, nick) { return set(r(`rooms/${code}/players/${user.uid}`), { nick, joinedAt: Date.now() }); },
     answer(code, qKey, choice) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), { choice, at: Date.now() }); },
     deleteRoom(code) { return remove(r(`rooms/${code}`)); },
+    // Back to the lobby: answers are deleted, participants stay in the room
+    resetRoom(code) { return update(r(`rooms/${code}`), { state: LOBBY, answers: null }); },
   };
 }
 
@@ -65,7 +68,7 @@ function localBackend() {
   return Promise.resolve({
     uid,
     async roomExists(code) { return getPath(load(), `rooms/${code}`) != null; },
-    async createRoom(code) { write(`rooms/${code}`, { hostUid: uid, createdAt: Date.now(), state: { phase: 'lobby', q: -1, qKey: '' } }); },
+    async createRoom(code) { write(`rooms/${code}`, { hostUid: uid, createdAt: Date.now(), state: LOBBY }); },
     watchRoom(code, cb) {
       const w = (db) => cb(getPath(db, `rooms/${code}`) ?? null);
       watchers.add(w); w(load());
@@ -79,6 +82,7 @@ function localBackend() {
       write(`rooms/${code}/answers/${qKey}/${uid}`, { choice, at: Date.now() });
     },
     async deleteRoom(code) { write(`rooms/${code}`, null); },
+    async resetRoom(code) { write(`rooms/${code}/answers`, null); write(`rooms/${code}/state`, LOBBY); },
   });
 }
 

@@ -60,9 +60,14 @@ const actions = {
     if (!confirm('Delete all answers of this room? Download the CSV first if you need it.')) return;
     await be.deleteRoom(code);
   },
+  restart: async () => {
+    if (!confirm('Restart the quiz from the beginning?\n\nAll answers will be deleted. Participants stay connected and do not need to scan the QR code again.')) return;
+    await be.resetRoom(code);
+  },
   newQuiz: async () => { localStorage.removeItem('quiz-host-room'); location.href = `?${params.has('demo') ? 'demo' : ''}`; },
 };
 
+const RESTART = ['restart', '<i class="fa-solid fa-rotate-left"></i> Restart', 'danger'];
 function setActions(list) {
   $('#actions').innerHTML = list.map(([id, label, cls = '']) => `<button class="btn ${cls}" id="${id}" data-act="${id}">${label}</button>`).join('');
 }
@@ -160,7 +165,7 @@ function buildQuestion() {
     t.classList.toggle('hurry', left <= HURRY_SECONDS);
   };
   tick(); timer = setInterval(tick, 500);
-  setActions([['close', 'Close answers <i class="fa-solid fa-lock"></i>', 'alert']]);
+  setActions([RESTART, ['close', 'Close answers <i class="fa-solid fa-lock"></i>', 'alert']]);
 }
 
 function buildResults() {
@@ -186,7 +191,7 @@ function buildResults() {
     </section>`;
   grow();
   const last = q === QUESTIONS.length - 1;
-  setActions([['toggleCorrect', showCorrect ? '<i class="fa-solid fa-eye-slash"></i> Hide correct answer' : '<i class="fa-solid fa-eye"></i> Show correct answer', 'ghost'],
+  setActions([RESTART, ['toggleCorrect', showCorrect ? '<i class="fa-solid fa-eye-slash"></i> Hide correct answer' : '<i class="fa-solid fa-eye"></i> Show correct answer', 'ghost'],
     ['next', last ? 'Mission debrief <i class="fa-solid fa-flag-checkered"></i>' : 'Next incident <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
 }
 
@@ -230,7 +235,7 @@ function buildSummary() {
     ${showTable ? `<section class="card"><table><tr><th>Responder</th>${QUESTIONS.map((_, i) => `<th>Q${i + 1}</th>`).join('')}<th>Total</th></tr>
       ${rows.map((r) => `<tr><td>${esc(r.nick)}</td>${r.per.map((x) => `<td>${x.choice || '–'} (${x.points})</td>`).join('')}<td><b>${r.total}</b></td></tr>`).join('')}</table></section>` : ''}`;
   grow();
-  setActions([['toggleTable', showTable ? 'Hide individual scores' : '<i class="fa-solid fa-table"></i> Individual scores', 'ghost'],
+  setActions([RESTART, ['toggleTable', showTable ? 'Hide individual scores' : '<i class="fa-solid fa-table"></i> Individual scores', 'ghost'],
     ['csv', '<i class="fa-solid fa-download"></i> Download CSV', 'ghost'], ['remove', '<i class="fa-solid fa-trash-can"></i> Delete data', 'ghost'], ['newQuiz', 'New quiz']]);
 }
 
