@@ -1,0 +1,643 @@
+% Project guide: a detailed, self-explanatory deck for the team (to read, not to present).
+% It explains every part of the project: plan, slides, quiz, game, case, cheat sheet, web app, files and open points.
+% Build from this folder: latexmk -lualatex project-overview.tex
+\documentclass[aspectratio=169,11pt,t]{beamer}
+\usepackage{../slides/latex/beamerthemefocus}
+\usepackage{qrcode}
+\usepackage{booktabs}
+\usepackage{array}
+\usetikzlibrary{arrows.meta}
+\graphicspath{{screenshots/}}
+\input{common}
+\sections{Overview,Plan,Quiz,Game,Case,Cheat sheet,Web app,Team}{8}
+
+% ---- Compact frame title (this guide is for reading: more room for text)
+\makeatletter
+\setbeamertemplate{frametitle}{%
+  \vspace*{3.5mm}%
+  \ifx\insertframesubtitle\@empty\else
+    {\kickerfont\fontsize{6.5}{8}\selectfont\color{alert}\MakeUppercase{\insertframesubtitle}}\par\vspace{.6mm}%
+  \fi
+  {\headfont\fontsize{16}{19}\selectfont\color{navy}\insertframetitle}\par
+  \vspace{-.5mm}{\color{alert}\rule{10mm}{.9mm}}\par\vspace{-6mm}}
+\makeatother
+
+% ---- Helpers
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand\thumb[2][30mm]{\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.2}]{\includegraphics[page=#2, width=#1]{../slides/latex/slides.pdf}};}
+\newcommand\pdfpage[2][50mm]{\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.25}]{\includegraphics[height=#1]{#2}};}
+% \explain{<title>}{<text>}: explanation box (the main reading content)
+\newcommand\explain[2]{%
+  \begin{tcolorbox}[enhanced, colback=white, colframe=white, arc=2mm, boxrule=0pt, left=2.5mm, right=2.5mm, top=1.5mm, bottom=1.5mm,
+      before skip=0pt, after skip=1.6mm, drop fuzzy shadow={black!30}, before upper=\raggedright]
+    {\headfont\fontsize{8}{10}\selectfont\color{navy}#1\par}\vspace{.5mm}
+    {\fontsize{7}{8.6}\selectfont #2\par}
+  \end{tcolorbox}}
+% \dot{<colour>}{<text>}: compact bullet line
+\newcommand\bul[2]{\par\noindent\makebox[3.5mm][l]{\textcolor{#1}{\tiny\faCircle}}\parbox[t]{\dimexpr\linewidth-3.5mm}{\raggedright #2}\par\vspace{.4mm}}
+\newcommand\chip[2]{\tikz[baseline=(t.base)]\node[fill=#1, text=white, rounded corners=1.3mm, inner xsep=1.4mm, inner ysep=.6mm, font=\mediumfont\tiny](t){#2};}
+\newcommand\heading[1]{{\headfont\small\color{navy}#1\par}\vspace{1.2mm}}
+\newcommand\file[1]{{\ttfamily\color{navy}#1}}
+\newcommand\yes{\textcolor{good}{\faCheck}}
+
+\title{When something goes wrong: project guide}
+
+\begin{document}
+
+% =====================================================================
+\setsection{1}
+{\darkslide
+\begin{frame}[plain,c]
+  \vspace*{-2mm}
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}TRAINING 3 \textbullet{} PROJECT GUIDE FOR THE TEAM}\par\vspace{4mm}
+  \begin{minipage}{100mm}\raggedright
+    {\headfont\fontsize{27}{32}\selectfont When something\\ goes wrong\par}\par\vspace{3mm}
+    {\lightfont\fontsize{14}{18}\selectfont\color{soft}Everything we built, how it works\\ and why: to read, not to present\par}\par\vspace{8mm}
+    {\small\color{soft}Divya Ravichandran \textbullet{} Álvaro Gómez García\\Mohammed Krayem \textbullet{} University of Luxembourg\par}
+  \end{minipage}
+\end{frame}
+}
+
+% ---------- How to read ----------
+\begin{frame}{How to read this guide}{Overview}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{What this document is}{A complete walk through the project, so that each of us can explain any part of it to the jury or run the session alone.
+      Every slide has the facts (numbers, timings, file names) and the reasons behind our choices. For the 5-minute talk use \file{pitch.pdf}; to run the training use \file{slides/latex/slides.pdf}.}
+    \explain{The bar at the bottom}{Shows the section you are in: Overview, Plan, Quiz, Game, Case, Cheat sheet, Web app, Team (practical points and what is still open).}
+    \column{.48\textwidth}
+    \explain{The deliverables}{%
+      \bul{navy}{\textbf{Challenge 1} Training plan: \file{01-training-plan/}}
+      \bul{alert}{\textbf{Challenge 2} Quiz, before and after: \file{02-learner-assessment/} + web app}
+      \bul{alert}{\textbf{Challenge 3} Game ``Put out the fire'': \file{03-serious-game/} + web app}
+      \bul{alert}{\textbf{Challenge 4} Case ``The urgent payment'': \file{04-learning-by-doing/}}
+      \bul{good}{\textbf{Challenge 5} Cheat sheet: \file{05-take-home/}}
+      \bul{navydark}{\textbf{Slides} 32 training slides: \file{slides/}}
+      \bul{navydark}{\textbf{Web app} quiz + game: \file{quiz/}, online on GitHub Pages}
+      Each deliverable is worth 100 points (600 in total). Final submission: Monday 16 November 2026, 12:00. Presentation: 5 minutes + 5 minutes of questions.}
+  \end{columns}
+\end{frame}
+
+% ---------- The brief ----------
+\begin{frame}{The brief and our audience}{Overview}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{What the bootcamp asked}{The Cybersecurity for NGOs Bootcamp (Digital Learning Hub, 13 and 16 November 2026) has three trainings. Ours is \textbf{Training 3: ``When something goes wrong: a simple incident response''}, \textbf{60 minutes}.
+      We must deliver a training plan, a diagnostic assessment, a serious game, a learning-by-doing activity, a take-home sheet and the slides.
+      Everything must work \textbf{online and onsite}, and the organisers ask us to \textbf{avoid account creation} and connection delays.}
+    \explain{Our main design rule}{Simple, jargon-free, practical. Every technical word is explained or avoided, and every part of the hour leads to the same small set of actions.}
+    \column{.48\textwidth}
+    \explain{Who we train}{NGO staff and volunteers with \textbf{no technical background}: food banks, shelters, small associations. Typical situation:
+      \bul{alert}{a small team and \textbf{no IT department};}
+      \bul{alert}{sensitive data of beneficiaries, volunteers and donors;}
+      \bul{alert}{shared computers, personal phones used for work;}
+      \bul{alert}{coordinators often away; many volunteers part-time.}
+      The problem we solve: when something goes wrong, \textbf{the first minutes decide the damage}, and most people either do nothing (embarrassment, ``it can wait'') or the wrong thing (restart, pay, delete).}
+  \end{columns}
+\end{frame}
+
+% ---------- The idea ----------
+\begin{frame}{One analogy, one rule}{Overview \textbullet{} the thread of the hour}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{\textcolor{alert}{\faFire}\ An incident is like a fire}{The sooner you spot it, the less damage it does. A bin on fire (minutes) is easy; the whole building (days) is not.
+      The warning signs are the smoke, and \textbf{each person is the smoke alarm}: you don't need to be sure it is a fire to raise the alarm.
+      This analogy appears in the slides (minutes 10--18), becomes the \textbf{rule of the game} (the fire really grows) and is the header of the cheat sheet.}
+    \explain{\textcolor{alert}{\faTimes}\ Never \ \textcolor{good}{\faUserShield}\ No blame}{Never pay, delete, hide, restart or forward. Nobody gets blamed for reporting: the only mistake is to stay silent.}
+    \column{.48\textwidth}
+    \explain{One rule, four steps}{%
+      \bul{alert}{\textbf{Stop} (don't add fuel): hands off; don't click, type, pay or try to fix it.}
+      \bul{navy}{\textbf{Disconnect} (close the door): Wi-Fi off or cable out, \textbf{leave the computer on} (restarting erases clues). Lost device or money sent: nothing to unplug, go to step 3.}
+      \bul{good}{\textbf{Report} (call the firefighters): call your contact \textbf{now}, even on Friday at 18:00; no answer, call the backup; money sent, call the bank.}
+      \bul{navydark}{\textbf{Write down} (tell them what you saw): when, what you saw, what you did and who you called, a photo of the screen.}
+      The same words are used in the slides, the quiz answers, the game phases, the case answer key and the cheat sheet.}
+  \end{columns}
+\end{frame}
+
+% ---------- Objectives ----------
+\begin{frame}{Five objectives, measured several times}{Overview \textbullet{} learning objectives}
+  \vspace{0mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm, after skip=2mm]
+    \scriptsize\setlength\tabcolsep{3pt}\renewcommand{\arraystretch}{1.12}
+    \begin{tabular}{@{}L{56mm}L{14mm}L{34mm}L{13mm}L{12mm}@{}}
+      \textcolor{muted}{By the end, participants can\dots} & \textcolor{muted}{Quiz 5'} & \textcolor{muted}{Game 26'} & \textcolor{muted}{Case 41'} & \textcolor{muted}{Quiz 53'}\\\midrule
+      \textbf{LO1 Recognise} a security incident & Q1 & Phase 1 ``Is it a fire?'' & Q1 & Q1\\
+      \textbf{LO2 Take the first steps:} stop, disconnect & Q2 & Phase 2 ``Cut the fire'' & Q1 & Q2\\
+      \textbf{LO3 Report} quickly to the right person & Q3 & Phase 3 ``Firefighters'' & Q2 & Q3\\
+      \textbf{LO4 Write down} what happened & Q4 & Phase 4 ``Fire report'' & Q4 & Q4\\
+      \textbf{LO5 Avoid} the mistakes (pay, delete, hide) & Q5 & Trap cards avoided & Q3 & Q5\\
+    \end{tabular}
+  \end{card}
+  \explain{How we measure learning}{\textbf{Main measure:} the same quiz at the start and at the end, compared by the app per objective and per person (criterion 4 of Challenge 2, 25 points). \textbf{In between:} the game measures the same objectives on 4 new incidents and shows the quiz-at-the-start result next to each one; the case checks that each person can apply the rule alone. We wrote the objectives ourselves (see the open points).}
+\end{frame}
+
+% =====================================================================
+\setsection{2}
+% ---------- Session plan ----------
+\begin{frame}{The session plan}{Challenge 1 \textbullet{} training plan \textbullet{} 01-training-plan/}
+  \vspace{0mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm, after skip=1.5mm]
+    \scriptsize\setlength\tabcolsep{3pt}\renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}L{12mm}L{46mm}L{62mm}c@{}}
+      \textcolor{muted}{Min} & \textcolor{muted}{Topic (what?)} & \textcolor{muted}{Method (how?)} & \textcolor{muted}{Ch.}\\\midrule
+      0--5 \hfill 5' & Welcome participants and introduce the session & Who we are, ``Raise your hand if\dots'', agenda, 3 things they take home; QR code scanned now & --\\
+      5--10 \hfill 5' & Assess what participants already know & Quiz ``What would you do?'' on the phone, right answers not shown & \chip{alert}{2}\\
+      10--18 \hfill 8' & Recognise that something has gone wrong & Lost / leaks / acts strange, 4 everyday incidents, fire analogy, thumbs vote & --\\
+      18--26 \hfill 8' & Apply the first steps & The 4-step rule said aloud, each step in detail, never list, ransom example & --\\
+      26--41 \hfill 15' & Play an incident response game & ``Put out the fire'': 1' rules, $\sim$10' play, $\sim$4' debrief & \chip{alert}{3}\\
+      41--53 \hfill 12' & Apply the first steps to a new NGO case & ``The urgent payment'': 4' alone, 4' groups, 4' debrief & \chip{alert}{4}\\
+      53--56 \hfill 3' & Measure what participants have learned & The same quiz (30 s per question), before / after screen & \chip{alert}{2}\\
+      56--60 \hfill 4' & Review key points and close & Cheat sheet (fill in the phone numbers), 3 key messages, feedback & \chip{good}{5}\\
+    \end{tabular}
+  \end{card}
+\end{frame}
+
+% ---------- Minute by minute ----------
+\begin{frame}{What the trainers do, minute by minute}{Challenge 1 \textbullet{} running the hour}
+  \vspace{0mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm]
+    \fontsize{7}{8.4}\selectfont\setlength\tabcolsep{3pt}\renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}L{9mm}L{11mm}L{106mm}@{}}
+      \textcolor{muted}{Min} & \textcolor{muted}{Slides} & \textcolor{muted}{Trainer actions}\\\midrule
+      before & -- & Open \file{host.html} (room + QR), print case sheets, cheat sheets and a few paper answer sheets\\
+      0 & 1--5 & Introduce the team; show the QR so people join while we talk; warm-up with hands up\\
+      5 & 6 & Web app: Menu \textrightarrow{} Quiz. About 1 minute per question; do \textbf{not} show the right answers\\
+      10 & 7--12 & Spot it: one click per idea; ``Incident or not?'' thumbs vote; ``Not sure? Sound the alarm''\\
+      18 & 13--18 & Everyone says the 4 steps aloud; ask the room to solve the ransom example before clicking\\
+      26 & 19--21 & Menu \textrightarrow{} Game; rules in 30 s; start each room; use Pause to comment on a trap\\
+      41 & 22--28 & Hand out the case sheet; show the 3 moments; groups; debrief with hands up\\
+      53 & 29 & Menu \textrightarrow{} Quiz again; read one striking before / after number aloud\\
+      56 & 30--32 & Hand out the cheat sheet, ask for the 3 phone numbers, feedback, thanks\\
+      after & -- & Download the CSV files (before / after and game), then Delete data\\
+    \end{tabular}
+  \end{card}
+\end{frame}
+
+% ---------- Why the plan works ----------
+\begin{frame}{Why the plan scores well}{Challenge 1 \textbullet{} against the criteria}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{Wording of topics (20) \textbullet{} Description (20)}{Every topic starts with an action verb and says what participants will be able to do (``Recognise\dots'', ``Apply\dots''). Every description says \textbf{how}: exercise, vote, game, case, and the key messages.}
+    \explain{Variety and balance (15)}{Theory and practice alternate: about \textbf{35 of 60 minutes} are activities (quiz twice, game, case), explanations never last more than 8 minutes and each one includes an interaction (hands up, thumbs vote, the rule said aloud).}
+    \column{.48\textwidth}
+    \explain{Realistic durations (15) \textbullet{} Total (5)}{The QR code is scanned during the introductions, so connecting costs no time; participants stay in the same room all hour. The 8 sequences add up to exactly 60 minutes, and the game and the case have their own internal timing.}
+    \explain{Online description (20) \textbullet{} Audience (5)}{The plan covers recognising an incident, the first steps, reporting, documenting and the mistakes to avoid. No prerequisites: everyday examples, no jargon, no account, online and onsite.}
+  \end{columns}
+\end{frame}
+
+% ---------- Training slides ----------
+\begin{frame}{The training slides}{Slides \textbullet{} 32 slides, LaTeX Beamer}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.44\textwidth}
+    \thumb[28mm]{8}\hspace{1.5mm}\thumb[28mm]{23}\par\vspace{1.5mm}
+    \thumb[28mm]{35}\hspace{1.5mm}\thumb[28mm]{42}\par\vspace{1.5mm}
+    \thumb[28mm]{54}\hspace{1.5mm}\thumb[28mm]{61}
+    \column{.54\textwidth}
+    \explain{Structure}{%
+      \bul{navy}{1--5 Welcome: title, who we are, warm-up, agenda, take-home}
+      \bul{alert}{6 How to join the quiz (QR code)}
+      \bul{navy}{7--12 Spot it: incident, examples, fire, vote, key message}
+      \bul{navy}{13--18 Act on it: rule, steps 1--2, 3--4, never, example}
+      \bul{alert}{19--21 Game: divider, rules, rooms and steps}
+      \bul{alert}{22--28 Case: how it works, 3 moments, answers}
+      \bul{alert}{29 The same quiz again}
+      \bul{good}{30--32 Cheat sheet, key messages, thank you}}
+    \explain{Design}{One idea per slide, icons, 3 colours (navy = information, orange-red = alerts and ``you do'', green = right), overlays to reveal one point at a time, a progress bar of the hour. \textbf{Speaker notes} on every slide.}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{3}
+% ---------- Quiz questions ----------
+\begin{frame}{The five questions}{Challenge 2 \textbullet{} quiz content}
+  \vspace{0mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm, after skip=1.5mm]
+    \tiny\setlength\tabcolsep{2.5pt}\renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}L{5mm}L{30mm}L{22mm}L{22mm}L{22mm}L{22mm}@{}}
+      & \textcolor{muted}{Situation} & \textcolor{muted}{A} & \textcolor{muted}{B} & \textcolor{muted}{C} & \textcolor{muted}{D}\\\midrule
+      \textbf{Q1} & Which are incidents? (several) & \textcolor{good}{\yes\ Work phone lost on the bus} & Windows ``updates installed'' & \textcolor{good}{\yes\ Account sends messages you didn't write} & \textcolor{good}{\yes\ Volunteers' addresses to the wrong person}\\
+      \textbf{Q2} & ``Files locked, pay €500'': first step? & Switch it off completely & \textcolor{good}{\yes\ Wi-Fi off / cable out, leave it on} & Run the antivirus yourself & Pay quickly\\
+      \textbf{Q3} & Friday 18:00, strange link, coordinator gone & Email the coordinator from this computer & Ask a friend good with computers & \textcolor{good}{\yes\ Call the backup contact now} & Wait an hour, report only if needed\\
+      \textbf{Q4} & What is most useful to write down? & \textcolor{good}{\yes\ When, what you saw, what you did, photo} & Which virus or hacker caused it & Nothing: IT will find it & ``Computer problem, please help''\\
+      \textbf{Q5} & ``Just delete that strange email'' & Delete it & Forward it to warn the team & Reply to ask if it is genuine & \textcolor{good}{\yes\ Keep it, don't click, report it}\\
+    \end{tabular}
+  \end{card}
+  {\scriptsize\textbf{Scoring:} 2 = right, 0 = wrong; Q1: 2 for exactly A, C, D, 1 if at least one right situation is ticked. Maximum 10. The questions and the key live in \file{quiz/questions.js} (used by the app) and \file{02-learner-assessment/README.md}.\par}
+\end{frame}
+
+% ---------- Quiz design ----------
+\begin{frame}{Why the questions are built this way}{Challenge 2 \textbullet{} question design}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{So that a before / after comparison means something}{A first version had 3 options with an obvious right answer: people would have scored high before the training and no progress would show. Now:
+      \bul{navy}{\textbf{4 options}: guessing gives only 25\,\%;}
+      \bul{alert}{\textbf{the wrong options are real beliefs} (switch it off, run the antivirus, email the coordinator, ask a friend, guess the virus, forward to warn, reply to check), each corrected on a slide;}
+      \bul{good}{\textbf{the right answer uses the words of the training}, so it is indisputable;}
+      \bul{navydark}{\textbf{answers are hidden at the start}: the first round does not teach the second.}}
+    \column{.48\textwidth}
+    \explain{Against the Challenge 2 criteria}{%
+      \bul{navy}{\textbf{Relevance (25):} 1 question per objective.}
+      \bul{navy}{\textbf{Quality of questions (20):} real NGO situations, short, no tricks.}
+      \bul{navy}{\textbf{Quality of answers (5):} indisputable right answer, plausible distractors.}
+      \bul{alert}{\textbf{Measure progress (25):} the same quiz at minute 5 and minute 53, compared by the app.}
+      \bul{navy}{\textbf{Tool choice (20):} 8 factual reasons (next slides).}
+      \bul{navy}{\textbf{Coverage (5):} all five objectives, one each.}}
+    \explain{Paper backup}{\file{answer-sheet.pdf}: same questions, a Start and an End column, two sheets per A4 page.}
+  \end{columns}
+\end{frame}
+
+% ---------- Quiz screens ----------
+\begin{frame}{The quiz in the web app}{Challenge 2 \textbullet{} screens}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{quiz-lobby}\par\vspace{1.5mm}
+    \screen{quiz-host-question}
+    \column{.58\textwidth}
+    \explain{Joining}{The trainer screen shows a QR code and a 4-digit room code. Participants scan it, choose a nickname (or a random ``cyber name'') and get an avatar. Online: ``Copy link for the chat''. No account, no app.}
+    \explain{Answering}{Each question is an ``incident'' with an animated scene. The main screen shows the timer (60 s at the start, 30 s at the end), how many have answered and their avatars. On the phone, \textbf{one tap saves the answer} (Q1: tap to tick several); answers can be changed until the trainer closes the question. Keyboard: \(\rightarrow\), Space or Enter = main button.}
+  \end{columns}
+\end{frame}
+
+% ---------- Quiz results ----------
+\begin{frame}{Results during and after the first quiz}{Challenge 2 \textbullet{} screens}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{quiz-host-results}\par\vspace{1.5mm}
+    \screen{quiz-debrief-start}
+    \column{.58\textwidth}
+    \explain{After each question}{Bars with the number of answers per option. At the start the right answer is \textbf{not} shown (the button only appears in the final quiz), so the comparison stays fair.}
+    \explain{Debrief of the first quiz}{For each objective: the share of fully correct answers; objectives under 60\,\% are flagged in orange with the belief behind the wrong answers (e.g. ``switching off is safest''). Also the team score (out of 10) and ``Spend more time on'': the trainer knows which slides to stress in the next 50 minutes. ``Individual scores'' shows a table per nickname.}
+  \end{columns}
+\end{frame}
+
+% ---------- Before / after ----------
+\begin{frame}{The same quiz at the end: before / after}{Challenge 2 \textbullet{} measuring progress}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{quiz-before-after}\par\vspace{1mm}
+    {\scriptsize\color{muted}\faFlask\ Test data, 6 simulated players\par}\vspace{1.5mm}
+    \centering\phone[22mm]{quiz-phone-progress}
+    \column{.58\textwidth}
+    \explain{How it works}{At minute 53 the trainer opens Menu \textrightarrow{} Quiz again. Same questions, 30 s each, now with ``Show correct answer''. Answers are stored separately (\file{q1} at the start, \file{q1-after} at the end), so nothing is overwritten.}
+    \explain{What the screen shows}{%
+      \bul{navy}{per objective: \% fully correct at the start (grey) and at the end (purple), with the difference;}
+      \bul{navy}{team score start \textrightarrow{} end and how many people improved;}
+      \bul{alert}{``Still to work on'': objectives still under 60\,\%;}
+      \bul{good}{a table and a CSV with both rounds per nickname.}
+      Each phone shows the person's own score at the start and at the end.}
+  \end{columns}
+\end{frame}
+
+% ---------- Tool choice ----------
+\begin{frame}{Why we built our own tool}{Challenge 2 \textbullet{} tool choice (3 points per reason)}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{Reasons 1--4}{%
+      \bul{navy}{\textbf{No install and no account:} scan, nickname, play in about 30 seconds, as the bootcamp asks.}
+      \bul{navy}{\textbf{Same tool online and onsite:} QR code in the room, link in the chat, same page.}
+      \bul{navy}{\textbf{Suitable for the audience:} one question at a time, big coloured buttons with letters and icons (colour is never the only cue).}
+      \bul{navy}{\textbf{Instant, automatic scoring:} the answer key is applied live; results per objective and the misconception behind wrong answers.}}
+    \column{.48\textwidth}
+    \explain{Reasons 5--8}{%
+      \bul{alert}{\textbf{Before / after with no extra work:} one room all session, so each nickname's two rounds are matched automatically.}
+      \bul{alert}{\textbf{Independent and free:} our own code on free hosting; no licence, no ads, no player limit.}
+      \bul{alert}{\textbf{Privacy-friendly:} only a nickname and answers, EU servers (Belgium), one-click delete.}
+      \bul{alert}{\textbf{Backup that always works:} paper sheet with the same questions if there is no Wi-Fi.}}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{4}
+% ---------- Game concept ----------
+\begin{frame}{Put out the fire: the idea}{Challenge 3 \textbullet{} serious game}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{The analogy becomes the rule}{In the slides we say ``the sooner you spot it, the less damage it does''. In the game it is literally true: \textbf{every second of hesitation makes the fire grow}, a right move is \textbf{water}, a classic mistake is a \textbf{trap card: petrol}. Players don't memorise the lesson, they feel it.}
+    \explain{Structure}{Our NGO has \textbf{4 rooms = 4 rounds}, each with a real incident. Each round has \textbf{4 phases = the 4 steps}: Is it a fire? (recognise), Cut the fire (stop and disconnect), Call the firefighters (report), Fire report (write down). Every phase: 3 options, \textbf{1 right move and 2 trap cards}. 16 decisions in total.}
+    \column{.48\textwidth}
+    \explain{The 4 rooms}{%
+      \bul{navy}{\textbf{Work phones:} Ana loses the work phone with the beneficiaries' WhatsApp groups on the bus.}
+      \bul{navy}{\textbf{Social media:} the NGO's Facebook page posts an ad nobody wrote.}
+      \bul{navy}{\textbf{Beneficiary data:} the volunteers' home addresses sent to the wrong ``Marc''.}
+      \bul{navy}{\textbf{Office computers:} slow computer, files ending in ``.locked'', then a ransom message; \textbf{surprise:} a message from ``Anna (management)'' says ``pay now and don't tell anyone''.}}
+    \explain{Mode}{One fire per room \textbf{for the whole team} plus \textbf{individual points} and a leaderboard. Every person's answers are recorded.}
+  \end{columns}
+\end{frame}
+
+% ---------- 16 decisions ----------
+\begin{frame}{The 16 right moves}{Challenge 3 \textbullet{} game content (quiz/game.js)}
+  \vspace{0mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm, after skip=1.5mm]
+    \tiny\setlength\tabcolsep{2.5pt}\renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}L{17mm}L{27mm}L{27mm}L{27mm}L{27mm}@{}}
+      & \textcolor{muted}{1 Is it a fire?} & \textcolor{muted}{2 Cut the fire} & \textcolor{muted}{3 Call the firefighters} & \textcolor{muted}{4 Fire report}\\\midrule
+      \textbf{Work phones} & Yes: the beneficiaries' contacts are at risk & Nothing to unplug: report straight away & The backup contact, now & When and where it was last seen, what was on it\\
+      \textbf{Social media} & Yes: someone else uses the account & Stop: don't click the links, don't delete the posts & Your contact person, right now & Screenshots with date and time\\
+      \textbf{Beneficiary data} & Yes: personal data reached the wrong person & Stop: send nothing else, keep the email & Your contact now: they can ask Marc to delete it & Who got it, when, what was in the list\\
+      \textbf{Office computers} & Yes: signs of ransomware & Unplug the cable, Wi-Fi off, leave it on & \textbf{Hacker message:} report it, with the message & Time, what the screen says, what you did, photo\\
+    \end{tabular}
+  \end{card}
+  {\scriptsize\textbf{Trap cards} (2 per phase) are named after the mistake, so the debrief can count them: Just a lost object, Wait and see, Carry on as normal, Wait until Monday, Tell everyone, Leave it to IT, Too vague, Say nothing, Delete the evidence, Click to check, Only hackers count, Hide it, Restart and see, Pay the ransom. Each phase also has a one-sentence ``why'' shown after the answers.\par}
+\end{frame}
+
+% ---------- Fire mechanics ----------
+\begin{frame}{How the fire is calculated}{Challenge 3 \textbullet{} mechanics}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{During a phase (up to 25 s)}{The room's fire grows \textbf{1.6\,\% per second} on every screen and phone. The phase closes when everybody has answered (after at least 2 s) or after 25 s. All numbers on this slide are constants at the top of \file{quiz/game.js}.}
+    \explain{When the phase closes}{With \(n\) players, \(g\) right answers and \(t\) trap cards:\\[1mm]
+      \(\textit{fire} = \textit{start} + 1.6 \times \textit{seconds} - 40\,\tfrac{g}{n} + 30\,\tfrac{t}{n}\)\\[1mm]
+      (between 0 and 100). No answer counts as nothing: only the time cost. The screen shows the three parts: waiting, water and petrol.}
+    \column{.48\textwidth}
+    \explain{End of a room}{%
+      \bul{good}{\textbf{Saved:} under 50\,\% after phase 4.}
+      \bul{alert}{\textbf{Damaged:} 50--99\,\%.}
+      \bul{alert}{\textbf{Burnt down:} it reached 100\,\%. The fire \textbf{spreads}: the next room starts at 45\,\% instead of 20\,\%.}}
+    \explain{Points}{A right move gives \textbf{100 points + up to 50 for speed} (50 if instant, 0 at 25 s). Trap card or no answer: 0. The first tap locks the answer. Leaderboard after each room; each phone shows the points and the rank.}
+  \end{columns}
+\end{frame}
+
+% ---------- Game screens 1 ----------
+\begin{frame}{Running the game}{Challenge 3 \textbullet{} screens}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{game-lobby}\par\vspace{1.5mm}
+    \screen{game-intro}
+    \column{.58\textwidth}
+    \explain{Start}{Menu \textrightarrow{} Game. The waiting room shows the three rules and the board. Participants who joined for the quiz are already in; latecomers scan the QR code. Phones show the rules too.}
+    \explain{Each round}{The trainer clicks \textbf{Start the round}: the board with the current room and the incident, and the starting fire (20\,\%, or 45\,\% if the fire spread). Then the 4 phases \textbf{run by themselves}: 25 s to answer, 9 s of results, next phase. \textbf{Pause} stops the countdown to comment; \textbf{Next phase} skips it; \textbf{Restart} deletes only the game answers.}
+  \end{columns}
+\end{frame}
+
+% ---------- Game screens 2 ----------
+\begin{frame}{A phase: decision and feedback}{Challenge 3 \textbullet{} screens}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{game-host-hacker}\par\vspace{1.5mm}
+    \screen{game-host-reveal}
+    \column{.58\textwidth}
+    \centering\phone[27mm]{game-phone-hacker}\hspace{1mm}\phone[27mm]{game-phone-water}\hspace{1mm}\phone[27mm]{game-phone-petrol}\par\vspace{2mm}
+    \raggedright
+    \explain{What people see}{\textbf{Main screen:} the phase, the live fire meter, the timer and who answered (top: the ``hacker'' surprise). After the phase (bottom): votes per option, the right one in green, traps with a petrol icon, the effect on the fire and \textbf{why}. \textbf{Phones:} the question, then ``Water! +points'' or ``Petrol! Trap card: \dots'' with the explanation.}
+  \end{columns}
+\end{frame}
+
+% ---------- Game screens 3 ----------
+\begin{frame}{Results and evidence}{Challenge 3 \textbullet{} screens}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \screen{game-round-end}\par\vspace{1.5mm}
+    \screen{game-debrief}
+    \column{.58\textwidth}
+    \explain{After each room}{The result (saved, damaged, burnt down) on the board, and the top 5 firefighters. The trainer clicks \textbf{Next room}.}
+    \explain{Mission debrief (about 4 minutes)}{%
+      \bul{navy}{rooms saved out of 4;}
+      \bul{navy}{\% of right moves per objective (LO1--LO4 by phase, LO5 = trap cards avoided), with the \textbf{quiz-at-the-start} result under each bar;}
+      \bul{alert}{the \textbf{most chosen trap cards}: the misconceptions to discuss;}
+      \bul{good}{top 3, every person's 16 answers, and a CSV.}}
+  \end{columns}
+\end{frame}
+
+% ---------- Game criteria ----------
+\begin{frame}{Why the game meets the criteria}{Challenge 3 \textbullet{} 5 \texttimes{} 20 points}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{Application of learning}{Players don't recall definitions: they take 16 decisions in 4 incidents, in the order of the 4 steps, under time pressure.}
+    \explain{Evidence of learning}{Right moves per objective and per person, rooms saved, traps chosen: all visible on screen and in the CSV.}
+    \explain{Originality}{The training's own analogy is the mechanic: time and mistakes really feed the fire. Team fire + individual points + a surprise hacker.}
+    \column{.48\textwidth}
+    \explain{Clear rules, quick set-up}{Rules in 30 seconds (3 sentences), the same QR room as the quiz, phases that run by themselves. Works online and onsite, no account.}
+    \explain{Objective indicators}{Each trap card has the name of a misconception, so the trainer sees exactly which belief remains. The debrief puts each objective next to the quiz at the start.}
+    \explain{Concept deck}{\file{03-serious-game/concept/game-concept.pdf} (13 slides) explains the original design.}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{5}
+% ---------- The case ----------
+\begin{frame}{The urgent payment: the case}{Challenge 4 \textbullet{} learning by doing}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.56\textwidth}
+    \explain{The story (Food for All, a small food bank, no IT department)}{%
+      \textbf{Moment 1, Tuesday 16:40.} An email from ``Paul Martin, President'', sent from a \textbf{gmail.com} address, asks Sofia, the volunteer treasurer, to pay \textbf{today} a €2,000 invoice of a new supplier and to \textbf{keep it confidential}. She pays at 16:55. At 17:10 she notices Paul always writes from @foodforall.org. \textbf{Q1} Is this an incident? What should Sofia do in the first minutes?\\[1mm]
+      \textbf{Moment 2, 17:15.} Paul never sent it. The coordinator is on holiday until Monday. A colleague: ``Reply and ask them to send the money back. And let's keep this between us.'' \textbf{Q2} Who should she tell, how, how fast? \textbf{Q3} What should she NOT do?\\[1mm]
+      \textbf{Moment 3, 17:40.} The bank's fraud team needs precise information. \textbf{Q4} What should she have written down?}
+    \column{.4\textwidth}
+    \explain{Why this case}{%
+      \bul{good}{\textbf{A new situation}: no virus, nothing broken. The ransom screen, lost phone, Facebook and wrong email were already used, so this checks \textbf{transfer} of the rule.}
+      \bul{alert}{\textbf{Critical skill}: acting right in the first minutes (Stop, Report).}
+      \bul{navy}{\textbf{Real NGO risk}: fake ``urgent payment'' emails from a manager are a common scam; volunteers, no IT, donors' money.}
+      \bul{navydark}{Disconnect means here: ask the bank to stop the payment.}}
+  \end{columns}
+\end{frame}
+
+% ---------- Run + key ----------
+\begin{frame}{Running and scoring the case}{Challenge 4 \textbullet{} trainer guide}
+  \vspace{2mm}
+  {\scriptsize\textbf{12 minutes:} \chip{navy}{4' alone} each person writes on the case sheet, one moment at a time (slides 24--26) \textbullet{} \chip{alert}{4' groups} of 3--4 agree on one answer per question (online: breakout rooms) \textbullet{} \chip{good}{4' debrief} one group answers, then the slide, then hands up (slides 27--28)\par}\vspace{1.5mm}
+  \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm]
+    \tiny\setlength\tabcolsep{2.5pt}\renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}L{17mm}L{46mm}L{34mm}L{27mm}@{}}
+      \textcolor{muted}{Q (objective)} & \textcolor{muted}{Good (2)} & \textcolor{muted}{Partial (1)} & \textcolor{muted}{Wrong (0)}\\\midrule
+      Q1 (LO1, LO2) & It is an incident (money may have gone to criminals) \textbf{and} stop: no other payment, no reply, keep the email & Incident but no first step, or a step without seeing the incident & Not an incident, wait, pay or reply\\
+      Q2 (LO3) & \textbf{The bank now} (a payment can sometimes be stopped) \textbf{and} the contact or backup today, by phone & Only one of the two, or by email, or tomorrow & Wait until Monday, tell nobody\\
+      Q3 (LO5) & At least 2 of: don't reply, don't hide, don't delete the email, don't pay again & 1 of them & None, or recommends one\\
+      Q4 (LO4) & At least 3 of: times of email and payment, sender address, amount and bank details, who she called, keep the email & 1--2 of them & Nothing useful\\
+    \end{tabular}
+  \end{card}
+  \vspace{.5mm}
+  {\scriptsize Maximum 8 points. Full guide: \file{04-learning-by-doing/README.md}.\par}
+\end{frame}
+
+% ---------- Case materials ----------
+\begin{frame}{Case sheet, debrief and criteria}{Challenge 4 \textbullet{} materials}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.26\textwidth}
+    \centering\pdfpage[52mm]{../04-learning-by-doing/case-sheet.pdf}\par\vspace{1mm}
+    {\tiny\color{muted}\file{case-sheet.pdf}\par}
+    \column{.36\textwidth}
+    \explain{Key messages of the debrief}{%
+      \bul{alert}{\textbf{Speed is money:} reported within minutes, a payment can sometimes be stopped.}
+      \bul{good}{\textbf{Nobody is to blame:} hiding out of shame makes the fire bigger.}
+      \bul{navy}{\textbf{Never answer the fraudster:} call the real person on a known number.}
+      \bul{navydark}{\textbf{The 4 steps work for every incident.}}
+      Common mistakes to listen for: waiting for Monday, replying, deleting the email, reporting only by email.}
+    \column{.34\textwidth}
+    \explain{Against the criteria}{%
+      \bul{navy}{\textbf{Core skill (20):} first steps, the heart of incident response.}
+      \bul{navy}{\textbf{Alignment (20):} each question = a step and an objective.}
+      \bul{navy}{\textbf{Hands-on (15):} decisions alone, then debate.}
+      \bul{navy}{\textbf{NGO (15):} food bank, volunteer treasurer.}
+      \bul{navy}{\textbf{Feasible (10):} paper and pen, 12'.}
+      \bul{navy}{\textbf{Design (10):} story, steps, key, guide.}
+      \bul{navy}{\textbf{Debrief (10):} answers, mistakes, hands up.}}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{6}
+% ---------- Cheat sheet ----------
+\begin{frame}{The cheat sheet}{Challenge 5 \textbullet{} take-home}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.26\textwidth}
+    \centering\pdfpage[54mm]{../05-take-home/cheat-sheet.pdf}\par\vspace{1mm}
+    {\tiny\color{muted}\file{cheat-sheet.pdf}\par}
+    \column{.36\textwidth}
+    \explain{What is on it (one A4 page)}{%
+      \bul{navy}{\textbf{Header:} ``Something seems wrong? Treat it like a fire.''}
+      \bul{alert}{\textbf{1 Spot it:} lost, leaks, acts strange, odd request; ``Not sure? Sound the alarm.''}
+      \bul{navy}{\textbf{2 The 4 steps} with do (\yes) and don't (\textcolor{alert}{\faTimes}), and lines for the \textbf{phone numbers} of my contact, the backup and the bank.}
+      \bul{alert}{\textbf{3 Never:} pay, delete, hide, restart, forward or reply.}
+      \bul{navy}{\textbf{4 Quick decisions} for 5 NGO situations.}
+      \bul{good}{\textbf{Footer:} no blame for reporting.}}
+    \column{.34\textwidth}
+    \explain{Why it works}{Every line comes from the training (slides, game, case): nothing new to learn. The personal phone numbers make it the NGO's own procedure, and they are filled in at the end of the session. Readable in seconds: numbered sections, icons, 3 colours; prints well in black and white (icons, \yes\ and \textcolor{alert}{\faTimes}).}
+    \explain{Handed out}{At minute 56 (slide 30); online as a PDF in the chat.}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{7}
+% ---------- Architecture ----------
+\begin{frame}{How the web app works}{Web app \textbullet{} architecture}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1mm,y=1mm, box/.style={draw=softdark, fill=white, rounded corners=2mm, align=center, font=\scriptsize, inner sep=1.3mm, drop shadow={opacity=.15}}]
+      \node[box, text width=18mm] (phones) at (0,0) {\textcolor{alert}{\faMobile*}\ \textbf{Phones}\\ \file{index.html}};
+      \node[box, text width=18mm] (host) at (46,0) {\textcolor{navy}{\faDesktop}\ \textbf{Trainer}\\ \file{host.html}};
+      \node[box, text width=30mm] (db) at (23,-13) {\textcolor{good}{\faDatabase}\ \textbf{Firebase} (Belgium)};
+      \node[box, text width=30mm] (gh) at (23,11) {\textcolor{navydark}{\faGithub}\ \textbf{GitHub Pages}};
+      \draw[navy, line width=.5mm, {Stealth}-{Stealth}] (phones.south) |- (db.west);
+      \draw[navy, line width=.5mm, {Stealth}-{Stealth}] (host.south) |- (db.east);
+      \draw[softdark, line width=.4mm, -{Stealth}, dashed] (gh.west) -| (phones.north);
+      \draw[softdark, line width=.4mm, -{Stealth}, dashed] (gh.east) -| (host.north);
+    \end{tikzpicture}\par\vspace{2mm}
+    \raggedright
+    \explain{Data of one room}{\file{rooms/\{code\}}: \file{mode} (quiz, quiz-after, game, none = menu), \file{state} (phase, timers, fire), \file{players} (nicknames), \file{answers/\{key\}/\{uid\}}. Keys: \file{q1}\dots, \file{q1-after}\dots, \file{r1s1}\dots\file{r4s4}.}
+    \column{.48\textwidth}
+    \explain{Technology}{Plain HTML, CSS and JavaScript, no build step. \file{host.js} + \file{host-game.js} (trainer), \file{play.js} (phones), \file{questions.js} + \file{game.js} (content), \file{backend.js} (Firebase or demo).}
+    \explain{Security}{Invisible anonymous sign-in. \file{database.rules.json}: only the device that created the room changes it; a player writes only their own nickname and answer, only while that question is open.}
+    \explain{Publishing}{Each push to \file{quiz/} publishes it (GitHub Action) and stamps the files with the commit, so no browser keeps an old version.}
+  \end{columns}
+\end{frame}
+
+% ---------- On the day ----------
+\begin{frame}{The trainer's flow on the day}{Web app \textbullet{} how to use it}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.5\textwidth}
+    \screen{menu}\par\vspace{1.5mm}
+    \explain{One room for the whole session}{\file{host.html} creates a room and keeps it if you reload. The menu marks the activities already played; results of every activity are kept until you delete the room. Starting an activity again asks for confirmation; Restart only deletes the activity you are in.}
+    \column{.46\textwidth}
+    \explain{Steps}{%
+      \bul{navy}{\textbf{Before:} open the trainer page (see Useful links) and test that a phone can join.}
+      \bul{alert}{\textbf{Minute 5:} Menu \textrightarrow{} Quiz \textrightarrow{} Start (when everyone is in).}
+      \bul{alert}{\textbf{Minute 26:} Menu \textrightarrow{} Game \textrightarrow{} Start the game.}
+      \bul{alert}{\textbf{Minute 53:} Menu \textrightarrow{} Quiz again \textrightarrow{} Start the final quiz.}
+      \bul{good}{\textbf{End:} Download CSV in the before / after screen and in the game debrief, then \textbf{Delete data}.}}
+    \explain{Demo mode}{Add \file{?demo} to the address: everything runs in one browser (open the phone page in other tabs). Useful to rehearse without Firebase.}
+  \end{columns}
+\end{frame}
+
+% ---------- Privacy + testing ----------
+\begin{frame}{Privacy, reliability and changing the content}{Web app}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.32\textwidth}
+    \explain{Privacy}{Only a nickname and the answers are stored, on EU servers (Belgium). No names, e-mails or IP addresses are saved by the app. One button deletes the whole room after the session. The Firebase config in the code is public by design: the rules protect the data.}
+    \column{.32\textwidth}
+    \explain{Reliability}{Tested end to end with automated browsers (Playwright) simulating up to 6 phones, in demo mode and on the live site: quiz, game, before / after, restart, fast taps. Trainer screen and phones resume after a reload. Paper backups exist for the quiz and the case.}
+    \column{.32\textwidth}
+    \explain{Changing the content}{%
+      \bul{navy}{Quiz: \file{quiz/questions.js} and the Challenge 2 README.}
+      \bul{navy}{Game: \file{quiz/game.js} (texts, answers, constants).}
+      \bul{navy}{Names and branding: \file{quiz/brand.js}.}
+      Push to GitHub: the site updates in about 1 minute.}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\setsection{8}
+% ---------- Repository ----------
+\begin{frame}{Where everything is}{Team \textbullet{} repository and builds}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.56\textwidth}
+    \begin{card}[left=3mm, right=3mm, top=1.5mm, bottom=1mm]
+      \scriptsize\setlength\tabcolsep{2pt}\renewcommand{\arraystretch}{1.12}
+      \begin{tabular}{@{}>{\ttfamily\color{navy}}l>{\color{muted}}l@{}}
+        01-training-plan/ & plan + one-page PDF\\
+        02-learner-assessment/ & quiz + answer key\\
+        03-serious-game/ & game + concept deck\\
+        04-learning-by-doing/ & case + guide\\
+        05-take-home/ & cheat sheet\\
+        quiz/ & web app (quiz + game)\\
+        slides/latex/ & training slides\\
+        presentation/ & pitch, this guide\\
+        tools/ & PDF generators\\
+        docs/ & evaluation criteria\\
+      \end{tabular}
+    \end{card}
+    \column{.4\textwidth}
+    \explain{Rebuilding the PDFs}{LaTeX (LuaLaTeX, Montserrat and Fira Sans fonts): \file{latexmk -lualatex <file>.tex} in the folder of the slides, the pitch, this guide, the concept deck, the case sheet and the cheat sheet. Python (reportlab): \file{tools/build\_session\_plan.py} and \file{tools/build\_answer\_sheet.py}.}
+    \explain{Every folder has a README}{It explains what the folder contains and how to use it.}
+  \end{columns}
+\end{frame}
+
+% ---------- Open points ----------
+\begin{frame}{Open points and checklist}{Team \textbullet{} before the submission and the session}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \explain{\textcolor{alert}{\faExclamationTriangle}\ To check}{%
+      \bul{alert}{\textbf{Learning objectives:} we wrote LO1--LO5 from the training title; compare them with the official online description of Training 3 (criterion ``consistency with the online description'', 20 points).}
+      \bul{alert}{\textbf{Who presents what} in the 5-minute pitch (not decided yet).}
+      \bul{alert}{\textbf{Rehearse the timing} once, especially the game (15') and the case (12').}}
+    \column{.48\textwidth}
+    \explain{\textcolor{good}{\faCheck}\ Checklist for the day}{%
+      \bul{good}{Laptop with \file{host.html} open, projector, Wi-Fi tested with a phone.}
+      \bul{good}{Printed: case sheets and cheat sheets (one per person), a few paper answer sheets.}
+      \bul{good}{Online: links and PDFs ready to paste in the chat; breakout rooms for the case.}
+      \bul{good}{After: CSV files saved, then Delete data.}}
+  \end{columns}
+\end{frame}
+
+% ---------- Links ----------
+\begin{frame}{Useful links}{Team}
+  \vspace{2mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.66\textwidth}
+    \explain{Web app}{Participants: \file{algoga22.github.io/Focus-Activity-Training3/}\\ Trainer: \file{algoga22.github.io/Focus-Activity-Training3/host.html}\\ Rehearsal without Firebase: add \file{?demo} to both.}
+    \explain{Repository}{\file{github.com/algoga22/Focus-Activity-Training3}}
+    \explain{The three PDFs to open}{Training: \file{slides/latex/slides.pdf} \textbullet{} Pitch: \file{presentation/pitch.pdf} \textbullet{} This guide: \file{presentation/project-overview.pdf}}
+    \column{.3\textwidth}
+    \centering
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
+      {\color{navy}\qrcode[height=25mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\par\vspace{1.5mm}
+      {\scriptsize\color{muted}Scan to try the app\par}
+    \end{card}
+  \end{columns}
+\end{frame}
+
+\end{document}

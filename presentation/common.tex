@@ -1,0 +1,55 @@
+% Shared look of the project presentations (pitch.tex and project-overview.tex).
+% ---- Background without the session progress bar (this is a pitch, not the training)
+\makeatletter
+\setbeamertemplate{background}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (160,90);
+    \fill[paper] (0,0) rectangle (160,90);
+    \fill[soft] (163,93) circle (26);
+    \fill[soft!60] (139,96) circle (9);
+    \fill[alert] (152,70) circle (1.4);
+    \node[anchor=east, fill=white, rounded corners=3mm, inner xsep=3mm, inner ysep=1.6mm, font=\mediumfont\scriptsize, text=navy,
+          blur shadow={shadow blur steps=6, shadow xshift=0, shadow yshift=-.3mm, shadow opacity=15}]
+      at (148,80.5) {\textcolor{alert}{\faUserFriends}\ \insertframenumber\,/\,\inserttotalframenumber};
+    % optional section tracker at the bottom (detailed deck): \sections{A,B,C} and \setsection{<n>}
+    \ifdefined\pitch@sections
+      \foreach \name [count=\i] in \pitch@sections {
+        \pgfmathsetmacro\xa{12+(\i-1)*136/\pitch@nsec+.4}\pgfmathsetmacro\xb{12+\i*136/\pitch@nsec-.4}
+        \ifnum\i=\pitch@cur \fill[alert, rounded corners=.4mm] (\xa,3.4) rectangle (\xb,4.8);
+        \else\ifnum\i<\pitch@cur \fill[navy!70, rounded corners=.4mm] (\xa,3.7) rectangle (\xb,4.5);
+        \else \fill[softdark!70, rounded corners=.4mm] (\xa,3.7) rectangle (\xb,4.5); \fi\fi
+      }
+    \fi
+  \end{tikzpicture}}
+\newcommand\sections[2]{\gdef\pitch@sections{#1}\gdef\pitch@nsec{#2}}
+\newcount\pitch@cur
+\newcommand\setsection[1]{\global\pitch@cur=#1\relax}
+\makeatother
+
+% ---- Helpers
+% \screen[<width>]{<file>}: trainer-screen screenshot in a window frame (the app footer is cropped)
+\newcommand\screen[2][\linewidth]{%
+  \begin{tcolorbox}[enhanced, width=#1, arc=1.6mm, boxrule=.4pt, colframe=softdark, colback=white,
+      left=0pt, right=0pt, top=0pt, bottom=0pt, before skip=0pt, after skip=0pt, drop fuzzy shadow={black!35}]
+    \includegraphics[width=\linewidth, trim=0 215 0 0, clip]{#2}
+  \end{tcolorbox}}
+% \phone[<height>]{<file>}: phone screenshot in a phone frame (top part only)
+\newcommand\phone[2][44mm]{%
+  \tikz\node[inner sep=0pt, draw=ink, line width=1.1mm, rounded corners=3.5mm, fill=white, drop shadow={opacity=.25}]
+    {\includegraphics[height=#1, trim=0 420 0 0, clip]{#2}};}
+% \caption{<icon>}{<text>}
+\newcommand\shotcaption[2]{{\scriptsize\color{muted}#1\ #2\par}}
+% \point{<colour>}{<icon>}{<text>}: compact bullet card
+\newcommand\point[3]{%
+  \begin{card}[left=2.5mm, top=1.2mm, bottom=1.2mm, before skip=0pt, after skip=1.6mm]
+    \iconbadge[6.5mm]{#1}{\small #2}\hspace{2.2mm}\begin{minipage}[c]{\dimexpr\linewidth-9mm\relax}\raggedright\mediumfont\footnotesize #3\end{minipage}
+  \end{card}}
+% \bigcard{<colour>}{<icon>}{<title>}{<text>}: card of the "why it works" slide
+\newcommand\bigcard[4]{%
+  \begin{card}[equal height group=why, before upper=\centering, left=2mm, right=2mm, top=2mm, bottom=2mm]
+    \iconbadge[8mm]{#1}{#2}\par\vspace{1.2mm}
+    {\headfont\small\color{navy}#3\par}\vspace{1mm}
+    {\scriptsize\color{muted}#4\par}
+  \end{card}}
+\newcommand\stepbadge[3]{\tikz[baseline=(b.base)]\node[fill=#1, text=white, rounded corners=2mm, inner xsep=2.4mm, inner ysep=1.4mm, font=\headfont\small](b){#2\ #3};}
+

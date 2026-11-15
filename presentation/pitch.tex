@@ -1,0 +1,233 @@
+% 5-minute presentation of our project to the jury (Cybersecurity for NGOs Bootcamp, Training 3).
+% Same theme as the training slides. Build from this folder: latexmk -lualatex pitch.tex
+% Speaker notes (who says what, timing): change "hide notes" to "show notes on second screen=right".
+\documentclass[aspectratio=169,11pt,t]{beamer}
+\usepackage{../slides/latex/beamerthemefocus}
+\usepackage{qrcode}
+\usetikzlibrary{arrows.meta}
+\setbeameroption{hide notes}
+\graphicspath{{screenshots/}}
+
+\input{common}
+
+\title{When something goes wrong}
+
+\begin{document}
+
+% ---------- 1 · Title ----------
+{\darkslide
+\begin{frame}[plain,c]
+  \vspace*{-2mm}
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}TRAINING 3 \textbullet{} OUR PROJECT}\par\vspace{4mm}
+  \begin{minipage}{100mm}\raggedright
+    {\headfont\fontsize{27}{32}\selectfont When something\\ goes wrong\par}\par\vspace{3mm}
+    {\lightfont\fontsize{14}{18}\selectfont\color{soft}A simple incident response for NGOs,\\ in 60 minutes}\par\vspace{8mm}
+    {\small\color{soft}Divya Ravichandran \textbullet{} Álvaro Gómez García\\Mohammed Krayem \textbullet{} University of Luxembourg\par}
+  \end{minipage}
+  \note{[15 s] "We are Divya, Álvaro and Mohammed, cybersecurity students at the University of Luxembourg.
+  Our training is Training 3: what to do when something goes wrong."}
+\end{frame}
+}
+
+% ---------- 2 · The idea ----------
+\begin{frame}{One analogy, one rule}{Our idea}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \point{navy}{\faUsers}{\textbf{For:} NGO staff and volunteers with \textbf{no technical background}}
+    \point{alert}{\faStopwatch}{\textbf{The problem:} the first minutes decide the damage, and most people don't know what to do}
+    \point{good}{\faBullseye}{\textbf{Goal:} recognise an incident and take the right first steps}
+    \column{.56\textwidth}
+    \begin{card}[before upper=\centering, top=2.5mm, bottom=2.5mm]
+      {\fontsize{20}{20}\selectfont\color{alert}\faFire}\par\vspace{1mm}
+      {\headfont\large\color{navy}An incident is like a fire\par}\vspace{.5mm}
+      {\small\color{muted}the sooner you act, the less damage\par}\vspace{2.5mm}
+      \stepbadge{alert}{1}{Stop}\hspace{.6mm}\stepbadge{navy}{2}{Disconnect}\par\vspace{1.2mm}
+      \stepbadge{good}{3}{Report}\hspace{.6mm}\stepbadge{navydark}{4}{Write down}\par\vspace{2mm}
+      {\scriptsize\color{muted}Never pay, delete or hide \textbullet{} no blame for reporting\par}
+    \end{card}
+  \end{columns}
+  \note{[35 s] "Our audience has no technical background. When something goes wrong, the first minutes
+  decide the damage, and most people either do nothing or the wrong thing. So we built the whole hour on one
+  analogy: an incident is like a fire. And one rule with four steps: Stop, Disconnect, Report, Write down.
+  The same words appear in every challenge."}
+\end{frame}
+
+% ---------- 3 · The hour ----------
+\begin{frame}{One hour, one thread}{The session}
+  \vspace{5mm}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,-26) rectangle (136,22);
+    \begin{scope}[xshift=5mm]
+    \def\L{126}
+    \foreach \s/\e/\c in {0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/53/alert,53/56/alert,56/60/softdark}
+      \fill[\c, rounded corners=1mm] ({\s*\L/60+.4},-1.8) rectangle ({\e*\L/60-.4},1.8);
+    \foreach \t in {0,15,30,60} \node[font=\scriptsize, text=muted] at ({\t*\L/60},-4.5) {\t'};
+    \foreach \m/\c/\ic/\name/\sub in {
+        2.5/muted/\faHandshake/Welcome/slides,
+        14/navy/\faSearch/Spot it/slides,
+        33.5/alert/\faGamepad/Game/Challenge 3,
+        58/muted/\faClipboardCheck/Cheat sheet/Challenge 5} {
+      \pgfmathsetmacro\x{\m*\L/60}
+      \draw[\c, line width=.4mm] (\x,2.4) -- (\x,6);
+      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,10.5) {\ic};
+      \node[anchor=south, align=center, font=\footnotesize, text=navy] at (i.north) {{\headfont\name}\\[-.5mm]{\color{muted}\sub}};
+    }
+    \foreach \m/\c/\ic/\name/\sub in {
+        7.5/alert/\faQuestionCircle/Quiz/Ch. 2 \textbullet{} start,
+        22/navy/\faFirstAid/Act on it/slides,
+        46/alert/\faUsers/Case/Challenge 4,
+        54.5/alert/\faChartLine/Quiz again/Ch. 2 \textbullet{} end} {
+      \pgfmathsetmacro\x{\m*\L/60}
+      \draw[\c, line width=.4mm] (\x,-2.4) -- (\x,-6);
+      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,-10.5) {\ic};
+      \node[anchor=north, align=center, font=\footnotesize, text=navy] at (i.south) {{\headfont\name}\\[-.5mm]{\color{muted}\sub}};
+    }
+    \end{scope}
+  \end{tikzpicture}\par\vspace{1mm}
+  \centering
+  \pill{alert}{\faHandPointer\ 37 of 60 minutes: participants act}\hspace{1.5mm}%
+  \pill{navy}{\faMobile*\ One QR code for the whole hour}
+  \note{[30 s] "Here is the hour. Short explanations alternate with activities: in 37 of the 60 minutes
+  participants are doing something. They scan one QR code at the start and use it for the quiz, the game and the
+  final quiz. Álvaro will show you the quiz and the game."}
+\end{frame}
+
+% ---------- 4 · Quiz ----------
+\begin{frame}{The quiz: what would you do?}{Challenge 2 \textbullet{} learner assessment}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.65\textwidth}
+    \screen{quiz-host-question}\par\vspace{1.2mm}
+    \shotcaption{\faDesktop}{Trainer screen: 5 real situations, 1 per learning objective}\vspace{2mm}
+    \pill{navy}{\faRandom\ 4 options: real beliefs}\hspace{1mm}\pill{alert}{\faEyeSlash\ No answers shown yet}
+    \column{.31\textwidth}
+    \centering\phone[50mm]{quiz-phone-q1}\par\vspace{1.2mm}
+    \shotcaption{\faMobile*}{Phone: no app, no account}
+  \end{columns}
+  \note{[35 s] "We built our own Kahoot-style web app. Participants scan the QR code, choose a nickname and
+  answer on their phone: no app, no account, online or onsite. Five real situations, one per learning objective.
+  The wrong options are not silly: they are what people really believe, like switching the computer off. At the
+  start we do not show the right answers, because..."}
+\end{frame}
+
+% ---------- 5 · Before / after ----------
+\begin{frame}{The same quiz at the end}{Challenge 2 \textbullet{} before / after}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.65\textwidth}
+    \screen{quiz-before-after}\par\vspace{1.2mm}
+    \shotcaption{\faFlask}{Example with test data: right answers per objective, start vs end}\vspace{2mm}
+    \pill{good}{\faChartLine\ Per objective and per person}\hspace{1mm}\pill{navy}{\faDownload\ CSV as evidence}
+    \column{.31\textwidth}
+    \centering\phone[50mm]{quiz-phone-progress}\par\vspace{1.2mm}
+    \shotcaption{\faMobile*}{Your own progress}
+  \end{columns}
+  \note{[30 s] "...we ask exactly the same questions again at minute 53. The app compares both rounds per
+  objective and per person, and every participant sees their own progress on the phone. So we don't just say
+  people learned: we can show it, and download it."}
+\end{frame}
+
+% ---------- 6 · Game ----------
+\begin{frame}{The game: put out the fire}{Challenge 3 \textbullet{} serious game}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.65\textwidth}
+    \screen{game-host-question}\par\vspace{1.2mm}
+    \shotcaption{\faHome}{4 rooms \texttimes{} 4 steps \textbullet{} one team fire that grows every second}\vspace{2mm}
+    \pill{navy}{\faTint\ Right move = water}\hspace{1mm}\pill{alert}{\faGasPump\ Trap card = petrol}
+    \column{.31\textwidth}
+    \centering\phone[50mm]{game-phone-hacker}\par\vspace{1.2mm}
+    \shotcaption{\faBolt}{Surprise: a ``hacker''}
+  \end{columns}
+  \note{[35 s] "In the game, the analogy becomes the rule. Our NGO has four rooms, each with a real
+  incident, and each room is played in four phases: the four steps. The fire grows every second, a right move
+  is water, and a classic mistake is a trap card: petrol, for the whole team. And in the last room, a fake
+  manager sends a message: pay and keep it secret."}
+\end{frame}
+
+% ---------- 7 · Game evidence ----------
+\begin{frame}{Every answer changes the fire}{Challenge 3 \textbullet{} feedback and evidence}
+  \vspace{2mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.49\textwidth}
+    \screen{game-host-reveal}\par\vspace{1.2mm}
+    \shotcaption{\faCommentDots}{After each phase: answers, effect on the fire (waiting, water, petrol) and why}
+    \column{.49\textwidth}
+    \screen{game-debrief}\par\vspace{1.2mm}
+    \shotcaption{\faChartBar}{Debrief: right moves per objective next to the quiz at the start, most chosen trap cards}
+  \end{columns}
+  \vspace{4mm}
+  \centering\pill{good}{\faEye\ The trainer sees which misconceptions remain}\hspace{1mm}\pill{navy}{\faDownload\ CSV per person}
+  \note{[30 s] "After every phase the screen shows what the team chose, how the fire changed, and why;
+  each phone says Water or Petrol. At the end the trainer gets the right moves per objective, next to the quiz
+  result at the start, and the trap cards people still fall for."}
+\end{frame}
+
+% ---------- 8 · Case + cheat sheet ----------
+\begin{frame}{Apply it alone, take it home}{Challenges 4 and 5}
+  \vspace{5mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.49\textwidth}
+    \begin{columns}[T,onlytextwidth]
+      \column{.42\linewidth}
+      \tikz\node[inner sep=0pt, drop shadow={opacity=.25}] {\includegraphics[height=38mm]{../04-learning-by-doing/case-sheet.pdf}};
+      \column{.56\linewidth}
+      {\headfont\small\color{navy}The urgent payment\par}\vspace{1mm}
+      {\scriptsize A fake email from the ``president'': the treasurer pays €2,000. \textbf{A new case}, no virus, nothing broken.\par}\vspace{1.5mm}
+      {\scriptsize\color{muted}\faUser\ 4' alone \textrightarrow{} \faUsers\ 4' groups \textrightarrow{} 4' debrief, answer key per step\par}
+    \end{columns}
+    \column{.49\textwidth}
+    \begin{columns}[T,onlytextwidth]
+      \column{.42\linewidth}
+      \tikz\node[inner sep=0pt, drop shadow={opacity=.25}] {\includegraphics[height=38mm]{../05-take-home/cheat-sheet.pdf}};
+      \column{.56\linewidth}
+      {\headfont\small\color{navy}One-page cheat sheet\par}\vspace{1mm}
+      {\scriptsize When to use it, the 4 steps, \textbf{your contacts' phone numbers}, what never to do, quick decisions.\par}\vspace{1.5mm}
+      {\scriptsize\color{muted}\faThumbtack\ To keep next to the computer\par}
+    \end{columns}
+  \end{columns}
+  \vspace{4mm}
+  \centering\pill{navy}{\faCheckCircle\ Can they transfer the rule to something they have never seen? That is the real test.}
+  \note{[35 s] "Then each person applies the rule alone to a case they have never seen: a fake email from
+  the president, and 2,000 euros paid. No virus, nothing broken: if they still stop, call the bank and report,
+  they have understood the rule, not just memorised examples. And they leave with a one-page cheat sheet, with
+  their own contacts' phone numbers on it."}
+\end{frame}
+
+% ---------- 9 · Why it works ----------
+\begin{frame}{Why it works}{In short}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.235\textwidth}\bigcard{alert}{\faFire}{Coherent}{One analogy and one rule in every slide, game, case and sheet}
+    \column{.235\textwidth}\bigcard{navy}{\faChartLine}{Measurable}{Same quiz before and after, game per objective, CSV per person}
+    \column{.235\textwidth}\bigcard{good}{\faMobile*}{Simple}{One QR code, no account, online and onsite, paper backups}
+    \column{.235\textwidth}\bigcard{navydark}{\faBoxOpen}{Ready to run}{32 slides with speaker notes, all PDFs, our own free app}
+  \end{columns}
+  \vspace{2mm}
+  \begin{card}[left=4mm, top=1.5mm, bottom=1.5mm]
+    {\color{navy}\qrcode[height=11mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\hspace{4mm}%
+    \begin{minipage}[c]{.8\linewidth}\raggedright
+      {\mediumfont\small\color{navy}Try the quiz and the game now: scan and pick a nickname.\par}
+      {\scriptsize\color{muted}algoga22.github.io/Focus-Activity-Training3\par}
+    \end{minipage}
+  \end{card}
+  \note{[25 s] "To sum up: coherent, measurable, simple, and ready to run tomorrow: 32 slides with speaker
+  notes, every document, and our own app, free and with no accounts. You can try it right now with this code."}
+\end{frame}
+
+% ---------- 10 · Thank you ----------
+{\darkslide
+\begin{frame}[plain,c]
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}TRAINING 3 \textbullet{} WHEN SOMETHING GOES WRONG}\par\vspace{4mm}
+  \begin{minipage}{112mm}\raggedright
+    {\headfont\fontsize{30}{35}\selectfont Thank you!\par}\par\vspace{3mm}
+    {\lightfont\fontsize{14}{18}\selectfont\color{soft}Stop \textbullet{} Disconnect \textbullet{} Report \textbullet{} Write down}\par\vspace{8mm}
+    \pill{alert}{\faQuestionCircle\ Your questions}\hspace{1.5mm}%
+    \pill{white!15!navy}{\faGithub\ github.com/algoga22/Focus-Activity-Training3}
+  \end{minipage}
+  \note{[5 s] "Thank you. We are happy to answer your questions." (Total about 5 minutes.)}
+\end{frame}
+}
+
+\end{document}
