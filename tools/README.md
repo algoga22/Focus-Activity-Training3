@@ -13,7 +13,7 @@ The other PDFs are built with LuaLaTeX in their own folder (`latexmk -lualatex <
 
 | Source | Output |
 |---|---|
-| [`slides/latex/60-minute-training.tex`](../slides/latex/60-minute-training.tex) | 60-minute training slides |
+| [`slides/60-minute-training.tex`](../slides/60-minute-training.tex), [`5-minute-presentation.tex`](../slides/5-minute-presentation.tex), [`project-overview.tex`](../slides/project-overview.tex) | The 3 decks |
 | [`03-serious-game/concept/game-concept.tex`](../03-serious-game/concept/game-concept.tex) | Game concept deck |
 | [`04-learning-by-doing/case-sheet.tex`](../04-learning-by-doing/case-sheet.tex) | Case sheet |
 | [`05-take-home/cheat-sheet.tex`](../05-take-home/cheat-sheet.tex) | Cheat sheet |
