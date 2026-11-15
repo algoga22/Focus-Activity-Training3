@@ -34,6 +34,11 @@
     \iconbadge[7.5mm]{#1}{\headfont #2}\hspace{3mm}\begin{minipage}[c]{.84\linewidth}\raggedright\mediumfont\small #3\end{minipage}
   \end{card}}
 
+% \gstep{<colour>}{<n>}{<text>}: compact numbered step for narrow columns
+\newcommand\gstep[3]{%
+  \begin{card}[left=2.5mm, top=1.2mm, bottom=1.2mm, before skip=0pt, after skip=1.8mm]
+    \iconbadge[6.5mm]{#1}{\headfont\small #2}\hspace{2.5mm}\begin{minipage}[c]{\dimexpr\linewidth-9.5mm\relax}\raggedright\mediumfont\small #3\end{minipage}
+  \end{card}}
 % \partslide{<kicker>}{<title>}{<subtitle>}{<pills>}: dark divider at the start of a part
 \newcommand\partslide[4]{%
   {\darkslide
@@ -243,8 +248,8 @@
       {\scriptsize\color{muted}\faVideo\ Online: link in the chat\par}
     \end{card}
   \end{columns}
-  \note{Ask everyone to take out their phone. Then switch to the quiz screen (host.html, opened before the
-  session): it shows the QR code with the room code, and who has joined. Reassure: it is not an exam, there
+  \note{Ask everyone to take out their phone. Then switch to the trainer screen (host.html, opened before the
+  session) and choose "Quiz" in the menu: it shows the QR code with the room code, and who has joined. Reassure: it is not an exam, there
   are no bad marks, and only a nickname is stored. Online: click "Copy link for the chat".
   About 1 minute per question; do NOT give the right answers yet. No internet? Use the paper answer sheet
   (02-learner-assessment/answer-sheet.pdf).}
@@ -511,6 +516,77 @@
   \end{columns}
   \note{Ask the room: "So what do you do?" and let participants say each step before you click. This is the
   bridge to the game: in the next 15 minutes teams apply the same four steps to new incidents. (~1.5 min)}
+\end{frame}
+
+% =====================================================================
+% PART 5 · Game: Put out the fire (26–41 min) – Challenge 3
+% The game runs in the same web app as the quiz: host.html → Menu → Game.
+% Concept: 03-serious-game/concept/game-concept.pdf
+% =====================================================================
+\sessionpart{5}{26}{41}
+
+% ---------- 19 · Part divider ----------
+\partslide{MINUTES 26\textendash 41 \textbullet{} GAME TIME}{Put out\\ the fire}{An incident is like a fire.\\ Now it really is one.}
+  {\pill{alert}{\faClock[regular]\ 15 minutes}\hspace{1.5mm}\pill{white!15!navy}{\faMobile*\ Same app as the quiz}}
+
+% ---------- 20 · How to play ----------
+\begin{frame}{How to play}{Put out the fire \textbullet{} rules in 30 seconds}
+  \vspace{2mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.62\textwidth}
+    \step{alert}{\faClock[regular]}{The fire \textbf{grows every second}: answer fast}
+    \step{navy}{\faTint}{Right move = \textbf{water}: the fire goes down, you win points}
+    \step{alert}{\faGasPump}{Trap card = \textbf{petrol}: the fire jumps up for the whole team}
+    \vspace{.5mm}
+    \pill{good}{\faUsers\ One fire for the team}\hspace{1mm}%
+    \pill{navy}{\faTrophy\ Points for everyone}
+    \column{.34\textwidth}
+    \centering
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
+      {\scriptsize\mediumfont\color{good}\faCheckCircle\ Joined for the quiz? You are already in\par}\vspace{2mm}
+      {\color{navy}\qrcode[height=22mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\par\vspace{2mm}
+      {\scriptsize\mediumfont\color{navy}algoga22.github.io/\\Focus-Activity-Training3\par}\vspace{1.5mm}
+      {\scriptsize\color{muted}\faVideo\ Online: link in the chat\par}
+    \end{card}
+  \end{columns}
+  \note{Before the session, nothing to prepare: on the trainer screen (host.html) click "Menu" and choose
+  "Game". Participants who joined for the quiz stay connected and their phone switches by itself; latecomers
+  scan the QR code. Explain the three rules in 30 seconds: the fire grows every second, right move = water,
+  trap card = petrol for the whole team. (~1 min with the next slide)}
+\end{frame}
+
+% ---------- 21 · 4 rooms, 4 steps ----------
+\begin{frame}{Four rooms, four steps}{How a round works}
+  \vspace{1mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.44\textwidth}
+    \centering
+    \begin{tikzpicture}[x=.9mm,y=.85mm]
+      \draw[navy, line width=.8mm, rounded corners=3mm] (-2,-2) rectangle (56,44);
+      \node[fill=paper, inner xsep=2mm, font=\headfont\scriptsize, text=navy] at (27,44) {\faHome\ \ OUR NGO};
+      \foreach \x/\y/\ic/\name/\l/\c in {0/21/\faMobile*/Work phones/30/alert, 28/21/\faThumbsUp/Social media/0/softdark,
+                                         0/0/\faAddressBook/Beneficiary data/0/softdark, 28/0/\faLaptop/Office computers/0/softdark} {
+        \draw[\c, fill=white, rounded corners=2mm, line width=.6mm] (\x,\y) rectangle ++(26,19);
+        \node[text=navy, font=\large] at ({\x+13},{\y+13}) {\ic};
+        \node[font=\headfont\tiny, text=navy] at ({\x+13},{\y+7.3}) {\name};
+        \fill[soft, rounded corners=.5mm] ({\x+4},{\y+2.6}) rectangle ++(18,1.6);
+        \ifnum\l>0 \fill[alert, rounded corners=.5mm] ({\x+4},{\y+2.6}) rectangle ++({18*\l/100},1.6);\fi
+      }
+      \node[text=alert, font=\small] at (23,37) {\faFire};
+    \end{tikzpicture}\par\vspace{2mm}
+    {\scriptsize\color{muted}One real NGO incident in each room}
+    \column{.53\textwidth}
+    \gstep{alert}{1}{\textbf{Is it a fire?} \textcolor{muted}{Spot it}}
+    \gstep{navy}{2}{\textbf{Cut the fire} \textcolor{muted}{Stop and disconnect}}
+    \gstep{good}{3}{\textbf{Call the firefighters} \textcolor{muted}{Report}}
+    \gstep{navydark}{4}{\textbf{Fire report} \textcolor{muted}{Write down}}
+    \vspace{.5mm}\centering\pill{alert!85!black}{\faBolt\ Watch out for surprises\dots}
+  \end{columns}
+  \note{Each room of the NGO is one round with one incident. Each round has four short phases: the same four
+  steps we just learned. 25 seconds per phase, then the main screen shows the answers, the effect on the fire
+  and why. Do not reveal the surprise (a "hacker" message in the last room). Then click "Start the game".
+  After the 4 rooms, use the debrief screen: rooms saved, right moves per objective and the most chosen trap
+  cards. Download the CSV for the evidence. (~30 s here, then 13 min of game and debrief)}
 \end{frame}
 
 \end{document}

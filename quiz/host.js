@@ -2,6 +2,8 @@ import { connect, DEMO, escapeHtml as esc } from './backend.js?v=__V__';
 import { QUESTIONS, MAX_POINTS, score } from './questions.js?v=__V__';
 import { SCENES } from './scenes.js?v=__V__';
 import { wordmark, avatar, TRAINERS, TRAINING, BOOTCAMP } from './brand.js?v=__V__';
+import { createGame, board } from './host-game.js?v=__V__';
+import { GAME_TITLE, ROOMS, PHASES, resultsOf } from './game.js?v=__V__';
 
 const QUESTION_SECONDS = 60;
 const HURRY_SECONDS = 10;
@@ -45,6 +47,12 @@ const answersFor = (qKey) => room.answers?.[qKey] || {};
 const setState = (s) => be.setState(code, s);
 
 const actions = {
+  pickQuiz: () => pick('quiz'),
+  pickGame: () => pick('game'),
+  menu: async () => {
+    if (room.answers && !confirm('Go back to the menu?\n\nThe answers of this activity will be deleted (download the CSV first if you need it). Participants stay connected.')) return;
+    await be.setMode(code, null);
+  },
   start: () => setState({ phase: 'question', q: 0, qKey: QUESTIONS[0].key, startedAt: Date.now() }),
   close: () => setState({ ...room.state, phase: 'closed' }),
   next: () => {
@@ -61,11 +69,17 @@ const actions = {
     await be.deleteRoom(code);
   },
   restart: async () => {
-    if (!confirm('Restart the quiz from the beginning?\n\nAll answers will be deleted. Participants stay connected and do not need to scan the QR code again.')) return;
+    if (!confirm(`Restart the ${room.mode === 'game' ? 'game' : 'quiz'} from the beginning?\n\nAll answers will be deleted. Participants stay connected and do not need to scan the QR code again.`)) return;
     await be.resetRoom(code);
   },
   newQuiz: async () => { localStorage.removeItem('quiz-host-room'); location.href = `?${params.has('demo') ? 'demo' : ''}`; },
 };
+async function pick(mode) {
+  if (room.answers && !confirm('Start a new activity? The answers of the last one will be deleted (download the CSV first if you need it).')) return;
+  await be.setMode(code, mode);
+}
+const game = createGame({ be, code, $, esc, setActions, actions, RESTART: ['restart', '<i class="fa-solid fa-rotate-left"></i> Restart', 'danger'],
+  grow: () => grow(), getRoom: () => room, players: () => players() });
 
 const RESTART = ['restart', '<i class="fa-solid fa-rotate-left"></i> Restart', 'danger'];
 function setActions(list) {
@@ -84,8 +98,11 @@ const grow = () => requestAnimationFrame(() => requestAnimationFrame(() =>
 // ---------------------------------------------------------------- views
 function build() {
   clearInterval(timer);
+  game.stop();
   const { phase } = room.state;
-  if (phase === 'lobby') buildLobby();
+  if (!room.mode) buildMenu();
+  else if (phase === 'lobby') buildLobby();
+  else if (room.mode === 'game') game.build();
   else if (phase === 'question') buildQuestion();
   else if (phase === 'closed') buildResults();
   else buildSummary();
@@ -93,6 +110,8 @@ function build() {
 
 function update() {
   const { phase } = room.state;
+  if (!room.mode) { $('#count').textContent = players().length; return; }
+  if (room.mode === 'game' && phase !== 'lobby') return game.update();
   if (phase === 'lobby') {
     const list = players();
     $('#count').textContent = list.length;
@@ -101,7 +120,7 @@ function update() {
       if (box.querySelector(`[data-uid="${CSS.escape(uid)}"]`)) continue;
       box.insertAdjacentHTML('beforeend', `<span class="player-chip" data-uid="${esc(uid)}">${avatar(uid)}${esc(p.nick)}</span>`);
     }
-    $('#start').disabled = list.length === 0;
+    const startBtn = $('#start') || $('#gBegin'); if (startBtn) startBtn.disabled = list.length === 0;
   } else if (phase === 'question') {
     const answered = Object.keys(answersFor(room.state.qKey));
     $('#answered').textContent = answered.length;
@@ -118,27 +137,59 @@ const qHead = (q, extra = '') => `<div class="q-head"><div>
     <div class="kicker"><i class="fa-solid fa-triangle-exclamation"></i>Incident ${q + 1} of ${QUESTIONS.length}${extra}</div>${progress(q)}</div>
     <span class="pill"><i class="fa-solid fa-${QUESTIONS[q].loIcon}"></i> ${esc(QUESTIONS[q].lo)}</span></div>`;
 
+function buildMenu() {
+  const n = players().length;
+  $('#main').innerHTML = `
+    <div><div class="kicker"><i class="fa-solid fa-table-cells-large"></i>Room ${code} · <span id="count">${n}</span> connected</div><h1>What do we play?</h1></div>
+    <section class="menu">
+      <button class="menu-card quiz" data-act="pickQuiz">
+        <span class="mc-icon"><i class="fa-solid fa-circle-question"></i></span>
+        <span class="kicker">Challenge 2 · minutes 5–10</span>
+        <h2>Quiz: what would you do?</h2>
+        <span class="muted">${QUESTIONS.length} real-life incidents · about 1 minute each · shows what the group already knows</span>
+        <span class="go">Open the quiz <i class="fa-solid fa-arrow-right"></i></span>
+      </button>
+      <button class="menu-card game" data-act="pickGame">
+        <span class="mc-icon"><i class="fa-solid fa-fire"></i></span>
+        <span class="kicker">Challenge 3 · minutes 26–41</span>
+        <h2>Game: ${GAME_TITLE}</h2>
+        <span class="muted">${ROOMS.length} rooms of our NGO · ${PHASES.length} phases each · one fire for the team, points for everyone</span>
+        <span class="go">Open the game <i class="fa-solid fa-arrow-right"></i></span>
+      </button>
+    </section>
+    <p class="muted"><i class="fa-solid fa-circle-info"></i> Participants stay connected when you switch: they join once with the QR code (shown in the next screen).</p>`;
+  setActions([]);
+}
+$('#main').addEventListener('click', (e) => { const b = e.target.closest('.menu-card[data-act]'); if (b) actions[b.dataset.act]?.(); });
+
 function buildLobby() {
+  const isGame = room.mode === 'game';
   const qr = qrcode(0, 'M');
   qr.addData(joinUrl); qr.make();
   $('#main').innerHTML = `
     <section class="lobby">
       <div class="qr-wrap"><div class="qr">${qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true })}</div></div>
       <div class="join">
-        <div class="kicker"><i class="fa-solid fa-tower-broadcast"></i>Incident response team · assembling</div>
-        <h1>Join the <span>response team</span></h1>
+        <div class="kicker"><i class="fa-solid fa-tower-broadcast"></i>${isGame ? `Challenge 3 · ${GAME_TITLE}` : 'Incident response team · assembling'}</div>
+        <h1>${isGame ? '<span>Put out</span> the fire' : 'Join the <span>response team</span>'}</h1>
+        ${isGame ? `<div class="rules">
+          <span><i class="fa-solid fa-clock"></i> The fire <b>grows every second</b></span>
+          <span><i class="fa-solid fa-droplet"></i> Right move = <b>water</b></span>
+          <span><i class="fa-solid fa-gas-pump"></i> Trap card = <b>petrol</b></span></div>` : ''}
         <div class="steps">
           <span class="step"><b>1</b> Scan the QR code with your phone camera</span>
           <span class="step"><b>2</b> Pick a nickname or a cyber name</span>
         </div>
         <div class="code-box"><span class="muted">or go to <span class="url">${esc(shortUrl)}</span> and enter</span><span class="code">${code}</span></div>
         <div class="crew">
-          <div class="crew-head"><span class="count" id="count">0</span><span class="muted">responders ready · 5 incidents · about 1 minute each · not an exam</span></div>
+          <div class="crew-head"><span class="count" id="count">0</span><span class="muted">${isGame ? `firefighters ready · ${ROOMS.length} rooms · ${PHASES.length} phases each · already joined for the quiz? You're in` : 'responders ready · 5 incidents · about 1 minute each · not an exam'}</span></div>
           <div class="players" id="players"></div>
         </div>
       </div>
+      ${isGame ? `<div class="lobby-board">${board(resultsOf(null))}</div>` : ''}
     </section>`;
-  setActions([['copy', '<i class="fa-solid fa-link"></i> Copy link for the chat', 'ghost'], ['start', 'Start the quiz <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
+  setActions([['menu', '<i class="fa-solid fa-table-cells-large"></i> Menu', 'ghost'], ['copy', '<i class="fa-solid fa-link"></i> Copy link for the chat', 'ghost'],
+    isGame ? ['gBegin', 'Start the game <i class="fa-solid fa-fire-extinguisher"></i>', 'alert'] : ['start', 'Start the quiz <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
 }
 
 const optionTiles = (Q) => Object.entries(Q.options).map(([l, t]) =>
@@ -238,7 +289,7 @@ function buildSummary() {
       ${rows.map((r) => `<tr><td>${esc(r.nick)}</td>${r.per.map((x) => `<td>${x.choice || '–'} (${x.points})</td>`).join('')}<td><b>${r.total}</b></td></tr>`).join('')}</table></section>` : ''}`;
   grow();
   setActions([RESTART, ['toggleTable', showTable ? 'Hide individual scores' : '<i class="fa-solid fa-table"></i> Individual scores', 'ghost'],
-    ['csv', '<i class="fa-solid fa-download"></i> Download CSV', 'ghost'], ['remove', '<i class="fa-solid fa-trash-can"></i> Delete data', 'ghost'], ['newQuiz', 'New quiz']]);
+    ['csv', '<i class="fa-solid fa-download"></i> Download CSV', 'ghost'], ['remove', '<i class="fa-solid fa-trash-can"></i> Delete data', 'ghost'], ['menu', '<i class="fa-solid fa-table-cells-large"></i> Menu']]);
 }
 
 function downloadCsv() {
@@ -253,11 +304,11 @@ function downloadCsv() {
 function renderDeleted() {
   clearInterval(timer);
   $('#main').innerHTML = `<div><div class="kicker">Room ${code}</div><h1>The data of this room was deleted</h1></div>`;
-  setActions([['newQuiz', 'New quiz', 'alert']]);
+  setActions([['newQuiz', 'New room', 'alert']]);
 }
 function renderNotHost() {
   $('#main').innerHTML = `<div><div class="kicker">Room ${code}</div><h1>This room was opened on another device</h1></div>`;
-  setActions([['newQuiz', 'Start a new quiz', 'alert']]);
+  setActions([['newQuiz', 'Open a new room', 'alert']]);
 }
 
 // Start listening last: the demo backend calls back immediately
@@ -265,7 +316,8 @@ be.watchRoom(code, (r) => {
   room = r;
   if (!room) return renderDeleted();
   if (room.hostUid !== be.uid) return renderNotHost();
-  const key = `${room.state.phase}:${room.state.q}`;
+  const st = room.state || {};
+  const key = `${room.mode}:${st.phase}:${st.q}:${st.round}:${st.step}`;
   if (key !== viewKey) { viewKey = key; showCorrect = false; showTable = false; build(); }
   update();
 });

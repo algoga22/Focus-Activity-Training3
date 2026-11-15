@@ -4,7 +4,7 @@
 
 A 5-minute diagnostic quiz at the start of the session. It measures what participants already know, the misconceptions they have and what they would actually do, against **all** the learning objectives. It works online and onsite.
 
-It is run **once, at the start of the session (5–10 min)**. What participants have learned is measured at the end with the case in [Challenge 4](../04-learning-by-doing/), which uses the **same objectives** (see [Measuring progress](#measuring-progress)).
+It is run **once, at the start of the session (5–10 min)**. The same five objectives are then measured again by the game ([Challenge 3](../03-serious-game/)) and the case in [Challenge 4](../04-learning-by-doing/) (see [Measuring progress](#measuring-progress)). The wrong answers of the quiz are answered on the slides of minutes 10–26 and come back as trap cards in the game.
 
 ## Learning objectives assessed
 
@@ -64,7 +64,7 @@ Every question is a real situation ("What would you do?"), with no tricks.
 
 ## Tool choice: our own QR quiz app (paper sheet as backup)
 
-We built a small Kahoot-style web app: [`quiz/`](../quiz/). The trainer projects the host screen; participants scan the QR code and answer on their phone.
+We built a small Kahoot-style web app: [`quiz/`](../quiz/), online at <https://algoga22.github.io/Focus-Activity-Training3/>. The trainer projects the host screen (menu → **Quiz**); participants scan the QR code and answer on their phone. The same app and the same room are used later for the game of Challenge 3, so participants join only once.
 
 | | Onsite | Online |
 |---|---|---|
@@ -86,16 +86,16 @@ Set-up and use on the day: [`quiz/README.md`](../quiz/README.md).
 
 ## Measuring progress
 
-The quiz is designed so it **could be run again at the end without any changes**. In our session, progress is measured with the case in [Challenge 4](../04-learning-by-doing/), whose questions cover the same objectives:
+The quiz is designed so it **could be run again at the end without any changes**. In our session the same objectives are measured three times:
 
-| Objective | Quiz (start) | Challenge 4 case (end) |
-|---|---|---|
-| LO1 Recognise | Q1 | Recognising the ransom screen as an incident (debrief) |
-| LO2 First steps | Q2 | "What is the first thing Marie should do?" |
-| LO3 Report | Q3 | "Who should she tell, and how, if the coordinator isn't there?" |
-| LO4 Write down | Q4 | "What should she write down?" |
-| LO5 Avoid mistakes | Q5 | "What should she not do?" |
+| Objective | Quiz, minute 5 (Ch. 2) | Game, minute 26 (Ch. 3) | Case, minute 41 (Ch. 4) |
+|---|---|---|---|
+| LO1 Recognise | Q1 | Phase 1 of each room, "Is it a fire?" | Recognising the case as an incident |
+| LO2 First steps | Q2 | Phase 2, "Cut the fire" | "What is the first thing to do?" |
+| LO3 Report | Q3 | Phase 3, "Call the firefighters" | "Who do you tell, and how, if the coordinator isn't there?" |
+| LO4 Write down | Q4 | Phase 4, "Fire report" | "What do you write down?" |
+| LO5 Avoid mistakes | Q5 | Trap cards avoided in all phases | "What should you not do?" |
 
-Q2 and Q3 at the start and the Marie case at the end are **the same kind of situation** (ransom screen, coordinator not available). That makes the comparison fair: "At the start, X of you would have waited until Monday. Now Y of you would call the backup contact."
+The quiz and the game both give a % of right answers per objective and a CSV per nickname, so the trainer can say: "At the start, X of you would have waited until Monday. In the game, only Y picked that trap card." The Challenge 4 case is still to be finalised.
 
 See [evaluation criteria](../docs/evaluation-criteria.md#challenge-2--learner-assessment).

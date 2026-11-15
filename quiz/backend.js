@@ -32,11 +32,13 @@ async function firebaseBackend() {
     watchRoom(code, cb) { return onValue(r(`rooms/${code}`), (s) => cb(s.val())); },
     setState(code, state) { return set(r(`rooms/${code}/state`), state); },
     join(code, nick) { return set(r(`rooms/${code}/players/${user.uid}`), { nick, joinedAt: Date.now() }); },
-    // choice '' removes the answer (Q1: everything unticked)
-    answer(code, qKey, choice) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), choice ? { choice, at: Date.now() } : null); },
+    // choice '' removes the answer (Q1: everything unticked). extra: e.g. { ms } = time taken in the game
+    answer(code, qKey, choice, extra = {}) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), choice ? { choice, at: Date.now(), ...extra } : null); },
     deleteRoom(code) { return remove(r(`rooms/${code}`)); },
     // Back to the lobby: answers are deleted, participants stay in the room
     resetRoom(code) { return update(r(`rooms/${code}`), { state: LOBBY, answers: null }); },
+    // Pick the activity ('quiz' | 'game' | null = menu): answers are deleted, participants stay in the room
+    setMode(code, mode) { return update(r(`rooms/${code}`), { mode, state: LOBBY, answers: null }); },
   };
 }
 
@@ -77,13 +79,14 @@ function localBackend() {
     },
     async setState(code, state) { write(`rooms/${code}/state`, state); },
     async join(code, nick) { write(`rooms/${code}/players/${uid}`, { nick, joinedAt: Date.now() }); },
-    async answer(code, qKey, choice) {
+    async answer(code, qKey, choice, extra = {}) {
       const room = getPath(load(), `rooms/${code}`);
       if (room?.state?.phase !== 'question' || room.state.qKey !== qKey) throw new Error('closed'); // same as the Firebase rules
-      write(`rooms/${code}/answers/${qKey}/${uid}`, choice ? { choice, at: Date.now() } : null);
+      write(`rooms/${code}/answers/${qKey}/${uid}`, choice ? { choice, at: Date.now(), ...extra } : null);
     },
     async deleteRoom(code) { write(`rooms/${code}`, null); },
     async resetRoom(code) { write(`rooms/${code}/answers`, null); write(`rooms/${code}/state`, LOBBY); },
+    async setMode(code, mode) { write(`rooms/${code}/answers`, null); write(`rooms/${code}/mode`, mode); write(`rooms/${code}/state`, LOBBY); },
   });
 }
 

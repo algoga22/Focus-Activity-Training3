@@ -2,6 +2,8 @@
 
 **In one sentence:** a hands-on exercise at the end of the session where participants solve a realistic NGO case on their own, which also **shows what they have learned** during the training.
 
+> **Status:** to do. The structure (alone → groups → debrief, 14') is fixed. **The case still has to be chosen.** The ransom screen, the lost phone and the hacked Facebook page are already used in the slides and the game, so the final case should be a **new situation**, to check that participants can transfer the 4 steps (Stop, Disconnect, Report, Write down).
+
 ## Purpose
 - **Practise ONE critical skill**, the most important one of the training: taking the right first steps when something goes wrong.
 - Participants **find the solution themselves** (deciding, analysing, solving) instead of listening.
@@ -10,7 +12,7 @@
 
 ## When in the session
 **41–55 min (14 minutes)**, after the theory and the game ([Challenge 3](../03-serious-game/)):
-- **5'** alone: each participant answers the case on a short sheet
+- **5'** alone: each participant answers the case on a short sheet (or an online form / the chat)
 - **5'** in groups: compare answers and agree on the best response
 - **4'** debrief: correct steps, common mistakes and comparison with the start
 
@@ -38,8 +40,6 @@ Each participant fills in a simple sheet **alone**:
 
 **Groups and debrief:** groups compare their sheets and agree on one answer, then the trainer shows the correct steps and explains the common mistakes. A quick show of hands ("Who got question 1 right? And in the quiz at the start?") makes the progress visible to everyone.
 
-**Other possible cases:**
-- A work phone with beneficiaries' contacts is lost on the bus.
-- The NGO's Facebook page starts posting strange messages.
+**Other possible cases:** a lost phone and a hacked Facebook page were also ideas, but they are now rooms of the game (Challenge 3).
 
 See [evaluation criteria](../docs/evaluation-criteria.md#challenge-4--learning-by-doing).

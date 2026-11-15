@@ -2,6 +2,8 @@
 
 A one-page, visual job aid: clear triggers, steps and decisions, common mistakes to avoid, realistic NGO situations. Only content covered during the training.
 
+> **Status:** to do. It must use exactly the words of the slides and the game: the rule **Stop, Disconnect, Report, Write down**, the fire analogy, the "never" list (pay, delete, hide, restart, forward) and the warning signs of the 4 everyday incidents (hacked account, ransomware, email to the wrong person, lost device). Handed out at minute 55, together with the key messages and the feedback.
+
 ## Simple example
 
 A one-page sheet to stick next to the computer:
