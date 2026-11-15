@@ -7,6 +7,7 @@
 | [`concept/game-concept.pdf`](concept/game-concept.pdf) | Concept deck: idea, board, mechanics, evidence (source: [`concept/game-concept.tex`](concept/game-concept.tex)) |
 | Web app [`../quiz/`](../quiz/README.md#the-game-put-out-the-fire), online at <https://algoga22.github.io/Focus-Activity-Training3/> | The playable game. Trainer screen: **Menu → Game** |
 | Slides 19–21 of the [60-minute training slides](../slides/60-minute-training.pdf) | Introduction and rules (1 minute) |
+| [`demo/game-demo-5-players.mp4`](demo/game-demo-5-players.mp4) | Video (6 min 52 s) of a full game with 5 players on the live web app: trainer screen and the 5 phones side by side |
 
 **When:** minutes 26–41 (15 minutes), right after the slides on the first steps.
 
