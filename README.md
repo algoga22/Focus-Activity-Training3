@@ -13,9 +13,9 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | # | Challenge | Folder | Status |
 |---|---|---|---|
 | 1 | Training plan | [`01-training-plan/`](01-training-plan/) | Updated with the slides, quiz and game (LOs provisional) |
-| 2 | Learner assessment (diagnostic quiz at the start, max 5 min) | [`02-learner-assessment/`](02-learner-assessment/), app in [`quiz/`](quiz/) | Quiz app ready and online |
+| 2 | Learner assessment (same quiz at the start and at the end, to measure progress) | [`02-learner-assessment/`](02-learner-assessment/), app in [`quiz/`](quiz/) | Quiz app ready and online |
 | 3 | Serious game ("Put out the fire") | [`03-serious-game/`](03-serious-game/), app in [`quiz/`](quiz/) | Concept + playable game online |
-| 4 | Learning by doing (also measures what participants have learned) | [`04-learning-by-doing/`](04-learning-by-doing/) | To do (case to be chosen) |
+| 4 | Learning by doing (practise one critical skill on a new case) | [`04-learning-by-doing/`](04-learning-by-doing/) | To do (case to be chosen) |
 | 5 | Take-home cheat sheet | [`05-take-home/`](05-take-home/) | To do |
 | – | Web app (quiz + game) | [`quiz/`](quiz/), online at <https://algoga22.github.io/Focus-Activity-Training3/> | Online (Firebase) |
 | – | Slides | [`slides/`](slides/) | Minutes 0–41 done |
@@ -32,10 +32,11 @@ There are 5 challenges plus the slides, each worth 100 points (600 points in tot
 | 10–18 | Recognise that something has gone wrong ("Spot it", fire analogy) | Slides |
 | 18–26 | Apply the first steps: Stop, Disconnect, Report, Write down | Slides |
 | 26–41 | Play an incident response game: "Put out the fire" | Challenge 3 (web app) |
-| 41–55 | Practise with a real NGO case and measure what participants have learned | Challenge 4 |
-| 55–60 | Review key points and close | Challenge 5 |
+| 41–53 | Practise with a real NGO case | Challenge 4 |
+| 53–56 | Measure what participants have learned: the same quiz again, before / after | Challenge 2 (web app) |
+| 56–60 | Review key points and close | Challenge 5 |
 
-One thread runs through the whole hour: **an incident is like a fire** (the sooner you spot it, the less damage) and **one rule, four steps**. The quiz misconceptions are answered in the slides and come back as trap cards in the game.
+One thread runs through the whole hour: **an incident is like a fire** (the sooner you spot it, the less damage) and **one rule, four steps**. The quiz misconceptions are answered in the slides and come back as trap cards in the game. Learning is measured by asking the same quiz again at the end (before / after per objective and per person).
 
 The full plan is in [`01-training-plan/`](01-training-plan/).
 

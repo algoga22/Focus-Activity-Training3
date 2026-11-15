@@ -8,63 +8,73 @@ export const QUESTIONS = [
     hint: 'Choose all that apply',
     options: {
       A: "You lose the work phone with the beneficiaries' contacts on the bus",
-      B: 'You forget your password and ask your coordinator to reset it',
+      B: 'Your computer shows "Windows updates installed, please restart"',
       C: "Your email account sends messages that you didn't write",
-      D: "You send the list of volunteers' addresses to the wrong person",
+      D: "You send the list of volunteers' home addresses to the wrong person",
     },
-    icons: { A: 'mobile-screen-button', B: 'key', C: 'envelopes-bulk', D: 'address-book' },
+    icons: { A: 'mobile-screen-button', B: 'rotate', C: 'envelopes-bulk', D: 'address-book' },
     correct: 'ACD',
-    misconception: '"An incident is only a virus or a hacker"',
+    misconception: '"An incident is only a virus or a hacker" (a lost phone or a wrong email does not count)',
   },
   {
     key: 'q2', lo: 'LO2 First steps', loIcon: 'power-off',
     text: 'A message fills your screen: "Your files are locked. Pay €500 to get them back." What do you do first?',
     options: {
-      A: "Pay quickly so the NGO doesn't lose its files",
-      B: 'Turn off the Wi-Fi or unplug the cable, and stop using the computer',
-      C: 'Restart the computer to see if the message goes away',
+      A: 'Switch the computer off completely, so the virus stops',
+      B: 'Turn off the Wi-Fi or unplug the cable, and leave the computer on',
+      C: 'Run the antivirus to remove the virus yourself',
+      D: 'Pay quickly, so the NGO does not lose its files',
     },
-    icons: { A: 'money-bill-wave', B: 'plug-circle-xmark', C: 'rotate-right' },
+    icons: { A: 'power-off', B: 'plug-circle-xmark', C: 'shield-virus', D: 'money-bill-wave' },
     correct: 'B',
-    misconception: '"Paying fixes it" / "Restarting fixes it"',
+    misconception: '"Switching off / fixing it myself is safest" (it erases clues; paying fixes nothing)',
   },
   {
     key: 'q3', lo: 'LO3 Report', loIcon: 'phone-volume',
     text: "It's Friday at 18:00. You clicked a strange link and now your computer is acting oddly. Your coordinator has gone home. What do you do?",
     options: {
-      A: 'Wait until Monday and tell the coordinator then',
-      B: 'Call the backup contact person now',
-      C: 'Say nothing if everything looks normal again after a while',
+      A: 'Email the coordinator from this computer, so it is in writing',
+      B: 'Ask a friend who is good with computers to have a look',
+      C: 'Call the backup contact person now',
+      D: 'Wait an hour: if it looks normal again, there is no need to report it',
     },
-    icons: { A: 'calendar-days', B: 'phone-volume', C: 'eye-slash' },
-    correct: 'B',
-    misconception: '"It can wait" / "If it looks fine, it is fine"',
+    icons: { A: 'envelope', B: 'user-group', C: 'phone-volume', D: 'hourglass-half' },
+    correct: 'C',
+    misconception: '"It can wait / someone I know can fix it" (report now, by phone, to the right person)',
   },
   {
     key: 'q4', lo: 'LO4 Write down', loIcon: 'pen-to-square',
-    text: 'What is the most useful thing to write down after an incident?',
+    text: 'You have reported an incident. What is the most useful thing to write down?',
     options: {
-      A: 'Nothing: the IT person will find out what happened',
-      B: 'What happened, when, and what you saw (with a photo of the screen)',
-      C: 'Only your name and your department',
+      A: 'When it happened, what you saw and what you did, with a photo of the screen',
+      B: 'Which virus or hacker you think caused it',
+      C: 'Nothing: the IT person can find everything in the computer',
+      D: 'A short message: "computer problem, please help"',
     },
-    icons: { A: 'user-gear', B: 'camera', C: 'id-badge' },
-    correct: 'B',
-    misconception: '"Documenting is the IT person\'s job"',
+    icons: { A: 'camera', B: 'user-secret', C: 'user-gear', D: 'note-sticky' },
+    correct: 'A',
+    misconception: '"I need to explain the technical cause" / "Documenting is the IT person\'s job"',
   },
   {
     key: 'q5', lo: 'LO5 Avoid mistakes', loIcon: 'ban',
     text: 'A colleague says: "Just delete that strange email and forget about it." What do you do?',
     options: {
       A: "Delete it: once it's gone, the danger is gone",
-      B: "Keep it, don't click anything and report it",
-      C: 'Forward it to the whole team to warn them',
+      B: 'Forward it to the whole team to warn them',
+      C: 'Reply to the sender to ask if it is genuine',
+      D: "Keep it, don't click anything and report it",
     },
-    icons: { A: 'trash-can', B: 'flag', C: 'share-from-square' },
-    correct: 'B',
-    misconception: '"Deleting = safe" / "Forwarding helps"',
+    icons: { A: 'trash-can', B: 'share-from-square', C: 'reply', D: 'flag' },
+    correct: 'D',
+    misconception: '"Deleting = safe" / "Forwarding or replying helps"',
   },
 ];
+
+// The same quiz runs twice: at the start (mode 'quiz') and at the end (mode 'quiz-after'), to measure progress.
+export const AFTER = 'quiz-after';
+export const isQuiz = (mode) => mode === 'quiz' || mode === AFTER;
+/** Where the answers of a question are stored: q1 (start) or q1-after (end). */
+export const answerKey = (Q, mode) => (mode === AFTER ? `${Q.key}-after` : Q.key);
 
 export const MAX_POINTS = QUESTIONS.length * 2;
 

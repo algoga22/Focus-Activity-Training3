@@ -1,15 +1,16 @@
 # Quiz and game app (Challenges 2 and 3)
 
-Our own Kahoot-style web app for the session. The trainer screen opens on a **menu** with two activities:
+Our own Kahoot-style web app for the session. The trainer screen opens on a **menu** with three activities:
 
-- **Quiz: what would you do?** The diagnostic quiz of [Challenge 2](../02-learner-assessment/), minutes 5–10.
+- **Quiz: what would you do?** The diagnostic quiz of [Challenge 2](../02-learner-assessment/), minutes 5–10. The right answers stay hidden.
 - **Game: Put out the fire.** The serious game of [Challenge 3](../03-serious-game/), minutes 26–41.
+- **Quiz again: what have we learned?** The same 5 questions at minutes 53–56 (30 s each), then the **before / after** comparison: % of right answers per objective at the start and at the end, team score, how many people improved, the misconceptions that remain, and every person's progress. Each phone shows that person's own score at the start and at the end.
 
-Participants scan a QR code, pick a nickname and answer on their phone: no app, no account. They join **once**. When the trainer switches from the quiz to the game (button **Menu**), the phones follow by themselves.
+Participants scan a QR code, pick a nickname and answer on their phone: no app, no account. They join **once**. When the trainer switches activity (button **Menu**), the phones follow by themselves. **The answers of every activity are kept** in the room, so the final quiz can be compared with the first one, and the game debrief shows the quiz result at the start next to each objective.
 
 | Page | Who | What it does |
 |---|---|---|
-| `host.html` | Trainer (projected) | Creates a room with a 4-digit code and QR, then the menu (quiz or game). Shows who joined, the questions, a timer, the answers, then the results per learning objective, CSV export and data deletion |
+| `host.html` | Trainer (projected) | Creates a room with a 4-digit code and QR, then the menu (quiz, game, final quiz). Shows who joined, the questions, a timer, the answers, then the results per learning objective, CSV export and data deletion |
 | `index.html` | Participants (phone) | Join with the QR or the code, choose a nickname, answer by tapping. Quiz: Q1 allows several answers, answers can be changed until the trainer closes the question. Game: the first tap locks the answer |
 
 **Look and feel:** Digital Learning Hub branding and an "incident response team" theme for Training 3. Each question is an *incident* with its own animated illustration ([`scenes.js`](scenes.js)): a radar, a ransom screen, Friday 18:00, incident notes, a suspicious email. Every option has a colour, a letter and an icon; every participant gets an avatar and can ask for a random "cyber name"; the results end with a *mission debrief*. Branding and trainer names are in [`brand.js`](brand.js).
@@ -28,7 +29,7 @@ Content and rules: [`game.js`](game.js). Trainer screen: [`host-game.js`](host-g
 - **Pace:** the trainer starts each room. The phases then run by themselves: 25 s to answer (or less, if everybody has answered), 9 s for the result with the explanation, then the next phase. **Pause** stops the countdown, so you can comment.
 - **Debrief:** rooms saved, right moves per objective (LO1–LO4, plus LO5 = trap cards avoided), the most chosen trap cards, top 3, every player's answers and a CSV.
 
-**Correct answers are not shown to participants**: the quiz is a diagnostic and the answers are covered during the session. The trainer can still reveal them on the main screen (*Show correct answer*).
+**Correct answers are not shown at the start**: the quiz is a diagnostic, the answers are covered during the session, and the same questions are asked again at the end. In the final quiz the trainer can reveal them on the main screen (*Show correct answer*).
 
 ## Try it now (demo mode)
 
@@ -62,11 +63,13 @@ The config values in `firebase-config.js` are public by design; the [rules](data
 1. Open `host.html` on the trainer laptop a few minutes before (it keeps the same room if you reload) and choose **Quiz** in the menu.
 2. Show the QR while you introduce yourselves, so people join before the quiz starts. Online: **Copy link for the chat**.
 3. Keyboard: `→`, `Space` or `Enter` = main button (start, close answers, next).
-   **Restart** (during or after the quiz) goes back to the waiting room and deletes all answers; participants stay connected and do not need to scan again.
-4. After the quiz: **Download CSV**, then **Menu → Game** at minute 26. Going back to the menu deletes the quiz answers; the participants stay connected.
-5. After the game: **Download CSV** (evidence for Challenge 3), then **Delete data**.
+   **Restart** (during or after an activity) goes back to the waiting room and deletes the answers of that activity; participants stay connected and do not need to scan again.
+4. Minute 26: **Menu → Game**. Minute 53: **Menu → Quiz again**. The menu marks the activities already played; their results are kept.
+5. At the end: **Download CSV** in the before / after screen (both quizzes per person) and in the game debrief (evidence for Challenge 3), then **Delete data** (deletes the whole room).
 
-**No internet at the venue?** Use the paper [answer sheet](../02-learner-assessment/answer-sheet.pdf) and the same questions on the slides.
+**Restart** only deletes the answers of the activity you are in. Starting an activity that was already played asks for confirmation first.
+
+**No internet at the venue?** Use the paper [answer sheet](../02-learner-assessment/answer-sheet.pdf) (Start and End columns) and read the questions aloud from [the Challenge 2 README](../02-learner-assessment/README.md#the-quiz).
 
 ## Privacy
 

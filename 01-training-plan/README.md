@@ -17,18 +17,21 @@ PDF version: [`Training3_Session_Plan.pdf`](Training3_Session_Plan.pdf)
 
 **Materials:** [slides](../slides/) (minutes 0–41 done), [web app](../quiz/) for the quiz and the game (QR code, <https://algoga22.github.io/Focus-Activity-Training3/>), paper [answer sheet](../02-learner-assessment/answer-sheet.pdf) as backup, Challenge 4 case sheet and Challenge 5 cheat sheet (to do).
 
-**Balance:** about 35 of the 60 minutes participants are doing something themselves (quiz, votes, game, case), and theory never lasts more than 8 minutes in a row.
+**Balance:** about 37 of the 60 minutes participants are doing something themselves (quiz, votes, game, case, final quiz), and theory never lasts more than 8 minutes in a row.
+
+**Measuring learning:** the same quiz at the start (minute 5) and at the end (minute 53), compared automatically by the web app for the group and for each person. The game (minute 26) measures the same objectives in between.
 
 
 | Min | Topic (What?) | Duration | Objectives | Description (How?) | Challenge |
 |---|---|---|---|---|---|
 | 0–5 | Welcome participants and introduce the session | 5' | — | Who we are (the 3 trainers), warm-up "Raise your hand if…" (strange email, lost device, not sure who to call), agenda of the hour and the 3 things they will take home. Participants scan the QR code of the web app while we introduce ourselves | Slides |
-| 5–10 | Assess what participants already know | 5' | LO1–LO5 | Diagnostic quiz "What would you do?": 5 real-life incidents, 1 per objective, answered on the phone in our web app (QR code, nickname, no account). The trainer sees the results per objective live and spends more time on the weakest ones. Paper answer sheet as backup | **Challenge 2** |
+| 5–10 | Assess what participants already know | 5' | LO1–LO5 | Diagnostic quiz "What would you do?": 5 real-life incidents with 4 options each, 1 per objective, answered on the phone in our web app (QR code, nickname, no account). The right answers are not shown yet: the same quiz comes back at the end. The trainer sees the results per objective live and spends more time on the weakest ones. Paper answer sheet as backup | **Challenge 2** |
 | 10–18 | Recognise that something has gone wrong | 8' | LO1 | "Spot it": what an incident is (something lost, leaked or acting strange: mistakes count too), 4 everyday incidents and their signs (hacked account, ransomware, email to the wrong person, lost device), the fire analogy (the sooner you spot it, the less damage), "Incident or not?" thumbs-up vote, key message: not sure? sound the alarm | Slides |
 | 18–26 | Apply the first steps | 8' | LO2–LO5 | "Act on it": one rule, **Stop, Disconnect, Report, Write down**, said aloud together and linked to the fire. Each step in detail (leave the computer on; lost device: report straight away; backup contact on Friday 18:00; a 4-line note + photo), what never to do (pay, delete, hide, restart, forward), worked example on the ransom screen | Slides |
-| 26–41 | Play an incident response game | 15' | LO1–LO5 | Game "Put out the fire" in the same web app: 4 rooms of the NGO (4 incidents) × 4 phases (the 4 steps). One fire for the whole team that grows every second: right move = water, trap card = petrol; individual points and a surprise "hacker" message. 1' rules + ~10' play + ~4' debrief (rooms saved, right moves per objective, most chosen trap cards) | **Challenge 3** |
-| 41–55 | Practise with a real NGO case and measure what participants have learned | 14' | LO2–LO5 | Each participant first answers a realistic NGO case alone on a short sheet (this shows what they have learned), then groups compare answers and the trainer runs the debrief and compares with the quiz (5' alone + 5' in groups + 4' debrief). Case to be finalised | **Challenge 4** |
-| 55–60 | Review key points and close | 5' | LO1–LO5 | Hand out the one-page cheat sheet (the 4 steps, who to call, what never to do), recap the key messages and collect feedback | **Challenge 5** |
+| 26–41 | Play an incident response game | 15' | LO1–LO5 | Game "Put out the fire" in the same web app: 4 rooms of the NGO (4 incidents) × 4 phases (the 4 steps). One fire for the whole team that grows every second: right move = water, trap card = petrol; individual points and a surprise "hacker" message. 1' rules + ~10' play + ~4' debrief (rooms saved, right moves per objective next to the quiz at the start, most chosen trap cards) | **Challenge 3** |
+| 41–53 | Practise with a real NGO case | 12' | to choose | Each participant first solves a new, realistic NGO case alone on a short sheet, then groups compare answers and agree on the best response, then the trainer runs the debrief (4' alone + 4' in groups + 4' debrief). Case to be finalised | **Challenge 4** |
+| 53–56 | Measure what participants have learned | 3' | LO1–LO5 | The same 5 quiz questions again in the web app (30 s each). The trainer shows the before / after comparison per objective, the team score and how many people improved; each person sees their own progress on the phone | **Challenge 2** |
+| 56–60 | Review key points and close | 4' | LO1–LO5 | Hand out the one-page cheat sheet (the 4 steps, who to call, what never to do), recap the key messages and collect feedback | **Challenge 5** |
 | | **Total** | **60'** | | | |
 
 ## Simple examples

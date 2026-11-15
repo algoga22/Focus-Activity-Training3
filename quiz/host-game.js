@@ -5,6 +5,7 @@ import {
   qKeyOf, stepOf, kind, fireAfter, liveFire, outcome, resultsOf, leaderboard,
 } from './game.js?v=__V__';
 import { avatar } from './brand.js?v=__V__';
+import { QUESTIONS, score } from './questions.js?v=__V__';
 
 const HURRY_SECONDS = 7;
 
@@ -244,6 +245,12 @@ export function createGame(ctx) {
     lo.push({ name: 'Avoid the traps', ...TRAPS_LO, n: answers.length, rate: answers.length ? answers.filter((x) => x.kind === 'good').length / answers.length : 0 });
     const traps = {};
     rows.forEach((r) => r.per.forEach((x, i) => { if (x.kind === 'trap') { const name = ALL_STEPS[i].step.options[x.choice].trap; traps[name] = (traps[name] || 0) + 1; } }));
+    // Same objective in the quiz at the start (phase s ↔ question s+1, trap cards ↔ Q5), to show progress
+    lo.forEach((x, i) => {
+      const Q = QUESTIONS[i];
+      const list = rows.map((r) => getRoom().answers?.[Q.key]?.[r.uid]?.choice).filter(Boolean);
+      x.quiz = list.length ? list.filter((c) => score(Q, c) === 2).length / list.length : null;
+    });
     return { rows, lo, traps: Object.entries(traps).sort((a, b) => b[1] - a[1]) };
   }
 
@@ -254,13 +261,14 @@ export function createGame(ctx) {
     const { rows, lo, traps } = stats();
     const tmax = Math.max(1, ...traps.map((t) => t[1]));
     $('#main').innerHTML = `
-      <div><div class="kicker"><i class="fa-solid fa-flag-checkered"></i>Mission debrief</div><h1>${saved} of ${ROOMS.length} rooms saved</h1></div>
+      <div><div class="kicker"><i class="fa-solid fa-flag-checkered"></i>Mission debrief</div><h1>${saved} of ${ROOMS.length} rooms saved</h1>
+        <div class="room-strip">${results.map((r, i) => { const o = outcome(r); return o ? `<span class="badge-room ${o.key}"><i class="fa-solid fa-${ROOMS[i].icon}"></i> ${esc(ROOMS[i].name)}: ${o.label}</span>` : ''; }).join('')}</div></div>
       <section class="g-summary">
         <div class="card">
           <h3 style="margin-bottom:.6em">Right moves per objective</h3>
           ${lo.map((x) => `<div class="lo-row ${x.n && x.rate < 0.6 ? 'weak' : ''}"><span class="lo-icon"><i class="fa-solid fa-${x.icon}"></i></span><b>${esc(x.lo)}</b>
-            <div class="bar"><i class="fill" data-w="${Math.round(x.rate * 100)}"></i></div><span class="bar-num">${Math.round(x.rate * 100)}%</span></div>`).join('')}
-          ${board(results)}
+            <div class="bar"><i class="fill" data-w="${Math.round(x.rate * 100)}"></i></div><span class="bar-num">${Math.round(x.rate * 100)}%</span>
+            ${x.quiz != null ? `<span class="was"><i class="fa-solid fa-clock-rotate-left"></i> Quiz at the start: ${Math.round(x.quiz * 100)}%</span>` : ''}</div>`).join('')}
         </div>
         <div style="display:flex;flex-direction:column;gap:1.2em">
           <div class="card"><h3 style="margin-bottom:.5em"><i class="fa-solid fa-gas-pump" style="color:var(--alert)"></i> Most chosen trap cards</h3>

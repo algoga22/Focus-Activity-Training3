@@ -1,5 +1,5 @@
 import { connect, DEMO, escapeHtml as esc } from './backend.js?v=__V__';
-import { QUESTIONS, normalise } from './questions.js?v=__V__';
+import { QUESTIONS, normalise, score, MAX_POINTS, AFTER, answerKey } from './questions.js?v=__V__';
 import { SCENES } from './scenes.js?v=__V__';
 import { wordmark, avatar, cyberName, TRAINING, BOOTCAMP } from './brand.js?v=__V__';
 import { ROOMS, PHASES, QUESTION_SECONDS, GAME_TITLE, stepOf, kind, points, liveFire, outcome, resultsOf, leaderboard } from './game.js?v=__V__';
@@ -94,15 +94,29 @@ function onRoom(r) {
     return;
   }
   if (room.mode === 'game') return gameView(me);
+  const after = room.mode === AFTER;
   if (phase === 'lobby') {
     app.innerHTML = `${top(`<span class="pill">Room ${code}</span>`)}
-      <div class="center">${avatar(be.uid, 'xl')}<div class="kicker">You're in</div>
-        <h1>Welcome to the team, ${esc(me.nick)}!</h1>
-        <p class="muted">Stand by and look at the main screen: the first incident arrives soon.</p>
+      <div class="center">${avatar(be.uid, 'xl')}<div class="kicker">${after ? 'Last check' : "You're in"}</div>
+        <h1>${after ? `Ready for the final quiz, ${esc(me.nick)}?` : `Welcome to the team, ${esc(me.nick)}!`}</h1>
+        <p class="muted">${after ? 'The same 5 questions as at the start. Answer with what you know now: we will compare with the beginning.' : 'Stand by and look at the main screen: the first incident arrives soon.'}</p>
         <span class="pill"><i class="fa-solid fa-satellite-dish fa-beat-fade"></i> Waiting for the trainer…</span></div>${foot}`;
   } else if (phase === 'question') showQuestion(q, me);
   else if (phase === 'closed') message('<i class="fa-solid fa-lock"></i>', "Time's up!", 'Answers are locked. Eyes on the main screen.');
+  else if (after) { finalScore(); confetti(); }
   else { message('<i class="fa-solid fa-flag-checkered"></i>', 'Mission complete!', "Thanks for your help, responder. We'll go through the right answers together during the session.", 'good'); confetti(); }
+}
+
+// End of the final quiz: the participant's own progress (start → end)
+function finalScore() {
+  const total = (mode) => QUESTIONS.reduce((sum, Q) => sum + score(Q, room.answers?.[answerKey(Q, mode)]?.[be.uid]?.choice || ''), 0);
+  const playedStart = QUESTIONS.some((Q) => room.answers?.[Q.key]?.[be.uid]);
+  const start = total('quiz'); const end = total(AFTER);
+  app.innerHTML = `${top(`<span class="pill">Room ${code}</span>`)}<div class="center">
+    <div class="big-icon good"><i class="fa-solid fa-chart-line"></i></div><div class="kicker">Before / after</div><h1>Your progress</h1>
+    <div class="score-card">${playedStart ? `<div><b>${start}<span>/${MAX_POINTS}</span></b><small>start</small></div>` : ''}
+      <div><b>${end}<span>/${MAX_POINTS}</span></b><small>end</small></div></div>
+    <p class="muted">${!playedStart ? 'You joined after the first quiz: thanks for taking part!' : end > start ? `+${end - start} points since the start. Well done, responder!` : end === start ? 'Same score as at the start. Check the cheat sheet!' : 'Look at the right answers on the main screen and keep the cheat sheet close.'}</p></div>${foot}`;
 }
 
 function message(icon, title, text, cls = '') {
@@ -111,7 +125,8 @@ function message(icon, title, text, cls = '') {
 
 function showQuestion(q, me) {
   const Q = QUESTIONS[q];
-  const previous = room.answers?.[Q.key]?.[be.uid]?.choice || '';
+  const qKey = room.state.qKey;
+  const previous = room.answers?.[qKey]?.[be.uid]?.choice || '';
   selected = new Set(previous);
   app.innerHTML = `
     ${top(`<span class="pill">${avatar(be.uid).replace('class="avatar ', 'style="font-size:.7em" class="avatar ')} ${esc(me.nick)}</span>`)}
@@ -138,13 +153,13 @@ function showQuestion(q, me) {
     if (Q.multi) { if (selected.has(l)) selected.delete(l); else selected.add(l); }
     else selected = new Set([l]);
     paint();
-    save(Q, normalise(selected));
+    save(Q, qKey, normalise(selected));
   });
 }
 
 let queue = Promise.resolve();
-function save(Q, choice) {
-  queue = queue.then(() => be.answer(code, Q.key, choice))
+function save(Q, qKey, choice) {
+  queue = queue.then(() => be.answer(code, qKey, choice))
     .then(() => { if (choice === normalise(selected)) saved(Q); navigator.vibrate?.(20); })
     .catch(() => status('<p class="error">Answers are closed for this question.</p>'));
 }

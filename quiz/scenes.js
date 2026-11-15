@@ -7,7 +7,7 @@ export const SCENES = {
   // Which of these are incidents? A radar scanning four situations
   q1: `<div class="scene s-radar">
       <div class="radar"><span class="sweep"></span>${i('triangle-exclamation', 'center-icon')}</div>
-      <span class="blip b1">${i('mobile-screen-button')}</span><span class="blip b2">${i('key')}</span>
+      <span class="blip b1">${i('mobile-screen-button')}</span><span class="blip b2">${i('rotate')}</span>
       <span class="blip b3">${i('envelopes-bulk')}</span><span class="blip b4">${i('address-book')}</span>
     </div>`,
   // Ransom screen

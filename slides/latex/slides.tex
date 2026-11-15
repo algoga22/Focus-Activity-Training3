@@ -166,13 +166,13 @@
 
 % ---------- 4 · Agenda ----------
 \begin{frame}{Our hour together}{Agenda}
-  \vspace{7.8mm}\noindent
+  \vspace{4.5mm}\noindent
   \begin{tikzpicture}[x=1mm,y=1mm]
-    \useasboundingbox (0,-24) rectangle (136,24);
+    \useasboundingbox (0,-28) rectangle (136,24);
     \begin{scope}[xshift=5mm]   % bar from 5 to 131 mm, labels stay inside the margins
     \def\L{126}
     % session bar
-    \foreach \s/\e/\c in {0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/55/alert,55/60/softdark}
+    \foreach \s/\e/\c in {0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/53/alert,53/56/alert,56/60/softdark}
       \fill[\c, rounded corners=1mm] ({\s*\L/60+.4},-1.8) rectangle ({\e*\L/60-.4},1.8);
     \foreach \t in {0,15,30,45,60}
       \node[font=\scriptsize, text=muted] at ({\t*\L/60},-4.5) {\t'};
@@ -181,7 +181,7 @@
         2.5/alert/\faHandshake/Welcome/{\textcolor{alert}{\faMapMarker*\ now}},
         14/navy/\faSearch/Spot it/8 min,
         33.5/alert/\faGamepad/Play a game/15 min,
-        57.5/muted/\faClipboardCheck/Take home/5 min} {
+        58/muted/\faClipboardCheck/Take home/4 min} {
       \pgfmathsetmacro\x{\m*\L/60}
       \draw[\c, line width=.4mm] (\x,2.4) -- (\x,6);
       \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,10.5) {\ic};
@@ -192,7 +192,8 @@
     \foreach \m/\c/\ic/\name/\mins in {
         7.5/alert/\faQuestionCircle/Quiz/5,
         22/navy/\faFirstAid/Act on it/8,
-        48/alert/\faUsers/Practise/14} {
+        46/alert/\faUsers/Practise/12,
+        54.5/alert/\faChartLine/Quiz again/3} {
       \pgfmathsetmacro\x{\m*\L/60}
       \draw[\c, line width=.4mm] (\x,-2.4) -- (\x,-6);
       \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,-10.5) {\ic};
@@ -200,12 +201,13 @@
         {{\headfont\name}\\[-.5mm]{\color{muted}\mins\ min}};
     }
     % legend
-    \node[font=\scriptsize, text=muted] at (75,-12)
+    \node[font=\scriptsize, text=muted] at (68,-26.5)
       {\textcolor{navy}{\faSquare}\ We explain\qquad\textcolor{alert}{\faSquare}\ \textbf{You do}};
     \end{scope}
   \end{tikzpicture}
   \note{Walk through the hour from left to right. Stress that more than half of the time participants are
-  doing something themselves (orange): quiz, game, real case. (~1 min)}
+  doing something themselves (orange): quiz, game, real case, and the same quiz again at the end to see what
+  we have learned. (~1 min)}
 \end{frame}
 
 % ---------- 5 · What you'll take home ----------
@@ -250,7 +252,8 @@
   \end{columns}
   \note{Ask everyone to take out their phone. Then switch to the trainer screen (host.html, opened before the
   session) and choose "Quiz" in the menu: it shows the QR code with the room code, and who has joined. Reassure: it is not an exam, there
-  are no bad marks, and only a nickname is stored. Online: click "Copy link for the chat".
+  are no bad marks, and only a nickname is stored. Say that we will ask the same questions again at the end,
+  to see what we have learned. Online: click "Copy link for the chat".
   About 1 minute per question; do NOT give the right answers yet. No internet? Use the paper answer sheet
   (02-learner-assessment/answer-sheet.pdf).}
 \end{frame}

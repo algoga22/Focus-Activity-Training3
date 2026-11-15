@@ -23,5 +23,6 @@ Guidelines: one slide = one idea, visual over text, short sentences with action 
 | 10–18 | Spot it: what an incident is, four everyday incidents, the fire analogy, "Incident or not?" vote, "Not sure? Sound the alarm" | – | Done |
 | 18–26 | Act on it: the 4-step rule (Stop, Disconnect, Report, Write down), steps in detail, what never to do, worked example (ransom screen) | – | Done |
 | 26–41 | Game time: "Put out the fire" divider, how to play (rules + QR), four rooms, four steps. The game itself runs in the [web app](../quiz/) | Challenge 3 | Done |
-| 41–55 | Your turn: the NGO case (alone, groups, debrief), then the answers and the comparison with the quiz | Challenge 4 | To do (case to be chosen) |
-| 55–60 | Cheat sheet, recap and feedback | Challenge 5 | To do |
+| 41–53 | Your turn: the NGO case (alone, groups, debrief), then the answers | Challenge 4 | To do (case to be chosen) |
+| 53–56 | The same quiz again: before / after. The comparison runs in the [web app](../quiz/) | Challenge 2 | To do |
+| 56–60 | Cheat sheet, recap and feedback | Challenge 5 | To do |

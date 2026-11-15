@@ -1,11 +1,12 @@
 import { connect, DEMO, escapeHtml as esc } from './backend.js?v=__V__';
-import { QUESTIONS, MAX_POINTS, score } from './questions.js?v=__V__';
+import { QUESTIONS, MAX_POINTS, score, AFTER, isQuiz, answerKey } from './questions.js?v=__V__';
 import { SCENES } from './scenes.js?v=__V__';
 import { wordmark, avatar, TRAINERS, TRAINING, BOOTCAMP } from './brand.js?v=__V__';
 import { createGame, board } from './host-game.js?v=__V__';
-import { GAME_TITLE, ROOMS, PHASES, resultsOf } from './game.js?v=__V__';
+import { GAME_TITLE, ROOMS, PHASES, ALL_STEPS, resultsOf } from './game.js?v=__V__';
 
 const QUESTION_SECONDS = 60;
+const AFTER_SECONDS = 30; // at the end of the session the questions are already known: 30 s each
 const HURRY_SECONDS = 10;
 const WEAK_BELOW = 0.6; // questions with fewer fully correct answers are flagged for the trainer
 const params = new URLSearchParams(location.search);
@@ -45,19 +46,30 @@ let timer = null;
 const players = () => Object.entries(room.players || {}).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
 const answersFor = (qKey) => room.answers?.[qKey] || {};
 const setState = (s) => be.setState(code, s);
+const isAfter = () => room.mode === AFTER;
+const kq = (Q) => answerKey(Q, room.mode);   // q1 at the start, q1-after at the end
+const seconds = () => (isAfter() ? AFTER_SECONDS : QUESTION_SECONDS);
+// answer keys of an activity: used to restart it without touching the other activities
+const keysOf = (mode) => (mode === 'game' ? ALL_STEPS.map((x) => x.key) : QUESTIONS.map((Q) => answerKey(Q, mode)));
+const hasAnswers = (mode) => keysOf(mode).some((k) => room.answers?.[k]);
+const ACTIVITY = { quiz: 'quiz (start)', [AFTER]: 'quiz (end)', game: 'game' };
+async function clearIfPlayed() {
+  if (!hasAnswers(room.mode)) return true;
+  if (!confirm(`This ${ACTIVITY[room.mode]} was already played in this room.\n\nStart again? Its previous answers will be deleted (the other activities are kept).`)) return false;
+  await be.resetRoom(code, keysOf(room.mode));
+  return true;
+}
 
 const actions = {
-  pickQuiz: () => pick('quiz'),
-  pickGame: () => pick('game'),
-  menu: async () => {
-    if (room.answers && !confirm('Go back to the menu?\n\nThe answers of this activity will be deleted (download the CSV first if you need it). Participants stay connected.')) return;
-    await be.setMode(code, null);
-  },
-  start: () => setState({ phase: 'question', q: 0, qKey: QUESTIONS[0].key, startedAt: Date.now() }),
+  pickQuiz: () => be.setMode(code, 'quiz'),
+  pickGame: () => be.setMode(code, 'game'),
+  pickAfter: () => be.setMode(code, AFTER),
+  menu: () => be.setMode(code, null),
+  start: async () => { if (await clearIfPlayed()) setState({ phase: 'question', q: 0, qKey: kq(QUESTIONS[0]), startedAt: Date.now() }); },
   close: () => setState({ ...room.state, phase: 'closed' }),
   next: () => {
     const q = room.state.q + 1;
-    if (q < QUESTIONS.length) setState({ phase: 'question', q, qKey: QUESTIONS[q].key, startedAt: Date.now() });
+    if (q < QUESTIONS.length) setState({ phase: 'question', q, qKey: kq(QUESTIONS[q]), startedAt: Date.now() });
     else setState({ phase: 'summary', q: QUESTIONS.length, qKey: '' });
   },
   toggleCorrect: () => { showCorrect = !showCorrect; build(); update(); },
@@ -65,21 +77,19 @@ const actions = {
   copy: async () => { await navigator.clipboard.writeText(joinUrl); flash('#copy', '<i class="fa-solid fa-check"></i> Link copied'); },
   csv: downloadCsv,
   remove: async () => {
-    if (!confirm('Delete all answers of this room? Download the CSV first if you need it.')) return;
+    if (!confirm('Delete ALL the data of this room (quiz at the start, game and quiz at the end)? Download the CSV files first if you need them.')) return;
     await be.deleteRoom(code);
   },
   restart: async () => {
-    if (!confirm(`Restart the ${room.mode === 'game' ? 'game' : 'quiz'} from the beginning?\n\nAll answers will be deleted. Participants stay connected and do not need to scan the QR code again.`)) return;
-    await be.resetRoom(code);
+    if (!confirm(`Restart the ${ACTIVITY[room.mode]} from the beginning?\n\nIts answers will be deleted (the other activities are kept). Participants stay connected and do not need to scan the QR code again.`)) return;
+    await be.resetRoom(code, keysOf(room.mode));
   },
   newQuiz: async () => { localStorage.removeItem('quiz-host-room'); location.href = `?${params.has('demo') ? 'demo' : ''}`; },
 };
-async function pick(mode) {
-  if (room.answers && !confirm('Start a new activity? The answers of the last one will be deleted (download the CSV first if you need it).')) return;
-  await be.setMode(code, mode);
-}
 const game = createGame({ be, code, $, esc, setActions, actions, RESTART: ['restart', '<i class="fa-solid fa-rotate-left"></i> Restart', 'danger'],
   grow: () => grow(), getRoom: () => room, players: () => players() });
+const beginGame = actions.gBegin;
+actions.gBegin = async () => { if (await clearIfPlayed()) beginGame(); };
 
 const RESTART = ['restart', '<i class="fa-solid fa-rotate-left"></i> Restart', 'danger'];
 function setActions(list) {
@@ -139,25 +149,33 @@ const qHead = (q, extra = '') => `<div class="q-head"><div>
 
 function buildMenu() {
   const n = players().length;
+  const done = (mode) => (hasAnswers(mode) ? '<span class="done-chip"><i class="fa-solid fa-circle-check"></i> Played: results kept</span>' : '');
   $('#main').innerHTML = `
     <div><div class="kicker"><i class="fa-solid fa-table-cells-large"></i>Room ${code} · <span id="count">${n}</span> connected</div><h1>What do we play?</h1></div>
     <section class="menu">
       <button class="menu-card quiz" data-act="pickQuiz">
         <span class="mc-icon"><i class="fa-solid fa-circle-question"></i></span>
-        <span class="kicker">Challenge 2 · minutes 5–10</span>
+        <span class="kicker">Challenge 2 · minutes 5–10 · start</span>
         <h2>Quiz: what would you do?</h2>
-        <span class="muted">${QUESTIONS.length} real-life incidents · about 1 minute each · shows what the group already knows</span>
-        <span class="go">Open the quiz <i class="fa-solid fa-arrow-right"></i></span>
+        <span class="muted">${QUESTIONS.length} real-life incidents · about 1 minute each · what the group already knows</span>
+        ${done('quiz')}<span class="go">Open the quiz <i class="fa-solid fa-arrow-right"></i></span>
       </button>
       <button class="menu-card game" data-act="pickGame">
         <span class="mc-icon"><i class="fa-solid fa-fire"></i></span>
         <span class="kicker">Challenge 3 · minutes 26–41</span>
         <h2>Game: ${GAME_TITLE}</h2>
         <span class="muted">${ROOMS.length} rooms of our NGO · ${PHASES.length} phases each · one fire for the team, points for everyone</span>
-        <span class="go">Open the game <i class="fa-solid fa-arrow-right"></i></span>
+        ${done('game')}<span class="go">Open the game <i class="fa-solid fa-arrow-right"></i></span>
+      </button>
+      <button class="menu-card after" data-act="pickAfter">
+        <span class="mc-icon"><i class="fa-solid fa-chart-line"></i></span>
+        <span class="kicker">Challenge 2 · minutes 53–56 · end</span>
+        <h2>Quiz again: what have we learned?</h2>
+        <span class="muted">The same ${QUESTIONS.length} questions · 30 s each · before / after comparison for the group and for each person</span>
+        ${done(AFTER)}<span class="go">Open the final quiz <i class="fa-solid fa-arrow-right"></i></span>
       </button>
     </section>
-    <p class="muted"><i class="fa-solid fa-circle-info"></i> Participants stay connected when you switch: they join once with the QR code (shown in the next screen).</p>`;
+    <p class="muted"><i class="fa-solid fa-circle-info"></i> Participants join once with the QR code (next screen) and stay connected when you switch. The results of every activity are kept until you delete the room's data.</p>`;
   setActions([]);
 }
 $('#main').addEventListener('click', (e) => { const b = e.target.closest('.menu-card[data-act]'); if (b) actions[b.dataset.act]?.(); });
@@ -170,8 +188,8 @@ function buildLobby() {
     <section class="lobby">
       <div class="qr-wrap"><div class="qr">${qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true })}</div></div>
       <div class="join">
-        <div class="kicker"><i class="fa-solid fa-tower-broadcast"></i>${isGame ? `Challenge 3 · ${GAME_TITLE}` : 'Incident response team · assembling'}</div>
-        <h1>${isGame ? '<span>Put out</span> the fire' : 'Join the <span>response team</span>'}</h1>
+        <div class="kicker"><i class="fa-solid fa-tower-broadcast"></i>${isGame ? `Challenge 3 · ${GAME_TITLE}` : isAfter() ? 'Last check · same questions as at the start' : 'Incident response team · assembling'}</div>
+        <h1>${isGame ? '<span>Put out</span> the fire' : isAfter() ? 'What have we <span>learned</span>?' : 'Join the <span>response team</span>'}</h1>
         ${isGame ? `<div class="rules">
           <span><i class="fa-solid fa-clock"></i> The fire <b>grows every second</b></span>
           <span><i class="fa-solid fa-droplet"></i> Right move = <b>water</b></span>
@@ -182,14 +200,14 @@ function buildLobby() {
         </div>
         <div class="code-box"><span class="muted">or go to <span class="url">${esc(shortUrl)}</span> and enter</span><span class="code">${code}</span></div>
         <div class="crew">
-          <div class="crew-head"><span class="count" id="count">0</span><span class="muted">${isGame ? `firefighters ready · ${ROOMS.length} rooms · ${PHASES.length} phases each · already joined for the quiz? You're in` : 'responders ready · 5 incidents · about 1 minute each · not an exam'}</span></div>
+          <div class="crew-head"><span class="count" id="count">0</span><span class="muted">${isGame ? `firefighters ready · ${ROOMS.length} rooms · ${PHASES.length} phases each · already joined for the quiz? You're in` : isAfter() ? `responders ready · the same ${QUESTIONS.length} questions · 30 seconds each · then we compare with the start` : 'responders ready · 5 incidents · about 1 minute each · not an exam'}</span></div>
           <div class="players" id="players"></div>
         </div>
       </div>
       ${isGame ? `<div class="lobby-board">${board(resultsOf(null))}</div>` : ''}
     </section>`;
   setActions([['menu', '<i class="fa-solid fa-table-cells-large"></i> Menu', 'ghost'], ['copy', '<i class="fa-solid fa-link"></i> Copy link for the chat', 'ghost'],
-    isGame ? ['gBegin', 'Start the game <i class="fa-solid fa-fire-extinguisher"></i>', 'alert'] : ['start', 'Start the quiz <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
+    isGame ? ['gBegin', 'Start the game <i class="fa-solid fa-fire-extinguisher"></i>', 'alert'] : ['start', `${isAfter() ? 'Start the final quiz' : 'Start the quiz'} <i class="fa-solid fa-arrow-right"></i>`, 'alert']]);
 }
 
 const optionTiles = (Q) => Object.entries(Q.options).map(([l, t]) =>
@@ -212,9 +230,9 @@ function buildQuestion() {
       </aside>
     </section>`;
   const tick = () => {
-    const left = Math.max(0, QUESTION_SECONDS - Math.floor((Date.now() - startedAt) / 1000));
+    const left = Math.max(0, seconds() - Math.floor((Date.now() - startedAt) / 1000));
     const t = $('#timer'); if (!t) return;
-    t.textContent = left; t.style.setProperty('--p', left / QUESTION_SECONDS);
+    t.textContent = left; t.style.setProperty('--p', left / seconds());
     t.classList.toggle('hurry', left <= HURRY_SECONDS);
   };
   tick(); timer = setInterval(tick, 500);
@@ -224,7 +242,7 @@ function buildQuestion() {
 function buildResults() {
   const { q } = room.state;
   const Q = QUESTIONS[q];
-  const answers = Object.values(answersFor(Q.key));
+  const answers = Object.values(answersFor(kq(Q)));
   const n = answers.length;
   const counts = Object.fromEntries(Object.keys(Q.options).map((l) => [l, answers.filter((a) => a.choice.includes(l)).length]));
   const max = Math.max(1, ...Object.values(counts));
@@ -244,18 +262,27 @@ function buildResults() {
     </section>`;
   grow();
   const last = q === QUESTIONS.length - 1;
-  setActions([RESTART, ['toggleCorrect', showCorrect ? '<i class="fa-solid fa-eye-slash"></i> Hide correct answer' : '<i class="fa-solid fa-eye"></i> Show correct answer', 'ghost'],
-    ['next', last ? 'Mission debrief <i class="fa-solid fa-flag-checkered"></i>' : 'Next incident <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
+  // At the start the right answers stay hidden: the same quiz is used again at the end to measure progress
+  setActions([RESTART, ...(isAfter() ? [['toggleCorrect', showCorrect ? '<i class="fa-solid fa-eye-slash"></i> Hide correct answer' : '<i class="fa-solid fa-eye"></i> Show correct answer', 'ghost']] : []),
+    ['next', last ? (isAfter() ? 'Before / after <i class="fa-solid fa-chart-line"></i>' : 'Mission debrief <i class="fa-solid fa-flag-checkered"></i>') : 'Next incident <i class="fa-solid fa-arrow-right"></i>', 'alert']]);
 }
 
-function results() {
+function results(mode = room.mode) {
   return players().map(([uid, p]) => {
-    const per = QUESTIONS.map((Q) => { const choice = answersFor(Q.key)[uid]?.choice || ''; return { choice, points: score(Q, choice) }; });
-    return { uid, nick: p.nick, per, total: per.reduce((s, x) => s + x.points, 0) };
+    const per = QUESTIONS.map((Q) => { const choice = answersFor(answerKey(Q, mode))[uid]?.choice || ''; return { choice, points: score(Q, choice) }; });
+    return { uid, nick: p.nick, per, total: per.reduce((s, x) => s + x.points, 0), answered: per.some((x) => x.choice) };
   });
 }
+/** Share of fully correct answers per question, among the people who answered it. */
+const ratesOf = (rows) => QUESTIONS.map((Q, i) => {
+  const answered = rows.filter((r) => r.per[i].choice);
+  return answered.length ? answered.filter((r) => r.per[i].points === 2).length / answered.length : null;
+});
+const avgOf = (rows) => { const list = rows.filter((r) => r.answered); return list.length ? list.reduce((s, r) => s + r.total, 0) / list.length : null; };
+const pct = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
 
 function buildSummary() {
+  if (isAfter()) return buildCompare();
   const rows = results();
   const n = rows.length;
   const avg = n ? rows.reduce((s, r) => s + r.total, 0) / n : 0;
@@ -292,12 +319,61 @@ function buildSummary() {
     ['csv', '<i class="fa-solid fa-download"></i> Download CSV', 'ghost'], ['remove', '<i class="fa-solid fa-trash-can"></i> Delete data', 'ghost'], ['menu', '<i class="fa-solid fa-table-cells-large"></i> Menu']]);
 }
 
+function buildCompare() {
+  const before = results('quiz');
+  const after = results(AFTER);
+  const rb = ratesOf(before); const ra = ratesOf(after);
+  const ab = avgOf(before); const aa = avgOf(after);
+  const both = after.filter((r, i) => r.answered && before[i].answered);
+  const improved = both.filter((r) => r.total > before[after.indexOf(r)].total).length;
+  const still = QUESTIONS.map((Q, i) => ({ Q, rate: ra[i] })).filter((x) => x.rate != null && x.rate < WEAK_BELOW);
+  $('#main').innerHTML = `
+    <div><div class="kicker"><i class="fa-solid fa-chart-line"></i>Before / after · same ${QUESTIONS.length} questions</div><h1>What we have learned</h1></div>
+    <section class="summary">
+      <div class="card">
+        <h3 style="margin-bottom:.3em">Fully correct answers per objective</h3>
+        <div class="legend"><span><i class="sw before"></i> Start of the session</span><span><i class="sw after"></i> End of the session</span></div>
+        ${QUESTIONS.map((Q, i) => {
+          const d = rb[i] != null && ra[i] != null ? Math.round((ra[i] - rb[i]) * 100) : null;
+          return `<div class="cmp-row"><span class="lo-icon"><i class="fa-solid fa-${Q.loIcon}"></i></span><b>${esc(Q.lo)}</b>
+            <div class="cmp-bars"><div class="bar before"><i class="fill" data-w="${Math.round((rb[i] || 0) * 100)}"></i><span>${pct(rb[i])}</span></div>
+              <div class="bar after"><i class="fill" data-w="${Math.round((ra[i] || 0) * 100)}"></i><span>${pct(ra[i])}</span></div></div>
+            <span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : ''}">${d == null ? '' : `${d > 0 ? '+' : ''}${d}`}</span></div>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.2em">
+        <div class="card ba">
+          <div class="gauge small" style="--p:${(ab || 0) / MAX_POINTS}"><div><b>${ab == null ? '–' : ab.toFixed(1)}</b><small>start</small></div></div>
+          <i class="fa-solid fa-arrow-right"></i>
+          <div class="gauge" style="--p:${(aa || 0) / MAX_POINTS}"><div><b>${aa == null ? '–' : aa.toFixed(1)}</b><small>end · / ${MAX_POINTS}</small></div></div>
+        </div>
+        <div class="card"><h3><i class="fa-solid fa-arrow-trend-up" style="color:var(--good)"></i> ${improved} of ${both.length} improved their score</h3>
+          <div class="muted" style="margin-top:.3em">People who answered both quizzes</div></div>
+        <div class="card"><h3 style="margin-bottom:.4em"><i class="fa-solid fa-crosshairs" style="color:var(--alert)"></i> Still to work on</h3>
+          ${still.length ? still.map((x) => `<div style="padding:.2em 0"><b>${esc(x.Q.lo)}</b> <span class="muted">· ${esc(x.Q.misconception)}</span></div>`).join('')
+            : '<div class="muted">Every objective is above 60%: well done, team!</div>'}</div>
+      </div>
+    </section>
+    ${showTable ? `<section class="card"><table><tr><th>Responder</th>${QUESTIONS.map((_, i) => `<th>Q${i + 1}</th>`).join('')}<th>Start</th><th>End</th><th>Progress</th></tr>
+      ${after.map((r, k) => { const b = before[k]; const d = r.answered && b.answered ? r.total - b.total : null;
+        return `<tr><td>${esc(r.nick)}</td>${r.per.map((x, i) => `<td>${b.per[i].choice || '–'} → ${x.choice || '–'}</td>`).join('')}
+          <td>${b.answered ? b.total : '–'}</td><td><b>${r.answered ? r.total : '–'}</b></td><td class="${d > 0 ? 'good' : d < 0 ? 'trap' : ''}">${d == null ? '–' : (d > 0 ? '+' : '') + d}</td></tr>`; }).join('')}</table></section>` : ''}`;
+  grow();
+  setActions([RESTART, ['toggleTable', showTable ? 'Hide individual progress' : '<i class="fa-solid fa-table"></i> Individual progress', 'ghost'],
+    ['csv', '<i class="fa-solid fa-download"></i> Download CSV', 'ghost'], ['remove', '<i class="fa-solid fa-trash-can"></i> Delete data', 'ghost'], ['menu', '<i class="fa-solid fa-table-cells-large"></i> Menu']]);
+}
+
 function downloadCsv() {
   const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
-  const head = ['nickname', ...QUESTIONS.map((_, i) => `q${i + 1}_answer`), ...QUESTIONS.map((_, i) => `q${i + 1}_points`), 'total'];
-  const lines = results().map((r) => [q(r.nick), ...r.per.map((x) => x.choice), ...r.per.map((x) => x.points), r.total].join(','));
+  // Always both quizzes side by side (start and end), so progress can be measured per person
+  const cols = (tag) => [...QUESTIONS.map((_, i) => `${tag}_q${i + 1}_answer`), ...QUESTIONS.map((_, i) => `${tag}_q${i + 1}_points`), `${tag}_total`];
+  const head = ['nickname', ...cols('start'), ...cols('end'), 'progress'];
+  const before = results('quiz'); const after = results(AFTER);
+  const cells = (r) => (r.answered ? [...r.per.map((x) => x.choice), ...r.per.map((x) => x.points), r.total] : Array(QUESTIONS.length * 2 + 1).fill(''));
+  const lines = before.map((b, k) => { const a = after[k];
+    return [q(b.nick), ...cells(b), ...cells(a), b.answered && a.answered ? a.total - b.total : ''].join(','); });
   const blob = new Blob([[head.join(','), ...lines].join('\n')], { type: 'text/csv' });
-  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `quiz-${code}-${new Date().toISOString().slice(0, 10)}.csv` });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `quiz-start-end-${code}-${new Date().toISOString().slice(0, 10)}.csv` });
   a.click(); URL.revokeObjectURL(a.href);
 }
 
