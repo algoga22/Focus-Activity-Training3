@@ -1,14 +1,14 @@
-# Slides
+# Slides of the 60-minute training
 
-The deck is written in LaTeX (Beamer) in [`latex/`](latex/), with its own theme ([`beamerthemefocus.sty`](latex/beamerthemefocus.sty)): Montserrat + Fira Sans, Font Awesome icons and a progress bar showing which part of the 60-minute session each slide belongs to.
+The deck of the 60-minute training session is written in LaTeX (Beamer) in [`latex/`](latex/), with its own theme ([`beamerthemefocus.sty`](latex/beamerthemefocus.sty)): Montserrat + Fira Sans, Font Awesome icons and a progress bar showing which part of the 60-minute session each slide belongs to.
 
 ```sh
-cd slides/latex && latexmk -lualatex slides.tex
+cd slides/latex && latexmk -lualatex 60-minute-training.tex
 ```
 
-The compiled PDF is [`latex/slides.pdf`](latex/slides.pdf). Rebuild it with the command above after any change.
+The compiled PDF is [`latex/60-minute-training.pdf`](latex/60-minute-training.pdf). Rebuild it with the command above after any change.
 
-- Speaker notes (what to say, what to click in the web app, timing) are in `\note{}`: change `hide notes` to `show notes on second screen=right` in `slides.tex` to see them.
+- Speaker notes (what to say, what to click in the web app, timing) are in `\note{}`: change `hide notes` to `show notes on second screen=right` in `60-minute-training.tex` to see them.
 
 Guidelines: one slide = one idea, visual over text, short sentences with action verbs, limited colour palette, purposeful animations (overlays).
 

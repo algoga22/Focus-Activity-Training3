@@ -24,7 +24,7 @@
 
 % ---- Helpers
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcommand\thumb[2][30mm]{\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.2}]{\includegraphics[page=#2, width=#1]{../slides/latex/slides.pdf}};}
+\newcommand\thumb[2][30mm]{\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.2}]{\includegraphics[page=#2, width=#1]{../slides/latex/60-minute-training.pdf}};}
 \newcommand\pdfpage[2][50mm]{\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.25}]{\includegraphics[height=#1]{#2}};}
 % \explain{<title>}{<text>}: explanation box (the main reading content)
 \newcommand\explain[2]{%
@@ -64,7 +64,7 @@
   \begin{columns}[T,onlytextwidth]
     \column{.48\textwidth}
     \explain{What this document is}{A complete walk through the project, so that each of us can explain any part of it to the jury or run the session alone.
-      Every slide has the facts (numbers, timings, file names) and the reasons behind our choices. For the 5-minute talk use \file{5-minute-presentation.pdf}; to run the training use \file{slides/latex/slides.pdf}.}
+      Every slide has the facts (numbers, timings, file names) and the reasons behind our choices. For the 5-minute talk use \file{5-minute-presentation.pdf}; to run the 60-minute training use \file{slides/latex/60-minute-training.pdf}.}
     \explain{The bar at the bottom}{Shows the section you are in: Overview, Plan, Quiz, Game, Case, Cheat sheet, Web app, Team (practical points and what is still open).}
     \column{.48\textwidth}
     \explain{The deliverables}{%
@@ -630,7 +630,7 @@
     \column{.66\textwidth}
     \explain{Web app}{Participants: \file{algoga22.github.io/Focus-Activity-Training3/}\\ Trainer: \file{algoga22.github.io/Focus-Activity-Training3/host.html}\\ Rehearsal without Firebase: add \file{?demo} to both.}
     \explain{Repository}{\file{github.com/algoga22/Focus-Activity-Training3}}
-    \explain{The three PDFs to open}{Training: \file{slides/latex/slides.pdf} \textbullet{} 5-minute presentation: \file{presentation/5-minute-presentation.pdf} \textbullet{} This guide: \file{presentation/project-overview.pdf}}
+    \explain{The three PDFs to open}{60-minute training: \file{slides/latex/60-minute-training.pdf} \textbullet{} 5-minute presentation: \file{presentation/5-minute-presentation.pdf} \textbullet{} This guide: \file{presentation/project-overview.pdf}}
     \column{.3\textwidth}
     \centering
     \begin{card}[before upper=\centering, top=3mm, bottom=3mm]

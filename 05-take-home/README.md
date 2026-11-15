@@ -5,7 +5,7 @@
 | File | What it is |
 |---|---|
 | [`cheat-sheet.pdf`](cheat-sheet.pdf) | The cheat sheet, A4, one page (source: [`cheat-sheet.tex`](cheat-sheet.tex)) |
-| Slide 30 of the [main deck](../slides/latex/slides.pdf) | Presents the sheet at the end of the session |
+| Slide 30 of the [60-minute training slides](../slides/latex/60-minute-training.pdf) | Presents the sheet at the end of the session |
 
 **When:** handed out at minute 56, right after the final quiz. Participants fill in their phone numbers before leaving. Online: the PDF is shared in the chat.
 

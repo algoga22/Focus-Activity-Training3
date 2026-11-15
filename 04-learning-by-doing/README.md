@@ -5,7 +5,7 @@
 | File | What it is |
 |---|---|
 | [`case-sheet.pdf`](case-sheet.pdf) | Participant sheet: the story in 3 moments and 4 questions with space to write (source: [`case-sheet.tex`](case-sheet.tex)) |
-| Slides 22–28 of the [main deck](../slides/latex/slides.pdf) | The 3 moments, the group step and the debrief with the answers |
+| Slides 22–28 of the [60-minute training slides](../slides/latex/60-minute-training.pdf) | The 3 moments, the group step and the debrief with the answers |
 | This README | Trainer guide and answer key |
 
 **When:** minutes 41–53 (12 minutes), after the game and just before the final quiz.

@@ -20,7 +20,7 @@ It is a simple, jargon-free training for NGO staff and volunteers with no techni
 | 3 | Serious game | **"Put out the fire"**: 4 rooms of the NGO × the 4 steps, one fire for the team that grows every second, trap cards = petrol | [`03-serious-game/`](03-serious-game/), [concept](03-serious-game/concept/game-concept.pdf) |
 | 4 | Learning by doing | **"The urgent payment"**: a new case (fake email from the president, €2,000 paid) solved alone, then in groups, then debriefed | [`04-learning-by-doing/`](04-learning-by-doing/), [case sheet](04-learning-by-doing/case-sheet.pdf) |
 | 5 | Take-home | One-page **cheat sheet**: triggers, the 4 steps, phone numbers to fill in, "Never" list, quick decisions | [`05-take-home/`](05-take-home/), [cheat sheet](05-take-home/cheat-sheet.pdf) |
-| – | Slides | 32 slides in LaTeX (Beamer) with speaker notes and a progress bar of the hour | [`slides/`](slides/), [PDF](slides/latex/slides.pdf) |
+| – | Slides (60-minute training) | The 32 slides of the 60-minute training, in LaTeX (Beamer), with speaker notes and a progress bar of the hour | [`slides/`](slides/), [60-minute training](slides/latex/60-minute-training.pdf) |
 | – | Project presentations | 5-minute presentation for the jury, and a detailed project guide for the team (to read), both with screenshots of the quiz and the game | [`presentation/`](presentation/), [5-minute presentation](presentation/5-minute-presentation.pdf), [guide](presentation/project-overview.pdf) |
 | – | Web app | Our own Kahoot-style app for the quiz, the game and the final quiz: no account, works online and onsite | [`quiz/`](quiz/), <https://algoga22.github.io/Focus-Activity-Training3/> |
 
@@ -42,7 +42,7 @@ Details and rationale: [`01-training-plan/`](01-training-plan/).
 ## Running the session
 
 1. Before the session: open <https://algoga22.github.io/Focus-Activity-Training3/host.html> on the trainer laptop and print the [case sheet](04-learning-by-doing/case-sheet.pdf), the [cheat sheet](05-take-home/cheat-sheet.pdf) and a few [paper answer sheets](02-learner-assessment/answer-sheet.pdf) as backup.
-2. Present the [slides](slides/latex/slides.pdf). The speaker notes say what to do at each slide, including when to switch the web app to **Quiz**, **Game** and **Quiz again**.
+2. Present the [60-minute training slides](slides/latex/60-minute-training.pdf). The speaker notes say what to do at each slide, including when to switch the web app to **Quiz**, **Game** and **Quiz again**.
 3. At the end: download the CSV files from the web app (evidence of learning), then delete the room's data.
 
 ## Repository structure

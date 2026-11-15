@@ -45,7 +45,7 @@ The same five objectives are used everywhere: the quiz has one question per obje
 
 | Material | Used at | File |
 |---|---|---|
-| Slides with speaker notes | Whole session | [`slides/latex/slides.pdf`](../slides/latex/slides.pdf) |
+| 60-minute training slides with speaker notes | Whole session | [`slides/latex/60-minute-training.pdf`](../slides/latex/60-minute-training.pdf) |
 | Web app: quiz, game, final quiz | Minutes 5, 26, 53 | [`quiz/`](../quiz/), <https://algoga22.github.io/Focus-Activity-Training3/> |
 | Paper answer sheet (backup, start and end) | Minutes 5, 53 | [`02-learner-assessment/answer-sheet.pdf`](../02-learner-assessment/answer-sheet.pdf) |
 | Case sheet "The urgent payment" | Minute 41 | [`04-learning-by-doing/case-sheet.pdf`](../04-learning-by-doing/case-sheet.pdf) |
