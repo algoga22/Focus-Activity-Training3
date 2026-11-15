@@ -5,6 +5,7 @@
 \documentclass[aspectratio=169,11pt,t]{beamer}
 \usetheme{focus}
 \usepackage{qrcode}
+\usetikzlibrary{arrows.meta}
 \setbeameroption{hide notes}
 
 % ---- Slide helpers ----
@@ -31,6 +32,65 @@
 \newcommand\step[3]{%
   \begin{card}[left=3mm, top=1.3mm, bottom=1.3mm, before skip=0pt, after skip=2.2mm]
     \iconbadge[7.5mm]{#1}{\headfont #2}\hspace{3mm}\begin{minipage}[c]{.84\linewidth}\raggedright\mediumfont\small #3\end{minipage}
+  \end{card}}
+
+% \partslide{<kicker>}{<title>}{<subtitle>}{<pills>}: dark divider at the start of a part
+\newcommand\partslide[4]{%
+  {\darkslide
+  \begin{frame}[plain,c]
+    \vspace*{-2mm}
+    {\kickerfont\fontsize{8}{10}\selectfont\color{alert}#1}\par\vspace{4mm}
+    \begin{minipage}{100mm}\raggedright
+      {\headfont\fontsize{34}{38}\selectfont #2\par}\par\vspace{3mm}
+      {\lightfont\fontsize{15}{19}\selectfont\color{soft}#3\par}\par\vspace{9mm}
+      #4
+    \end{minipage}
+  \end{frame}}}
+% \incidentcard{<colour>}{<icon>}{<title>}{<signs>}: one card of "four everyday incidents"
+\newcommand\incidentcard[4]{%
+  \begin{card}[equal height group=examples, left=3mm, top=1.8mm, bottom=1.8mm, before skip=0pt, after skip=2mm]
+    \iconbadge[7mm]{#1}{#2}\hspace{2.5mm}{\headfont\color{navy}#3}\par\vspace{1mm}
+    {\color{muted}\kickerfont\fontsize{6}{7}\selectfont SIGNS\par}\vspace{.3mm}
+    {\footnotesize #4\par}
+  \end{card}}
+% \family{<colour>}{<icon>}{<title>}{<text>}: compact card of "what is an incident?"
+\newcommand\family[4]{%
+  \begin{card}[equal height group=family, before upper=\centering, left=2.5mm, right=2.5mm, top=2mm, bottom=2mm]
+    \iconbadge[8mm]{#1}{#2}\par\vspace{1.2mm}
+    {\headfont\color{navy}#3\par}\vspace{.8mm}
+    {\footnotesize\color{muted}#4\par}
+  \end{card}}
+% \verdict{<statement>}{<overlay>}{<pill>}: one row of "incident or not?"
+\newcommand\verdict[3]{%
+  \begin{card}[left=3mm, right=3mm, top=1.4mm, bottom=1.4mm, before skip=0pt, after skip=2mm]
+    \begin{minipage}[c]{.74\linewidth}\raggedright\mediumfont\small #1\end{minipage}\hfill
+    \begin{minipage}[c]{.24\linewidth}\raggedleft\onslide<#2->{#3}\end{minipage}
+  \end{card}}
+\newcommand\isincident{\pill{alert}{\faFire\ Incident}}
+\newcommand\notincident{\pill{good}{\faCheck\ Normal}}
+% \rulestep{<colour>}{<n>}{<icon>}{<name>}{<text>}{<fire analogy>}: one column of the 4-step rule
+\newcommand\rulestep[6]{%
+  \begin{card}[equal height group=rule, before upper=\centering, left=2mm, right=2mm, top=2mm, bottom=2mm]
+    {\kickerfont\fontsize{6.5}{8}\selectfont\color{#1}STEP #2\par}\vspace{1mm}
+    \iconbadge[9mm]{#1}{#3}\par\vspace{1.2mm}
+    {\headfont\fontsize{9}{11}\selectfont\color{navy}\MakeUppercase{#4}\par}\vspace{1mm}
+    {\footnotesize #5\par}\vspace{1.5mm}
+    {\scriptsize\color{muted}\faFire\ \emph{#6}\par}
+  \end{card}}
+% \doit{<text>} / \dontdo{<text>}: checklist lines with a green tick or a red cross
+\newcommand\doit[1]{\par\noindent\makebox[5mm][l]{\textcolor{good}{\faCheck}}\parbox[t]{\dimexpr\linewidth-5mm}{\raggedright #1}\par\vspace{.8mm}}
+\newcommand\dontdo[1]{\par\noindent\makebox[5mm][l]{\textcolor{alert}{\faTimes}}\parbox[t]{\dimexpr\linewidth-5mm}{\raggedright #1}\par\vspace{.8mm}}
+% \stephead{<colour>}{<n>}{<icon>}{<name>}: header line inside a card of steps 1–4
+\newcommand\stephead[4]{%
+  \iconbadge[8mm]{#1}{#3}\hspace{2.5mm}%
+  \begin{minipage}[c]{.7\linewidth}{\kickerfont\fontsize{6.5}{8}\selectfont\color{#1}STEP #2\par}{\headfont\large\color{navy}#4\par}\end{minipage}\par\vspace{1.8mm}}
+% \never{<icon>}{<title>}{<why>}: one card of "what never to do"
+\newcommand\never[3]{%
+  \begin{card}[equal height group=never, before upper=\centering, top=2.5mm, bottom=2.5mm]
+    \tikz{\node[circle, fill=alert, text=white, minimum size=11mm, inner sep=0pt, font=\Large](n){#1};
+      \node[circle, fill=white, draw=alert, line width=.4mm, text=alert, minimum size=4.6mm, inner sep=0pt, font=\scriptsize] at (n.north east) {\faTimes};}\par\vspace{1.5mm}
+    {\headfont\large\color{navy}#2\par}\vspace{1mm}
+    {\footnotesize\color{muted}#3\par}
   \end{card}}
 \title{When something goes wrong}
 \subtitle{A simple incident response for NGOs}
@@ -188,6 +248,269 @@
   are no bad marks, and only a nickname is stored. Online: click "Copy link for the chat".
   About 1 minute per question; do NOT give the right answers yet. No internet? Use the paper answer sheet
   (02-learner-assessment/answer-sheet.pdf).}
+\end{frame}
+
+% =====================================================================
+% PART 3 · Spot it: recognise that something has gone wrong (10–18 min)
+% Covers quiz Q1 (what counts as an incident). Analogy: an incident is like a fire.
+% =====================================================================
+\sessionpart{3}{10}{18}
+
+% ---------- 7 · Part divider ----------
+\partslide{MINUTES 10\textendash 18 \textbullet{} SPOT IT}{Spot it}{Recognise that something\\ has gone wrong}
+  {\pill{alert}{\faClock[regular]\ 8 minutes}\hspace{1.5mm}\pill{white!15!navy}{\faFire\ The sooner, the better}}
+
+% ---------- 8 · What is an incident? ----------
+\begin{frame}{What is an incident?}{Spot it}
+  \vspace{0mm}
+  \begin{card}[left=5mm, top=2mm, bottom=2mm, after skip=2.5mm]
+    \iconbadge[10mm]{navy}{\faShield*}\hspace{4mm}%
+    \begin{minipage}[c]{.86\linewidth}\raggedright\mediumfont\small
+      Anything that puts the NGO's \textbf{data}, \textbf{devices} or \textbf{accounts} at risk.\\
+      {\color{alert}Not only viruses and hackers: mistakes and accidents count too.}
+    \end{minipage}
+  \end{card}
+  \begin{columns}[T,onlytextwidth]
+    \column{.31\textwidth}
+    \onslide<2->{\family{navy}{\faMobile*}{It is lost}{A phone, a laptop, a USB stick or a paper file}}
+    \column{.31\textwidth}
+    \onslide<3->{\family{alert}{\faShare}{It leaks}{Personal data reaches the wrong people}}
+    \column{.31\textwidth}
+    \onslide<4->{\family{navy}{\faUserSecret}{It acts strange}{An account or computer does odd things}}
+  \end{columns}
+  \note{Answer to quiz question 1. Many people think an incident is only a virus or a hacker. Give the
+  definition in one sentence, then the three families (one per click): lost, leaked, acting strange.
+  Stress that a simple human mistake, like a wrong email address, is also an incident. (~1.5 min)}
+\end{frame}
+
+% ---------- 9 · Four everyday incidents ----------
+\begin{frame}{Four everyday incidents}{What it looks like}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.485\textwidth}
+    \incidentcard{alert}{\faUserSecret}{Hacked account}{Friends get messages you did not write \textbullet{} your password suddenly stops working}
+    \onslide<3->{\incidentcard{navy}{\faPaperPlane}{Wrong email address}{You notice the address too late \textbullet{} it had personal data of beneficiaries}}
+    \column{.485\textwidth}
+    \onslide<2->{\incidentcard{alert}{\faBug}{Virus or ransomware}{Pop-ups or a ransom message \textbullet{} files will not open \textbullet{} very slow}}
+    \onslide<4->{\incidentcard{navy}{\faLaptop}{Lost or stolen device}{A laptop, phone or USB stick is missing \textbullet{} it had NGO emails, files or contacts}}
+  \end{columns}
+  \note{One example per click. For each one, ask: "Has this happened to you or someone you know?" Point at
+  the signs: you do not need to know the technical cause, you only need to notice that something is not
+  normal. (~2 min)}
+\end{frame}
+
+% ---------- 10 · It's like a fire ----------
+\begin{frame}{It's like a fire}{The sooner, the better}
+  \vspace{3mm}\noindent
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,-17) rectangle (136,19);
+    % time arrow
+    \draw[softdark, line width=1mm, -{Latex[length=3mm,width=4mm]}] (2,0) -- (134,0);
+    \node[font=\scriptsize, text=muted, anchor=south east] at (134,1.2) {\faClock[regular]\ time};
+    \foreach \x/\sz/\c/\when/\fire/\inc in {
+        22/16/alert!65/Minutes/A bin is on fire/One account is hacked,
+        68/26/alert/Hours/The whole room/Every contact gets fake emails,
+        114/38/alert!75!black/Days/The whole building/{Data, money and trust are lost}} {
+      \node[text=\c, font=\fontsize{\sz}{\sz}\selectfont, anchor=south] at (\x,1.8) {\faFire};
+      \node[fill=white, draw=softdark, rounded corners=1.6mm, font=\headfont\scriptsize, text=navy,
+            inner xsep=2mm, inner ysep=.9mm] at (\x,0) {\when};
+      \node[anchor=north, align=center, text width=40mm, font=\footnotesize] at (\x,-3.5)
+        {{\headfont\color{navy}\fire}\\[.3mm]{\color{muted}\inc}};
+    }
+  \end{tikzpicture}
+  \vspace{2mm}
+  \onslide<2->{%
+  \begin{card}[left=4mm, top=2mm, bottom=2mm]
+    \iconbadge[9mm]{alert}{\faBell}\hspace{3mm}%
+    \begin{minipage}[c]{.86\linewidth}\raggedright\small
+      The warning signs are the \textbf{smoke}. \textbf{You are the smoke alarm}: you do not need to be sure it
+      is a fire to sound the alarm.
+    \end{minipage}
+  \end{card}}
+  \note{The analogy we use for the whole session (and in the game): a small fire in a bin is easy to put
+  out; after hours it is the whole room; after days the whole building. The same with a hacked account:
+  spotted in minutes it is one account, after hours every contact gets fake emails. Click: you are the smoke
+  alarm. (~1.5 min)}
+\end{frame}
+
+% ---------- 11 · Incident or not? ----------
+\begin{frame}{Incident or not?}{Your turn \textbullet{} thumbs up or down}
+  \vspace{3mm}
+  \verdict{\faKey\ \ A colleague forgets their password and asks the coordinator to reset it}{2}{\notincident}
+  \verdict{\faFacebook\ \ The NGO's Facebook page posts messages that nobody in the team wrote}{3}{\isincident}
+  \verdict{\faLink\ \ You clicked a link in a strange email and typed your password}{4}{\isincident}
+  \verdict{\faUsb\ \ A volunteer's USB stick with the list of donors is missing}{5}{\isincident}
+  \note{Read each situation aloud. Participants vote: thumb up = incident, thumb down = normal (online: the
+  reactions). Then click to show the answer and explain in one sentence. Password reset: normal, nothing
+  is at risk. Facebook: hacked account. Link + password: someone may now have the password. USB stick: data
+  can be lost or leaked. (~2 min)}
+\end{frame}
+
+% ---------- 12 · When in doubt ----------
+\begin{frame}{Not sure? Sound the alarm}{Key message}
+  \vspace{5mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \begin{card}[equal height group=doubt, before upper=\centering, top=4mm, bottom=4mm]
+      \iconbadge[12mm]{good}{\faBell}\par\vspace{2mm}
+      {\headfont\large\color{navy}A false alarm\par}\vspace{1mm}
+      {\small\color{muted}costs \textbf{five minutes} of someone's time\par}
+    \end{card}
+    \column{.48\textwidth}
+    \begin{card}[equal height group=doubt, before upper=\centering, top=4mm, bottom=4mm]
+      \iconbadge[12mm]{alert}{\faHourglassHalf}\par\vspace{2mm}
+      {\headfont\large\color{navy}Waiting to be sure\par}\vspace{1mm}
+      {\small\color{muted}can cost \textbf{data, money and the trust} of the people you help\par}
+    \end{card}
+  \end{columns}
+  \vspace{4mm}
+  \centering{\mediumfont\color{navy}\faUserShield\ \ Nobody gets blamed for reporting. The only mistake is to stay silent.\par}
+  \note{The single message to remember from this part. Nobody will be angry about a false alarm; hiding an
+  incident is what makes it big. Transition: "So you have spotted it. What do you do now?" (~30 s)}
+\end{frame}
+
+% =====================================================================
+% PART 4 · Act on it: apply the first steps (18–26 min)
+% Covers quiz Q2–Q5. Rule: Stop, Disconnect, Report, Write down. Same rule as the game and the cheat sheet.
+% =====================================================================
+\sessionpart{4}{18}{26}
+
+% ---------- 13 · Part divider ----------
+\partslide{MINUTES 18\textendash 26 \textbullet{} ACT ON IT}{Act on it}{Apply the first steps}
+  {\pill{alert}{\faClock[regular]\ 8 minutes}\hspace{1.5mm}\pill{white!15!navy}{\faListOl\ One rule, four steps}}
+
+% ---------- 14 · The rule ----------
+\begin{frame}{One rule, four steps}{Remember this}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.235\textwidth}
+    \onslide<1->{\rulestep{alert}{1}{\faHandPaper}{Stop}{Hands off: do not click or type}{Do not add fuel}}
+    \column{.235\textwidth}
+    \onslide<2->{\rulestep{navy}{2}{\faWifi}{Disconnect}{Turn off Wi-Fi or unplug the cable}{Close the door}}
+    \column{.235\textwidth}
+    \onslide<3->{\rulestep{good}{3}{\faPhone}{Report}{Call your contact person now}{Call firefighters}}
+    \column{.235\textwidth}
+    \onslide<4->{\rulestep{navydark}{4}{\faPen}{Write down}{What happened, when, what you saw}{Describe the fire}}
+  \end{columns}
+  \vspace{2mm}
+  \centering\onslide<5->{\pill{navy}{\faComments\ Say it with us: Stop \textendash{} Disconnect \textendash{} Report \textendash{} Write down}}
+  \note{The core of the session. Reveal one step per click and link each to the fire: do not add fuel,
+  close the door so it does not spread, call the firefighters, tell them what you saw. Last click: ask
+  everyone to say the four words aloud together. This is the same rule as in the game and on the cheat
+  sheet. (~1.5 min)}
+\end{frame}
+
+% ---------- 15 · Stop and disconnect ----------
+\begin{frame}{Stop and disconnect}{Steps 1 and 2}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.485\textwidth}
+    \begin{card}[equal height group=s12, top=2.5mm, bottom=1.5mm]
+      \stephead{alert}{1}{\faHandPaper}{Stop}
+      \small
+      \doit{Hands off the keyboard}
+      \dontdo{Do not click, type or open anything}
+      \dontdo{Do not try to fix it yourself}
+    \end{card}
+    \column{.485\textwidth}
+    \begin{card}[equal height group=s12, top=2.5mm, bottom=1.5mm]
+      \stephead{navy}{2}{\faWifi}{Disconnect}
+      \small
+      \doit{Turn off Wi-Fi or unplug the cable}
+      \doit{Leave the computer \textbf{on}}
+      \dontdo{Do not restart or switch off}
+    \end{card}
+  \end{columns}
+  \vspace{2mm}
+  \onslide<2->{\begin{card}[left=4mm, top=1.3mm, bottom=1.3mm]
+    \iconbadge[7.5mm]{good}{\faMobile*}\hspace{3mm}%
+    \begin{minipage}[c]{.88\linewidth}\raggedright\small
+      \textbf{Lost phone or laptop?} Skip to step 3: IT can lock it remotely.
+    \end{minipage}
+  \end{card}}
+  \note{Answer to quiz question 2 (the ransom screen). Disconnecting stops the problem from spreading to
+  other computers and accounts. Leave the computer on: restarting does not make the problem go away and can
+  destroy what the IT person needs to see. Click: the lost device case. (~1.5 min)}
+\end{frame}
+
+% ---------- 16 · Report and write down ----------
+\begin{frame}{Report and write down}{Steps 3 and 4}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.485\textwidth}
+    \begin{card}[equal height group=s34, top=2.5mm, bottom=2mm]
+      \stephead{good}{3}{\faPhone}{Report}
+      \small
+      \doit{Call your contact person \textbf{now}, even on Friday at 18:00}
+      \doit{No answer? Call the \textbf{backup contact}}
+      \dontdo{Do not wait until Monday or until it ``looks normal''}
+    \end{card}
+    \column{.485\textwidth}
+    \begin{card}[equal height group=s34, top=2.5mm, bottom=2mm]
+      \stephead{navydark}{4}{\faPen}{Write down}
+      \begin{tcolorbox}[enhanced, colback=paper, colframe=softdark, boxrule=.3pt, arc=1.5mm,
+          left=2mm, right=2mm, top=1.2mm, bottom=1.2mm, before skip=0pt, after skip=0pt]
+        \scriptsize
+        \textcolor{navy}{\faClock[regular]}\ \textbf{When:} Friday, 18:05\par\vspace{.6mm}
+        \textcolor{navy}{\faEnvelope}\ \textbf{What:} clicked a link in a ``bank'' email\par\vspace{.6mm}
+        \textcolor{navy}{\faEye}\ \textbf{Saw:} a black screen asking for 500\,€\par\vspace{.6mm}
+        \textcolor{navy}{\faWrench}\ \textbf{Did:} unplugged the cable, called Sam\par
+      \end{tcolorbox}\par\vspace{1.5mm}
+      {\small\textcolor{good}{\faCamera}\ \ Take a \textbf{photo of the screen} with your phone\par}
+    \end{card}
+  \end{columns}
+  \note{Answers to quiz questions 3 and 4. Report: incidents do not wait for office hours, that is why there
+  is a backup contact (on the cheat sheet you will write both names and numbers). Write down: four short lines
+  and a photo are enough; it helps the IT person act faster. Documenting is everyone's job, not only IT's.
+  (~1.5 min)}
+\end{frame}
+
+% ---------- 17 · What never to do ----------
+\begin{frame}{What never to do}{Common mistakes}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.31\textwidth}
+    \onslide<1->{\never{\faMoneyBillWave}{Don't pay}{No guarantee you get your files back, and you fund criminals}}
+    \column{.31\textwidth}
+    \onslide<2->{\never{\faTrash*}{Don't delete}{Strange emails and files are clues: the IT person needs them}}
+    \column{.31\textwidth}
+    \onslide<3->{\never{\faEyeSlash}{Don't hide it}{The longer you wait, the bigger the fire}}
+  \end{columns}
+  \vspace{1mm}
+  \centering\onslide<4->{%
+    \pill{alert!85!black}{\faPowerOff\ Don't restart or switch off}\hspace{1.5mm}%
+    \pill{alert!85!black}{\faShareSquare\ Don't forward the strange email}}
+  \note{Answer to quiz question 5 and the most common reflexes. Paying: criminals often do not unlock the
+  files, and they come back. Deleting: once it is gone, the danger is not gone, only the clues. Hiding: out of
+  embarrassment people wait, and the fire grows. Forwarding "to warn" spreads the danger. (~1.5 min)}
+\end{frame}
+
+% ---------- 18 · Put it together ----------
+\begin{frame}{Back to the ransom screen}{Put it together}
+  \vspace{1mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.42\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1mm,y=1mm]
+      % laptop
+      \fill[ink, rounded corners=2mm] (-27,-15) rectangle (27,20);
+      \fill[navydark] (-24.5,-12.5) rectangle (24.5,17.5);
+      \fill[softdark, rounded corners=.8mm] (-32,-18.5) -- (32,-18.5) -- (28,-15) -- (-28,-15) -- cycle;
+      % ransom message
+      \node[text=alert, font=\fontsize{20}{20}\selectfont] at (0,9) {\faLock};
+      \node[text=white, font=\headfont\scriptsize, align=center] at (0,1) {Your files are locked};
+      \node[text=soft, font=\tiny, align=center] at (0,-3.5) {Pay 500\,€ to get them back};
+      \node[fill=alert, text=white, rounded corners=1mm, font=\mediumfont\tiny, inner sep=1.2mm] at (0,-9) {23:59:41};
+    \end{tikzpicture}\par\vspace{4mm}
+    \onslide<6->{\pill{alert}{\faGamepad\ Next: let's put out the fire!}}
+    \column{.55\textwidth}
+    \onslide<2->{\step{alert}{1}{\textbf{Stop:} do not click on the message, do not pay}}
+    \onslide<3->{\step{navy}{2}{\textbf{Disconnect:} unplug the cable, turn off the Wi-Fi, leave it on}}
+    \onslide<4->{\step{good}{3}{\textbf{Report:} call your contact person now}}
+    \onslide<5->{\step{navydark}{4}{\textbf{Write down:} time, what you saw, photo of the screen}}
+  \end{columns}
+  \note{Ask the room: "So what do you do?" and let participants say each step before you click. This is the
+  bridge to the game: in the next 15 minutes teams apply the same four steps to new incidents. (~1.5 min)}
 \end{frame}
 
 \end{document}
