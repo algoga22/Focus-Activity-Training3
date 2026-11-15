@@ -4,10 +4,10 @@ This folder has two decks, both with the same theme as the training slides:
 
 | File | What it is | For |
 |---|---|---|
-| [`pitch.pdf`](pitch.pdf) | **5-minute presentation** of the project (10 slides) | The jury (5 minutes + 5 minutes of questions) |
+| [`5-minute-presentation.pdf`](5-minute-presentation.pdf) | **5-minute presentation** of the project (10 slides) | The jury (5 minutes + 5 minutes of questions) |
 | [`project-overview.pdf`](project-overview.pdf) | **Project guide** (32 slides): every part of the project explained in detail, with screenshots | The team, to read and understand everything; not meant to be presented |
 
-- **Sources:** [`pitch.tex`](pitch.tex), [`project-overview.tex`](project-overview.tex) and their shared style [`common.tex`](common.tex). Build them from this folder with `latexmk -lualatex <file>.tex`.
+- **Sources:** [`5-minute-presentation.tex`](5-minute-presentation.tex), [`project-overview.tex`](project-overview.tex) and their shared style [`common.tex`](common.tex). Build them from this folder with `latexmk -lualatex <file>.tex`.
 - **Screenshots:** [`screenshots/`](screenshots/), taken from the web app in demo mode with 6 test players.
 
 ## Project guide: contents
@@ -22,7 +22,7 @@ This folder has two decks, both with the same theme as the training slides:
 - **Web app:** architecture and data, the trainer's flow, privacy, testing and how to change the content.
 - **Team:** where everything is, open points and checklist, useful links.
 
-## Pitch
+## 5-minute presentation
 
 ### Slides and timing
 
@@ -39,6 +39,6 @@ This folder has two decks, both with the same theme as the training slides:
 | 9 | Why it works, plus a QR code so the jury can try the app | 25 s |
 | 10 | Thank you, questions | 5 s |
 
-A suggested text for each slide is in the speaker notes. To see them, change `hide notes` to `show notes on second screen=right` in `pitch.tex`.
+A suggested text for each slide is in the speaker notes. To see them, change `hide notes` to `show notes on second screen=right` in `5-minute-presentation.tex`.
 
 **Tip for the questions:** keep the trainer screen of the web app open in another tab, so you can show the game live if the jury asks.

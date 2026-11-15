@@ -21,7 +21,7 @@ It is a simple, jargon-free training for NGO staff and volunteers with no techni
 | 4 | Learning by doing | **"The urgent payment"**: a new case (fake email from the president, €2,000 paid) solved alone, then in groups, then debriefed | [`04-learning-by-doing/`](04-learning-by-doing/), [case sheet](04-learning-by-doing/case-sheet.pdf) |
 | 5 | Take-home | One-page **cheat sheet**: triggers, the 4 steps, phone numbers to fill in, "Never" list, quick decisions | [`05-take-home/`](05-take-home/), [cheat sheet](05-take-home/cheat-sheet.pdf) |
 | – | Slides | 32 slides in LaTeX (Beamer) with speaker notes and a progress bar of the hour | [`slides/`](slides/), [PDF](slides/latex/slides.pdf) |
-| – | Project presentations | 5-minute pitch for the jury, and a detailed project guide for the team (to read), both with screenshots of the quiz and the game | [`presentation/`](presentation/), [pitch](presentation/pitch.pdf), [guide](presentation/project-overview.pdf) |
+| – | Project presentations | 5-minute presentation for the jury, and a detailed project guide for the team (to read), both with screenshots of the quiz and the game | [`presentation/`](presentation/), [5-minute presentation](presentation/5-minute-presentation.pdf), [guide](presentation/project-overview.pdf) |
 | – | Web app | Our own Kahoot-style app for the quiz, the game and the final quiz: no account, works online and onsite | [`quiz/`](quiz/), <https://algoga22.github.io/Focus-Activity-Training3/> |
 
 ## The session
@@ -55,13 +55,13 @@ Details and rationale: [`01-training-plan/`](01-training-plan/).
 05-take-home/           Challenge 5 – cheat sheet
 quiz/                   Web app (quiz + game): trainer screen and phone page, Firebase, GitHub Pages
 slides/                 Slides (LaTeX Beamer) and their theme
-presentation/           5-minute pitch for the jury and detailed project guide for the team
+presentation/           5-minute presentation for the jury and detailed project guide for the team
 docs/                   Evaluation criteria of the bootcamp
 tools/                  Scripts that generate the session plan and answer sheet PDFs
 ```
 
 ## Building the files
 
-- **Slides, pitch, concept deck, case sheet, cheat sheet:** LuaLaTeX with the Montserrat and Fira Sans fonts. Build each one with `latexmk -lualatex <file>.tex` in its folder.
+- **Slides, presentations, concept deck, case sheet, cheat sheet:** LuaLaTeX with the Montserrat and Fira Sans fonts. Build each one with `latexmk -lualatex <file>.tex` in its folder.
 - **Session plan and answer sheet PDFs:** Python with reportlab. See [`tools/`](tools/).
 - **Web app:** static files. GitHub Actions publishes [`quiz/`](quiz/) to GitHub Pages on every push; set-up in [`quiz/README.md`](quiz/README.md).

@@ -64,7 +64,7 @@
   \begin{columns}[T,onlytextwidth]
     \column{.48\textwidth}
     \explain{What this document is}{A complete walk through the project, so that each of us can explain any part of it to the jury or run the session alone.
-      Every slide has the facts (numbers, timings, file names) and the reasons behind our choices. For the 5-minute talk use \file{pitch.pdf}; to run the training use \file{slides/latex/slides.pdf}.}
+      Every slide has the facts (numbers, timings, file names) and the reasons behind our choices. For the 5-minute talk use \file{5-minute-presentation.pdf}; to run the training use \file{slides/latex/slides.pdf}.}
     \explain{The bar at the bottom}{Shows the section you are in: Overview, Plan, Quiz, Game, Case, Cheat sheet, Web app, Team (practical points and what is still open).}
     \column{.48\textwidth}
     \explain{The deliverables}{%
@@ -594,13 +594,13 @@
         05-take-home/ & cheat sheet\\
         quiz/ & web app (quiz + game)\\
         slides/latex/ & training slides\\
-        presentation/ & pitch, this guide\\
+        presentation/ & 5-minute presentation, guide\\
         tools/ & PDF generators\\
         docs/ & evaluation criteria\\
       \end{tabular}
     \end{card}
     \column{.4\textwidth}
-    \explain{Rebuilding the PDFs}{LaTeX (LuaLaTeX, Montserrat and Fira Sans fonts): \file{latexmk -lualatex <file>.tex} in the folder of the slides, the pitch, this guide, the concept deck, the case sheet and the cheat sheet. Python (reportlab): \file{tools/build\_session\_plan.py} and \file{tools/build\_answer\_sheet.py}.}
+    \explain{Rebuilding the PDFs}{LaTeX (LuaLaTeX, Montserrat and Fira Sans fonts): \file{latexmk -lualatex <file>.tex} in the folder of the slides, the 5-minute presentation, this guide, the concept deck, the case sheet and the cheat sheet. Python (reportlab): \file{tools/build\_session\_plan.py} and \file{tools/build\_answer\_sheet.py}.}
     \explain{Every folder has a README}{It explains what the folder contains and how to use it.}
   \end{columns}
 \end{frame}
@@ -612,7 +612,7 @@
     \column{.48\textwidth}
     \explain{\textcolor{alert}{\faExclamationTriangle}\ To check}{%
       \bul{alert}{\textbf{Learning objectives:} we wrote LO1--LO5 from the training title; compare them with the official online description of Training 3 (criterion ``consistency with the online description'', 20 points).}
-      \bul{alert}{\textbf{Who presents what} in the 5-minute pitch (not decided yet).}
+      \bul{alert}{\textbf{Who presents what} in the 5-minute presentation (not decided yet).}
       \bul{alert}{\textbf{Rehearse the timing} once, especially the game (15') and the case (12').}}
     \column{.48\textwidth}
     \explain{\textcolor{good}{\faCheck}\ Checklist for the day}{%
@@ -630,7 +630,7 @@
     \column{.66\textwidth}
     \explain{Web app}{Participants: \file{algoga22.github.io/Focus-Activity-Training3/}\\ Trainer: \file{algoga22.github.io/Focus-Activity-Training3/host.html}\\ Rehearsal without Firebase: add \file{?demo} to both.}
     \explain{Repository}{\file{github.com/algoga22/Focus-Activity-Training3}}
-    \explain{The three PDFs to open}{Training: \file{slides/latex/slides.pdf} \textbullet{} Pitch: \file{presentation/pitch.pdf} \textbullet{} This guide: \file{presentation/project-overview.pdf}}
+    \explain{The three PDFs to open}{Training: \file{slides/latex/slides.pdf} \textbullet{} 5-minute presentation: \file{presentation/5-minute-presentation.pdf} \textbullet{} This guide: \file{presentation/project-overview.pdf}}
     \column{.3\textwidth}
     \centering
     \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
