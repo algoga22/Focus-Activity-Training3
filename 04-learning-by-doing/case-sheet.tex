@@ -1,0 +1,79 @@
+% Challenge 4 – Learning by doing: participant case sheet "The urgent payment" (one A4 page).
+% Same look as the cheat sheet and the slides. Build: latexmk -lualatex case-sheet.tex
+\documentclass[10pt]{article}
+\usepackage[a4paper, margin=0mm]{geometry}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{fontawesome5}
+\usepackage[most]{tcolorbox}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+
+\setmainfont{FiraSans}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic]
+\newfontfamily\headfont{Montserrat}[Extension=.otf, UprightFont=*-ExtraBold]
+\newfontfamily\kickerfont{Montserrat}[Extension=.otf, UprightFont=*-Bold, LetterSpace=12]
+\newfontfamily\mediumfont{FiraSans}[Extension=.otf, UprightFont=*-Medium]
+
+\definecolor{navy}{HTML}{1F3A5F}
+\definecolor{alert}{HTML}{E4572E}
+\definecolor{good}{HTML}{2E9E5B}
+\definecolor{soft}{HTML}{E3EAF3}
+\definecolor{softdark}{HTML}{B9C6D6}
+\definecolor{paper}{HTML}{F7F9FC}
+\definecolor{ink}{HTML}{22303F}
+\definecolor{muted}{HTML}{5B6778}
+\color{ink}
+
+\newcommand\kicker[2]{{\kickerfont\fontsize{7.5}{9}\selectfont\color{#1}#2}}
+\newcommand\lines[1]{\par\vspace{1mm}\foreach \i in {1,...,#1}{\tikz\draw[softdark, line width=.5pt] (0,0) -- (\linewidth,0);\par\vspace{6.2mm}}}
+% \moment{<n>}{<time>}{<story>}
+\newcommand\moment[3]{%
+  \begin{tcolorbox}[enhanced, colback=soft, colframe=soft, arc=2.5mm, left=3.5mm, right=3.5mm, top=2mm, bottom=2mm, before skip=0pt, after skip=2mm]
+    \kicker{alert}{MOMENT #1 \textbullet{} #2}\par\vspace{1mm}{\small #3\par}
+  \end{tcolorbox}}
+% \question{<n>}{<text>}{<lines>}
+\newcommand\question[3]{%
+  \begin{tcolorbox}[enhanced, colback=white, colframe=white, arc=2.5mm, left=3.5mm, right=3.5mm, top=2.2mm, bottom=0mm, before skip=0pt, after skip=2.5mm, drop fuzzy shadow={black!25}]
+    \tikz[baseline=(b.base)]\node[circle, fill=navy, text=white, minimum size=6.5mm, inner sep=0pt, font=\headfont\small](b){#1};\hspace{2mm}%
+    {\mediumfont\color{navy}#2}\vspace{3mm}\lines{#3}
+  \end{tcolorbox}}
+
+\begin{document}
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm]
+  \fill[paper] (current page.south west) rectangle (current page.north east);
+  \fill[navy] ($(current page.north west)+(0,-31)$) rectangle (current page.north east);
+  \node[anchor=north west, align=left, text width=180mm] at ($(current page.north west)+(14,-7)$) {%
+    \kicker{alert}{TRAINING 3 \textbullet{} YOUR TURN \textbullet{} CASE SHEET}\par\vspace{2mm}
+    {\headfont\fontsize{22}{26}\selectfont\color{white}The urgent payment\par}\vspace{1.5mm}
+    {\small\color{soft}Write your answers \textbf{alone} first (4 minutes). Short answers are fine. This is not an exam.\par}};
+  \node[anchor=north east, align=right, text=white, font=\small] at ($(current page.north east)+(-14,-10)$)
+    {Nickname:\ \tikz[baseline]\draw[white, opacity=.6] (0,-.8mm) -- (40mm,-.8mm);};
+\end{tikzpicture}
+
+\vspace*{35mm}
+\hspace*{14mm}\begin{minipage}{182mm}
+{\small\textbf{Food for All} is a small food bank: 2 employees, 40 volunteers, no IT department.
+\textbf{Sofia} is a volunteer and the treasurer: she pays the suppliers from the NGO's online bank account.\par}
+\vspace{3mm}
+
+\moment{1}{TUESDAY, 16:40}{An email arrives. \textbf{From:} Paul Martin, President \textless paul.martin.foodforall@gmail.com\textgreater\\
+\emph{``Hi Sofia, I'm in a meeting with a big donor and can't talk. Please pay today the €2,000 invoice of our new supplier
+(bank details attached). Keep it confidential until I announce the partnership. Thanks! Paul''}\\[1mm]
+At 16:55 Sofia pays. At 17:10 she reads the email again: Paul always writes from an \textbf{@foodforall.org} address.}
+\question{1}{Is this an incident? What should Sofia do in the first minutes?}{3}
+
+\moment{2}{17:15}{Sofia calls Paul on his usual phone number: \textbf{he never sent that email}. The coordinator, Lea, is on holiday until Monday.
+Sofia feels terrible: ``€2,000 of the donors' money, because of me.'' A colleague says:
+\emph{``Reply to the email and ask them to send the money back. And let's keep this between us.''}}
+\question{2}{Who should Sofia tell, how, and how fast?}{3}
+\question{3}{What should Sofia NOT do?}{2}
+
+\moment{3}{17:40}{The bank's fraud team calls back. To try to stop the payment, they need precise information.}
+\question{4}{What should Sofia have written down?}{2}
+
+\vspace{1mm}
+{\scriptsize\color{muted}Cybersecurity for NGOs Bootcamp \textbullet{} Training 3 \textbullet{} Challenge 4: learning by doing \textbullet{} Food for All, Sofia, Paul and Lea are fictional.\par}
+\end{minipage}
+\end{document}

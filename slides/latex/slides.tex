@@ -97,6 +97,32 @@
     {\headfont\large\color{navy}#2\par}\vspace{1mm}
     {\footnotesize\color{muted}#3\par}
   \end{card}}
+% \mailbox{<from>}{<subject>}{<body>}: an email window
+\newcommand\mailbox[3]{%
+  \begin{tcolorbox}[enhanced, colback=white, colframe=softdark, boxrule=.5pt, arc=2mm, left=3mm, right=3mm, top=1.5mm, bottom=2mm,
+      before skip=0pt, after skip=0pt, drop fuzzy shadow={black!30}, before upper=\raggedright,
+      overlay={\fill[soft] (frame.north west) rectangle ([yshift=-4.5mm]frame.north east);
+        \foreach \c [count=\i] in {alert,softdark,softdark} \fill[\c] ([xshift=2.5mm+\i*3.2mm-3.2mm, yshift=-2.25mm]frame.north west) circle (.8mm);}]
+    \vspace{3.5mm}\scriptsize
+    {\color{muted}From:} \textbf{#1}\par\vspace{.6mm}
+    {\color{muted}Subject:} \textbf{#2}\par\vspace{1.2mm}
+    {\color{ink}#3\par}
+  \end{tcolorbox}}
+% \storycard{<colour>}{<icon>}{<text>}: compact story card for narrow columns
+\newcommand\storycard[3]{%
+  \begin{card}[left=2.5mm, top=1.4mm, bottom=1.4mm, before skip=0pt, after skip=2mm]
+    \iconbadge[7mm]{#1}{\small #2}\hspace{2.5mm}\begin{minipage}[c]{\dimexpr\linewidth-9.5mm\relax}\raggedright\small #3\end{minipage}
+  \end{card}}
+% \casequestion{<n>}{<text>}: question box of the case
+\newcommand\casequestion[2]{%
+  \begin{card}[left=3mm, top=1.4mm, bottom=1.4mm, before skip=0pt, after skip=2mm, colback=navy, colframe=navy]
+    \iconbadge[7mm]{alert}{\headfont\small #1}\hspace{2.5mm}\begin{minipage}[c]{\dimexpr\linewidth-10mm\relax}\raggedright\mediumfont\small\color{white}#2\end{minipage}
+  \end{card}}
+% \answer{<colour>}{<icon>}{<title>}{<text>}
+\newcommand\answer[4]{%
+  \begin{card}[left=3mm, top=1.6mm, bottom=1.6mm, before skip=0pt, after skip=2mm]
+    \iconbadge[7.5mm]{#1}{\small #2}\hspace{2.5mm}\begin{minipage}[c]{\dimexpr\linewidth-10.5mm\relax}\raggedright\small{\headfont\color{navy}#3}\\[.3mm]#4\end{minipage}
+  \end{card}}
 \title{When something goes wrong}
 \subtitle{A simple incident response for NGOs}
 \author{Divya Ravichandran \and Álvaro Gómez García \and Mohammed Krayem}
@@ -591,5 +617,209 @@
   After the 4 rooms, use the debrief screen: rooms saved, right moves per objective and the most chosen trap
   cards. Download the CSV for the evidence. (~30 s here, then 13 min of game and debrief)}
 \end{frame}
+
+% =====================================================================
+% PART 6 · Your turn: the urgent payment (41–53 min) – Challenge 4
+% Case sheet: 04-learning-by-doing/case-sheet.pdf · answer key: 04-learning-by-doing/README.md
+% =====================================================================
+\sessionpart{6}{41}{53}
+
+% ---------- 22 · Part divider ----------
+\partslide{MINUTES 41\textendash 53 \textbullet{} YOUR TURN}{The urgent\\ payment}{A new case. Can you apply\\ the four steps on your own?}
+  {\pill{alert}{\faClock[regular]\ 12 minutes}\hspace{1.5mm}\pill{white!15!navy}{\faUser\ Alone \textrightarrow{} \faUsers\ groups \textrightarrow{} together}}
+
+% ---------- 23 · How it works ----------
+\begin{frame}{How it works}{Your turn \textbullet{} 12 minutes}
+  \vspace{4mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.6\textwidth}
+    \step{navy}{1}{\textbf{4' alone:} read each moment and write your answer on the case sheet}
+    \step{alert}{2}{\textbf{4' in groups of 3\textendash 4:} compare and agree on one answer per question}
+    \step{good}{3}{\textbf{4' together:} the answers and the most common mistakes}
+    \vspace{.5mm}
+    \pill{navy}{\faVideo\ Online: case sheet in the chat, breakout rooms for step 2}
+    \column{.36\textwidth}
+    \centering
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
+      \iconbadge[11mm]{alert}{\faFile*}\par\vspace{2mm}
+      {\headfont\color{navy}Case sheet\par}\vspace{1mm}
+      {\scriptsize\color{muted}A new situation: nothing on the computer is broken, but something has gone wrong.\par}
+    \end{card}
+  \end{columns}
+  \note{Hand out the case sheet (04-learning-by-doing/case-sheet.pdf); online, paste it in the chat. The goal is
+  to apply the 4 steps to a NEW situation, on their own: no help from the trainers in step 1. Show the three
+  moments on the next slides, about 1 minute each, and keep the time. (~30 s)}
+\end{frame}
+
+% ---------- 24 · Moment 1 ----------
+\begin{frame}{Moment 1 \textbullet{} Tuesday, 16:40}{Food for All: a small food bank, no IT department}
+  \vspace{2mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.56\textwidth}
+    \mailbox{Paul Martin, President \textless paul.martin.foodforall@\textcolor{alert}{gmail.com}\textgreater}{Urgent \textendash{} supplier payment today}
+      {Hi Sofia, I'm in a meeting with a big donor and can't talk. Please pay \textbf{today} the \textbf{€2,000} invoice of our new supplier
+       (bank details attached). \textbf{Keep it confidential} until I announce the partnership. Thanks! Paul}
+    \column{.4\textwidth}
+    \begin{card}[left=3mm, top=1.6mm, bottom=1.6mm, before skip=0pt, after skip=2mm]
+      \small\textcolor{alert}{\faClock[regular]}\ \textbf{16:55} Sofia, the volunteer treasurer, pays.\par\vspace{1mm}
+      \textcolor{alert}{\faClock[regular]}\ \textbf{17:10} She reads it again: Paul always writes from \textbf{@foodforall.org}.
+    \end{card}
+    \casequestion{1}{Is this an incident? What should Sofia do in the first minutes?}
+  \end{columns}
+  \note{Read the email aloud. Point at the warning signs only after the answers (urgency, secrecy, new bank
+  details, a gmail address). Give about 1 minute to write question 1.}
+\end{frame}
+
+% ---------- 25 · Moment 2 ----------
+\begin{frame}{Moment 2 \textbullet{} 17:15}{Food for All}
+  \vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.5\textwidth}
+    \storycard{navy}{\faPhone}{Sofia calls Paul on his usual number: \textbf{he never sent that email}.}
+    \storycard{navy}{\faUmbrellaBeach}{The coordinator, Lea, is on holiday until \textbf{Monday}.}
+    \storycard{alert}{\faCommentDots}{A colleague: \emph{``Reply and ask them to send the money back. And let's keep this between us.''}}
+    \column{.46\textwidth}
+    \vspace{1mm}
+    \begin{card}[left=3mm, top=1.6mm, bottom=1.6mm, before skip=0pt, after skip=3mm]
+      \small\emph{``€2,000 of the donors' money, because of me\dots''}\par\hfill{\scriptsize\color{muted}Sofia}
+    \end{card}
+    \casequestion{2}{Who should Sofia tell, how, and how fast?}
+    \casequestion{3}{What should Sofia \textbf{not} do?}
+  \end{columns}
+  \note{About 1.5 minutes to write questions 2 and 3. Do not comment yet.}
+\end{frame}
+
+% ---------- 26 · Moment 3 + groups ----------
+\begin{frame}{Moment 3 \textbullet{} 17:40}{Food for All}
+  \vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.5\textwidth}
+    \storycard{navy}{\faUniversity}{The bank's fraud team calls back. To try to stop the payment, they need \textbf{precise information}.}
+    \casequestion{4}{What should Sofia have written down?}
+    \column{.46\textwidth}
+    \onslide<2->{%
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm, colback=alert!8, colframe=alert!8]
+      \iconbadge[11mm]{alert}{\faUsers}\par\vspace{2mm}
+      {\headfont\color{navy}Now in groups: 4 minutes\par}\vspace{1.5mm}
+      {\small Compare your sheets and agree on \textbf{one answer per question}. Choose who speaks for the group.\par}
+    \end{card}}
+  \end{columns}
+  \note{About 1 minute for question 4. Click: groups of 3-4 (online: breakout rooms). Walk around and listen
+  for the common mistakes: waiting for Monday, replying to the fraudster, keeping it secret.}
+\end{frame}
+
+% ---------- 27 · Answers 1–2 ----------
+\begin{frame}{The answers}{Debrief \textbullet{} questions 1 and 2}
+  \vspace{3mm}
+  \answer{alert}{\faHandPaper}{1 \textbullet{} Yes, it is an incident: stop}{Money may have gone to criminals (a fake email from the president). No other payment, don't reply, don't click, \textbf{keep the email}.}
+  \answer{good}{\faPhone}{2 \textbullet{} Report now, by phone: first the bank, then the contact person}{The bank can sometimes \textbf{stop the payment if it is told within minutes}: this is the fire. Then the contact person or the backup, \textbf{today}: not on Monday, not by email.}
+  \centering\pill{navy}{\faFire\ Nothing to unplug here: the bank is the door you close}
+  \note{Ask each group for its answer, then show the slide. Show of hands: "Who wrote: call the bank?",
+  "Who would have waited for Lea on Monday?". Link to the fire: the sooner, the more money can be saved.}
+\end{frame}
+
+% ---------- 28 · Answers 3–4 ----------
+\begin{frame}{The answers}{Debrief \textbullet{} questions 3 and 4}
+  \vspace{3mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.48\textwidth}
+    \answer{alert}{\faTimes}{3 \textbullet{} Never}{Don't \textbf{reply} to the fraudster, don't \textbf{hide} it, don't \textbf{delete} the email, don't \textbf{pay} again.}
+    \column{.48\textwidth}
+    \answer{navydark}{\faPen}{4 \textbullet{} Write down}{Time of the email and of the payment, sender address, amount and bank details, who she called and when, and \textbf{keep the email}.}
+  \end{columns}
+  \vspace{2mm}
+  \begin{card}[left=4mm, top=2mm, bottom=2mm]
+    \iconbadge[9mm]{good}{\faUserShield}\hspace{3mm}%
+    \begin{minipage}[c]{.86\linewidth}\raggedright\small
+      Sofia is \textbf{not} to blame: these emails are made to fool people. What counts is to report fast.
+      \textbf{The four steps work for every incident}, even when nothing is broken on the computer.
+    \end{minipage}
+  \end{card}
+  \note{Show of hands for questions 3 and 4. Insist on "no blame": hiding out of shame is what turns a small
+  fire into a big one. Collect the sheets (nickname only) if you want to score them with the answer key.
+  Transition: "Now let's see what you have learned since the beginning." (~4 min for both slides)}
+\end{frame}
+
+% =====================================================================
+% PART 7 · What have we learned? The same quiz again (53–56 min) – Challenge 2
+% Web app: host.html → Menu → Quiz again (before / after comparison)
+% =====================================================================
+\sessionpart{7}{53}{56}
+
+% ---------- 29 · Quiz again ----------
+\begin{frame}{What have we learned?}{The same quiz again \textbullet{} 3 minutes}
+  \vspace{6mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.6\textwidth}
+    \step{navy}{1}{The \textbf{same 5 questions} as at the start: 30 seconds each}
+    \step{alert}{2}{Answer with \textbf{what you know now}}
+    \step{good}{3}{Then we compare: \textbf{start versus end}, for the group and on your phone}
+    \column{.36\textwidth}
+    \centering
+    \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
+      {\scriptsize\mediumfont\color{good}\faCheckCircle\ Still connected? You are already in\par}\vspace{2mm}
+      {\color{navy}\qrcode[height=22mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\par\vspace{2mm}
+      {\scriptsize\mediumfont\color{navy}algoga22.github.io/\\Focus-Activity-Training3\par}
+    \end{card}
+  \end{columns}
+  \note{On the trainer screen: Menu, then "Quiz again". After the 5 questions, the app shows the before / after
+  comparison per objective, the team score and how many people improved. Read one striking number aloud (for
+  example Q2: unplug and leave it on). Each phone shows the person's own score at the start and at the end.
+  Download the CSV. (~3 min)}
+\end{frame}
+
+% =====================================================================
+% PART 8 · Review key points and close (56–60 min) – Challenge 5
+% Cheat sheet: 05-take-home/cheat-sheet.pdf
+% =====================================================================
+\sessionpart{8}{56}{60}
+
+% ---------- 30 · Cheat sheet ----------
+\begin{frame}{Your cheat sheet}{Keep it next to your computer}
+  \vspace{1mm}
+  \begin{columns}[c,onlytextwidth]
+    \column{.36\textwidth}
+    \centering
+    \tikz\node[inner sep=0pt, drop shadow={opacity=.25}] {\includegraphics[height=50mm]{../../05-take-home/cheat-sheet.pdf}};
+    \column{.6\textwidth}
+    \gstep{alert}{\faSearch}{\textbf{When to use it:} lost, leaked, acting strange, odd request}
+    \gstep{navy}{\faListOl}{\textbf{The four steps}, with what to do and what not}
+    \gstep{good}{\faPen}{\textbf{Today:} write the names and numbers of your contact, your backup and your bank}
+    \gstep{alert}{\faTimes}{\textbf{Never:} pay, delete, hide, restart, forward}
+  \end{columns}
+  \note{Hand out the cheat sheet (05-take-home/cheat-sheet.pdf); online, share the PDF in the chat. Ask everyone to
+  fill in the three phone numbers before they leave or today: it is the most useful minute of the training. (~1.5 min)}
+\end{frame}
+
+% ---------- 31 · Key messages ----------
+\begin{frame}{Remember three things}{Key messages}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.31\textwidth}
+    \takeaway{navy}{\faFire}{It's like a fire}{Spot it early: the sooner you act, the less damage}
+    \column{.31\textwidth}
+    \takeaway{alert}{\faListOl}{One rule}{Stop, Disconnect, Report, Write down}
+    \column{.31\textwidth}
+    \takeaway{good}{\faUserShield}{No blame}{Never pay, delete or hide. Not sure? Sound the alarm}
+  \end{columns}
+  \vspace{1mm}
+  \centering{\mediumfont\color{navy}\faComments\ \ Feedback: one thing you liked, one thing to improve (aloud or in the chat)\par}
+  \note{Recap in three sentences, then collect feedback: one thing they liked and one thing to improve, aloud
+  or in the chat. (~1.5 min)}
+\end{frame}
+
+% ---------- 32 · Thank you ----------
+{\darkslide
+\begin{frame}[plain,c]
+  {\kickerfont\fontsize{8}{10}\selectfont\color{alert}CYBERSECURITY FOR NGOS \textbullet{} TRAINING 3}\par\vspace{4mm}
+  \begin{minipage}{112mm}\raggedright
+    {\headfont\fontsize{30}{35}\selectfont Thank you!\par}\par\vspace{4mm}
+    {\lightfont\fontsize{14}{18}\selectfont\color{soft}Stop \textbullet{} Disconnect \textbullet{} Report \textbullet{} Write down}\par\vspace{9mm}
+    {\small\color{soft}Divya Ravichandran \textbullet{} Álvaro Gómez García \textbullet{} Mohammed Krayem\\University of Luxembourg\par}\vspace{4mm}
+    \pill{alert}{\faQuestionCircle\ Questions?}
+  \end{minipage}
+  \note{Thank everyone, answer last questions. On the trainer screen: Delete data once the CSV files are saved. (~30 s)}
+\end{frame}
+}
 
 \end{document}

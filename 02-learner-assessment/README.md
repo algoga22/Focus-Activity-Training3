@@ -1,6 +1,6 @@
 # Challenge 2 – Learner assessment
 
-**Version 3:** the same quiz **at the start and at the end** of the session, in our QR web app ([`quiz/`](../quiz/)), paper sheet as backup
+**In one sentence:** the same quiz **at the start and at the end** of the session, in our QR web app ([`quiz/`](../quiz/)), with a paper sheet as backup.
 
 A 5-minute diagnostic quiz at the start of the session. It measures what participants already know, the misconceptions they have and what they would actually do, against **all** the learning objectives. It works online and onsite.
 
@@ -10,7 +10,7 @@ It is run **twice with exactly the same questions**:
 
 ## Learning objectives assessed
 
-> Provisional: to be replaced by the official Training 3 learning objectives.
+> The same five objectives as the [training plan](../01-training-plan/), the game and the case.
 
 | # | By the end of the training, participants are able to… |
 |---|---|
@@ -110,7 +110,7 @@ Set-up and use on the day: [`quiz/README.md`](../quiz/README.md).
 
 Example of what the trainer can say at the end: *"At the start, 30 % of you would have unplugged the cable and left the computer on. Now it's 90 %."*
 
-**Supporting evidence during the session:** the game ([Challenge 3](../03-serious-game/)) measures the same five objectives on new situations, and its debrief shows the quiz result at the start next to each objective. The Challenge 4 case lets each person show the skill in a new situation.
+**Supporting evidence during the session:** the game ([Challenge 3](../03-serious-game/)) measures the same five objectives on new situations, and its debrief shows the quiz result at the start next to each objective. The Challenge 4 case ("The urgent payment") lets each person show the skill in a new situation, with an answer key per step.
 
 | Objective | Quiz, start | Game (minute 26) | Quiz, end |
 |---|---|---|---|
