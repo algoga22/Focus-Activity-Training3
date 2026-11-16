@@ -690,9 +690,8 @@ def soundtrack():
         voice = np.tanh(1.6 * voice) / np.tanh(1.6)
         mix = 0.62 * mix * duck + 0.95 * voice
         mix = 0.89 * mix / np.max(np.abs(mix))
-    # small stereo width: delay the wet part on the right
-    right = np.roll(mix, int(0.012 * SR))
-    st = np.stack([mix, 0.85 * right + 0.15 * mix], 1)
+    # same signal on both channels: voice and music stay in the centre
+    st = np.stack([mix, mix], 1)
     return (st * 32767).astype(np.int16)
 
 
