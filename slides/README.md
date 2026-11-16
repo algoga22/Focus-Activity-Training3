@@ -6,6 +6,7 @@ All the decks of the project, in LaTeX (Beamer), with the same theme ([`beamerth
 |---|---|---|
 | [`60-minute-training.pdf`](60-minute-training.pdf) | **The training itself**: 32 slides with speaker notes and a progress bar of the hour | The participants (minutes 0–60) |
 | [`5-minute-presentation.pdf`](5-minute-presentation.pdf) | **Presentation of the project** (10 slides) | The jury (5 minutes + 5 minutes of questions) |
+| [`30-second-video.mp4`](30-second-video.mp4) | **30-second video** of the whole project: the 5 challenges with screenshots of the web app, the case sheet and the cheat sheet, with music | The jury, inside the 5-minute presentation |
 | [`project-overview.pdf`](project-overview.pdf) | **Project guide** (32 slides): every part of the project explained in detail, with screenshots | The team, to read; not meant to be presented |
 
 Each PDF has its `.tex` source with the same name. The two project decks share [`common.tex`](common.tex) and use the app screenshots in [`screenshots/`](screenshots/) (demo mode, 6 test players).
@@ -41,13 +42,13 @@ Guidelines: one slide = one idea, visual over text, short sentences with action 
 |---|---|---|
 | 1 | Title | 15 s |
 | 2 | The idea: one analogy (an incident is like a fire), one rule (Stop, Disconnect, Report, Write down) | 35 s |
-| 3 | The hour: alternating theory and activities, one QR code for the whole session | 30 s |
+| 3 | The hour: the 8 parts with their minutes, duration and a short definition; one QR code for the whole session | 30 s |
 | 4 | Quiz (Challenge 2): trainer screen and phone | 35 s |
 | 5 | The same quiz at the end: before / after comparison | 30 s |
 | 6 | The game "Put out the fire" (Challenge 3) | 35 s |
 | 7 | Game feedback and evidence: results after each phase, debrief | 30 s |
-| 8 | The case "The urgent payment" (Challenge 4) and the cheat sheet (Challenge 5) | 35 s |
-| 9 | Why it works, plus a QR code so the jury can try the app | 25 s |
+| 8 | The case "The urgent payment" (Challenge 4), with the case sheet | 25 s |
+| 9 | The cheat sheet (Challenge 5) | 20 s |
 | 10 | Thank you, questions | 5 s |
 
 A suggested text for each slide is in the speaker notes. To see them, change `hide notes` to `show notes on second screen=right` in the `.tex` file.

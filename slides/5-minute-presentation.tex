@@ -54,43 +54,39 @@
 \end{frame}
 
 % ---------- 3 · The hour ----------
-\begin{frame}{One hour, one thread}{The session}
-  \vspace{5mm}\noindent
+% \planpart{x}{y}{colour}{name}{icon}{minutes}{duration}{tag}{definition}: one card of the plan
+\newcommand\planpart[9]{%
+  \node[anchor=north west, inner sep=0pt] at (#1,#2) {\begin{tcolorbox}[enhanced, width=32mm, height=20mm, colback=white, colframe=white,
+      arc=2mm, boxrule=0pt, left=2mm, right=1.4mm, top=1.4mm, bottom=.8mm, before skip=0pt, after skip=0pt,
+      borderline west={1mm}{0pt}{#3}, drop fuzzy shadow={black!18}]
+    \begin{tikzpicture}[baseline=(c.base)]\node[circle, fill=#3, text=white, minimum size=5.6mm, inner sep=0pt, font=\scriptsize](c){#5};\end{tikzpicture}\hspace{1.4mm}%
+    \begin{minipage}[c]{19.5mm}\raggedright{\headfont\footnotesize\color{navy}#4\par}\vspace{-.2mm}{\headfont\fontsize{6.6}{8}\selectfont\color{#3}#6 \textbullet{} #7\par}\end{minipage}\par\vspace{1mm}
+    {\raggedright\fontsize{6.2}{7.4}\selectfont\color{ink}\textbf{#8.} #9\par}
+  \end{tcolorbox}};}
+\begin{frame}{One hour, one thread}{The session, minute by minute}
+  \vspace{3mm}\noindent
   \begin{tikzpicture}[x=1mm,y=1mm]
-    \useasboundingbox (0,-26) rectangle (136,22);
-    \begin{scope}[xshift=5mm]
-    \def\L{126}
-    \foreach \s/\e/\c in {0/5/softdark,5/10/alert,10/18/navy,18/26/navy,26/41/alert,41/53/alert,53/56/alert,56/60/softdark}
-      \fill[\c, rounded corners=1mm] ({\s*\L/60+.4},-1.8) rectangle ({\e*\L/60-.4},1.8);
-    \foreach \t in {0,15,30,60} \node[font=\scriptsize, text=muted] at ({\t*\L/60},-4.5) {\t'};
-    \foreach \m/\c/\ic/\name/\sub in {
-        2.5/muted/\faHandshake/Welcome/slides,
-        14/navy/\faSearch/Spot it/slides,
-        33.5/alert/\faGamepad/Game/Challenge 3,
-        58/muted/\faClipboardCheck/Cheat sheet/Challenge 5} {
-      \pgfmathsetmacro\x{\m*\L/60}
-      \draw[\c, line width=.4mm] (\x,2.4) -- (\x,6);
-      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,10.5) {\ic};
-      \node[anchor=south, align=center, font=\footnotesize, text=navy] at (i.north) {{\headfont\name}\\[-.5mm]{\color{muted}\sub}};
+    \useasboundingbox (0,-48) rectangle (136,4);
+    % proportional bar: 1 minute = 136/60 mm
+    \foreach \s/\e/\c/\n in {0/5/muted/1,5/10/alert/2,10/18/navy/3,18/26/navy/4,26/41/alert/5,41/53/alert/6,53/56/alert/7,56/60/good/8} {
+      \fill[\c, rounded corners=.8mm] ({\s*136/60+.3},0) rectangle ({\e*136/60-.3},4);
+      \node[font=\headfont\fontsize{6.5}{6}\selectfont, text=white] at ({(\s+\e)/2*136/60},2) {\n};
     }
-    \foreach \m/\c/\ic/\name/\sub in {
-        7.5/alert/\faQuestionCircle/Quiz/Ch. 2 \textbullet{} start,
-        22/navy/\faFirstAid/Act on it/slides,
-        46/alert/\faUsers/Case/Challenge 4,
-        54.5/alert/\faChartLine/Quiz again/Ch. 2 \textbullet{} end} {
-      \pgfmathsetmacro\x{\m*\L/60}
-      \draw[\c, line width=.4mm] (\x,-2.4) -- (\x,-6);
-      \node[circle, fill=\c, text=white, minimum size=8.5mm, inner sep=0pt] (i) at (\x,-10.5) {\ic};
-      \node[anchor=north, align=center, font=\footnotesize, text=navy] at (i.south) {{\headfont\name}\\[-.5mm]{\color{muted}\sub}};
-    }
-    \end{scope}
-  \end{tikzpicture}\par\vspace{1mm}
+    \planpart{0}{-2.5}{muted}{Welcome}{\faHandshake}{0–5'}{5 min}{Slides}{Introductions, “Raise your hand if…”, agenda. Everyone scans the QR code.}
+    \planpart{34.67}{-2.5}{alert}{Quiz}{\faQuestionCircle}{5–10'}{5 min}{Challenge 2, start}{5 real situations on the phone: what the group already knows.}
+    \planpart{69.33}{-2.5}{navy}{Spot it}{\faSearch}{10–18'}{8 min}{Slides}{What an incident is, the fire analogy, the “Incident or not?” vote.}
+    \planpart{104}{-2.5}{navy}{Act on it}{\faFirstAid}{18–26'}{8 min}{Slides}{One rule, four steps: Stop, Disconnect, Report, Write down. What never to do.}
+    \planpart{0}{-25.5}{alert}{Game}{\faGamepad}{26–41'}{15 min}{Challenge 3}{“Put out the fire”: 4 rooms \texttimes{} 4 steps, one team fire that grows every second.}
+    \planpart{34.67}{-25.5}{alert}{Case}{\faUsers}{41–53'}{12 min}{Challenge 4}{“The urgent payment”: a new case, alone, then in groups, then debrief.}
+    \planpart{69.33}{-25.5}{alert}{Quiz again}{\faChartLine}{53–56'}{3 min}{Challenge 2, end}{The same 5 questions: before / after, per objective and per person.}
+    \planpart{104}{-25.5}{good}{Close}{\faClipboardCheck}{56–60'}{4 min}{Challenge 5}{The one-page cheat sheet, key messages and feedback.}
+  \end{tikzpicture}\par\vspace{2.5mm}
   \centering
   \pill{alert}{\faHandPointer\ 37 of 60 minutes: participants act}\hspace{1.5mm}%
   \pill{navy}{\faMobile*\ One QR code for the whole hour}
-  \note{[30 s] "Here is the hour. Short explanations alternate with activities: in 37 of the 60 minutes
-  participants are doing something. They scan one QR code at the start and use it for the quiz, the game and the
-  final quiz. Álvaro will show you the quiz and the game."}
+  \note{[30 s] "Here is the hour, in eight parts. Short explanations alternate with activities: in 37 of the 60
+  minutes participants are doing something. They scan one QR code at the start and use it for the quiz, the
+  game and the final quiz. Álvaro will show you the quiz and the game."}
 \end{frame}
 
 % ---------- 4 · Quiz ----------
@@ -164,56 +160,43 @@
   result at the start, and the trap cards people still fall for."}
 \end{frame}
 
-% ---------- 8 · Case + cheat sheet ----------
-\begin{frame}{Apply it alone, take it home}{Challenges 4 and 5}
-  \vspace{5mm}
-  \begin{columns}[T,onlytextwidth]
-    \column{.49\textwidth}
-    \begin{columns}[T,onlytextwidth]
-      \column{.42\linewidth}
-      \tikz\node[inner sep=0pt, drop shadow={opacity=.25}] {\includegraphics[height=38mm]{../04-learning-by-doing/case-sheet.pdf}};
-      \column{.56\linewidth}
-      {\headfont\small\color{navy}The urgent payment\par}\vspace{1mm}
-      {\scriptsize A fake email from the ``president'': the treasurer pays €2,000. \textbf{A new case}, no virus, nothing broken.\par}\vspace{1.5mm}
-      {\scriptsize\color{muted}\faUser\ 4' alone \textrightarrow{} \faUsers\ 4' groups \textrightarrow{} 4' debrief, answer key per step\par}
-    \end{columns}
-    \column{.49\textwidth}
-    \begin{columns}[T,onlytextwidth]
-      \column{.42\linewidth}
-      \tikz\node[inner sep=0pt, drop shadow={opacity=.25}] {\includegraphics[height=38mm]{../05-take-home/cheat-sheet.pdf}};
-      \column{.56\linewidth}
-      {\headfont\small\color{navy}One-page cheat sheet\par}\vspace{1mm}
-      {\scriptsize When to use it, the 4 steps, \textbf{your contacts' phone numbers}, what never to do, quick decisions.\par}\vspace{1.5mm}
-      {\scriptsize\color{muted}\faThumbtack\ To keep next to the computer\par}
-    \end{columns}
-  \end{columns}
-  \vspace{4mm}
-  \centering\pill{navy}{\faCheckCircle\ Can they transfer the rule to something they have never seen? That is the real test.}
-  \note{[35 s] "Then each person applies the rule alone to a case they have never seen: a fake email from
-  the president, and 2,000 euros paid. No virus, nothing broken: if they still stop, call the bank and report,
-  they have understood the rule, not just memorised examples. And they leave with a one-page cheat sheet, with
-  their own contacts' phone numbers on it."}
-\end{frame}
-
-% ---------- 9 · Why it works ----------
-\begin{frame}{Why it works}{In short}
+% ---------- 8 · Case ----------
+\begin{frame}{The urgent payment}{Challenge 4 \textbullet{} learning by doing}
   \vspace{0mm}
   \begin{columns}[T,onlytextwidth]
-    \column{.235\textwidth}\bigcard{alert}{\faFire}{Coherent}{One analogy and one rule in every slide, game, case and sheet}
-    \column{.235\textwidth}\bigcard{navy}{\faChartLine}{Measurable}{Same quiz before and after, game per objective, CSV per person}
-    \column{.235\textwidth}\bigcard{good}{\faMobile*}{Simple}{One QR code, no account, online and onsite, paper backups}
-    \column{.235\textwidth}\bigcard{navydark}{\faBoxOpen}{Ready to run}{32 slides with speaker notes, all PDFs, our own free app}
+    \column{.4\textwidth}
+    \centering\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.25}] {\includegraphics[height=60mm]{../04-learning-by-doing/case-sheet.pdf}};
+    \column{.57\textwidth}
+    \vspace{2mm}
+    \point{alert}{\faEnvelope}{\textbf{A new case:} a fake email from the “president”, \textbf{€2,000} paid. No virus}
+    \point{navy}{\faListOl}{\textbf{3 moments, 4 questions:} one per step of the rule}
+    \point{good}{\faUsers}{\textbf{12'}: 4' alone \textrightarrow{} 4' groups \textrightarrow{} 4' debrief}
+    \point{navydark}{\faClipboardCheck}{\textbf{Answer key:} good / partial / wrong, per objective}
+    \vspace{.5mm}
+    \pill{alert}{\faCheckCircle\ The real test: the rule on a new case}
   \end{columns}
-  \vspace{2mm}
-  \begin{card}[left=4mm, top=1.5mm, bottom=1.5mm]
-    {\color{navy}\qrcode[height=11mm]{https://algoga22.github.io/Focus-Activity-Training3/}}\hspace{4mm}%
-    \begin{minipage}[c]{.8\linewidth}\raggedright
-      {\mediumfont\small\color{navy}Try the quiz and the game now: scan and pick a nickname.\par}
-      {\scriptsize\color{muted}algoga22.github.io/Focus-Activity-Training3\par}
-    \end{minipage}
-  \end{card}
-  \note{[25 s] "To sum up: coherent, measurable, simple, and ready to run tomorrow: 32 slides with speaker
-  notes, every document, and our own app, free and with no accounts. You can try it right now with this code."}
+  \note{[25 s] "Then each person applies the rule alone to a case they have never seen: a fake email from
+  the president, and 2,000 euros paid. No virus, nothing broken: if they still stop, call the bank and report,
+  they have understood the rule, not just memorised examples. Then they compare in groups, and we debrief."}
+\end{frame}
+
+% ---------- 9 · Cheat sheet ----------
+\begin{frame}{The cheat sheet}{Challenge 5 \textbullet{} take-home}
+  \vspace{0mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{.4\textwidth}
+    \centering\tikz\node[inner sep=0pt, draw=softdark, line width=.3pt, drop shadow={opacity=.25}] {\includegraphics[height=60mm]{../05-take-home/cheat-sheet.pdf}};
+    \column{.57\textwidth}
+    \vspace{2mm}
+    \point{alert}{\faExclamationTriangle}{\textbf{Spot it:} lost, leaks, acts strange, odd request}
+    \point{navy}{\faListOl}{\textbf{The 4 steps:} what to do and not to do}
+    \point{good}{\faPhone}{\textbf{Your phone numbers:} contact, backup, bank}
+    \point{navydark}{\faBan}{\textbf{Never} list and \textbf{quick decisions} for 5 cases}
+    \vspace{.5mm}
+    \pill{navy}{\faThumbtack\ One page, to keep next to the computer}
+  \end{columns}
+  \note{[20 s] "And they leave with a one-page cheat sheet: when to use it, the four steps, what never to do,
+  and their own contacts' phone numbers, written before they leave the room. In an emergency nobody looks for a number."}
 \end{frame}
 
 % ---------- 10 · Thank you ----------

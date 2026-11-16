@@ -6,6 +6,7 @@ Small Python scripts that generate the files in this repository.
 |---|---|---|
 | `build_session_plan.py` | `01-training-plan/Training3_Session_Plan.pdf` | reportlab |
 | `build_answer_sheet.py` | `02-learner-assessment/answer-sheet.pdf` | reportlab |
+| `build_video.py` | `slides/30-second-video.mp4` (no argument) | pillow, numpy, scipy, pymupdf, ffmpeg |
 
 Usage: `python tools/<script>.py <output-file>` (for example with uv: `uv run --with reportlab python tools/build_session_plan.py 01-training-plan/Training3_Session_Plan.pdf`)
 
