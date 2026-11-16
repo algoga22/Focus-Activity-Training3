@@ -44,6 +44,7 @@ let viewKey = '';
 let showCorrect = false;
 let showTable = false;
 let timer = null;
+let resetting = false; // Reset room: the old room is deleted, then a new one opens
 
 const players = () => Object.entries(room.players || {}).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
 const answersFor = (qKey) => room.answers?.[qKey] || {};
@@ -88,8 +89,10 @@ const actions = {
   },
   resetAll: async () => {
     if (!room || room.hostUid !== be.uid) return;
-    if (!confirm(`Reset room ${code}?\n\nEVERYTHING is deleted: the answers of the quiz at the start, the game and the quiz at the end, and the list of participants. Download the CSV files first if you need them.\n\nThe room code and the QR code stay the same: participants only need to type their nickname again.`)) return;
-    await be.wipeRoom(code);
+    if (!confirm(`Reset room ${code}?\n\nEVERYTHING is deleted: the answers of the quiz at the start, the game and the quiz at the end, and the list of participants. Download the CSV files first if you need them.\n\nA new room opens with a NEW room code and QR code: participants must scan again.`)) return;
+    resetting = true;
+    await be.deleteRoom(code);
+    actions.newQuiz();
   },
   newQuiz: async () => { localStorage.removeItem('quiz-host-room'); location.href = `?${params.has('demo') ? 'demo' : ''}`; },
 };
@@ -397,7 +400,7 @@ function renderNotHost() {
 // Start listening last: the demo backend calls back immediately
 be.watchRoom(code, (r) => {
   room = r;
-  if (!room) return renderDeleted();
+  if (!room) return resetting ? undefined : renderDeleted();
   if (room.hostUid !== be.uid) return renderNotHost();
   const st = room.state || {};
   const key = `${room.mode}:${st.phase}:${st.q}:${st.round}:${st.step}`;
