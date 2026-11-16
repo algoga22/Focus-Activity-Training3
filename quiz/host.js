@@ -26,7 +26,9 @@ history.replaceState(null, '', `?room=${code}${params.has('demo') ? '&demo' : ''
 const joinUrl = new URL(`./?room=${code}${params.has('demo') ? '&demo' : ''}`, location.href).href;
 const shortUrl = new URL('./', location.href).href.replace(/^https?:\/\//, '');
 $('#topbar').innerHTML = `${wordmark()}<div class="right"><span class="pill purple"><i class="fa-solid fa-shield-halved"></i> ${esc(TRAINING)}</span>
-  <span class="pill"><i class="fa-solid fa-hashtag"></i> Room ${code}</span></div>`;
+  <span class="pill"><i class="fa-solid fa-hashtag"></i> Room ${code}</span>
+  <button class="pill reset-room" id="resetRoom" title="Delete all answers and participants and go back to the menu"><i class="fa-solid fa-arrows-rotate"></i> Reset room</button></div>`;
+$('#resetRoom').addEventListener('click', () => actions.resetAll());
 
 async function createRoom() {
   for (let i = 0; i < 20; i++) {
@@ -83,6 +85,11 @@ const actions = {
   restart: async () => {
     if (!confirm(`Restart the ${ACTIVITY[room.mode]} from the beginning?\n\nIts answers will be deleted (the other activities are kept). Participants stay connected and do not need to scan the QR code again.`)) return;
     await be.resetRoom(code, keysOf(room.mode));
+  },
+  resetAll: async () => {
+    if (!room || room.hostUid !== be.uid) return;
+    if (!confirm(`Reset room ${code}?\n\nEVERYTHING is deleted: the answers of the quiz at the start, the game and the quiz at the end, and the list of participants. Download the CSV files first if you need them.\n\nThe room code and the QR code stay the same: participants only need to type their nickname again.`)) return;
+    await be.wipeRoom(code);
   },
   newQuiz: async () => { localStorage.removeItem('quiz-host-room'); location.href = `?${params.has('demo') ? 'demo' : ''}`; },
 };

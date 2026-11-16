@@ -69,6 +69,8 @@ The config values in `firebase-config.js` are public by design; the [rules](data
 
 **Restart** only deletes the answers of the activity you are in. Starting an activity that was already played asks for confirmation first.
 
+**Reset room** (top right, always visible) starts the whole room from zero: it deletes the answers of all activities and the list of participants, and goes back to the menu. The room code and the QR code stay the same, so participants only type their nickname again. Useful to rehearse, or to reuse the room with a new group.
+
 **No internet at the venue?** Use the paper [answer sheet](../02-learner-assessment/answer-sheet.pdf) (Start and End columns) and read the questions aloud from [the Challenge 2 README](../02-learner-assessment/README.md#the-quiz).
 
 ## Privacy

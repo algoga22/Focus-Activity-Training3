@@ -35,11 +35,12 @@ async function firebaseBackend() {
     // choice '' removes the answer (Q1: everything unticked). extra: e.g. { ms } = time taken in the game
     answer(code, qKey, choice, extra = {}) { return set(r(`rooms/${code}/answers/${qKey}/${user.uid}`), choice ? { choice, at: Date.now(), ...extra } : null); },
     deleteRoom(code) { return remove(r(`rooms/${code}`)); },
-    // Back to the lobby: answers are deleted, participants stay in the room
     // Back to the lobby: the answers of this activity (keys) are deleted, participants stay in the room
     resetRoom(code, keys) { return update(r(`rooms/${code}`), Object.fromEntries([['state', LOBBY], ...keys.map((k) => [`answers/${k}`, null])])); },
     // Pick the activity ('quiz' | 'quiz-after' | 'game' | null = menu). Answers are kept: the debriefs compare them
     setMode(code, mode) { return update(r(`rooms/${code}`), { mode, state: LOBBY }); },
+    // Reset the whole room: every answer and every participant is deleted, back to the menu. Same room code and QR
+    wipeRoom(code) { return update(r(`rooms/${code}`), { mode: null, state: LOBBY, answers: null, players: null }); },
   };
 }
 
@@ -88,6 +89,7 @@ function localBackend() {
     async deleteRoom(code) { write(`rooms/${code}`, null); },
     async resetRoom(code, keys) { keys.forEach((k) => write(`rooms/${code}/answers/${k}`, null)); write(`rooms/${code}/state`, LOBBY); },
     async setMode(code, mode) { write(`rooms/${code}/mode`, mode); write(`rooms/${code}/state`, LOBBY); },
+    async wipeRoom(code) { ['answers', 'players', 'mode'].forEach((k) => write(`rooms/${code}/${k}`, null)); write(`rooms/${code}/state`, LOBBY); },
   });
 }
 
