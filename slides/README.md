@@ -6,10 +6,10 @@ All the decks of the project, in LaTeX (Beamer), with the same theme ([`beamerth
 |---|---|---|
 | [`60-minute-training.pdf`](60-minute-training.pdf) | **The training itself**: 32 slides with speaker notes and a progress bar of the hour | The participants (minutes 0–60) |
 | [`5-minute-presentation.pdf`](5-minute-presentation.pdf) | **Presentation of the project** (10 slides) | The jury (5 minutes + 5 minutes of questions) |
-| [`30-second-video.mp4`](30-second-video.mp4) | **30-second video** of the whole project: the 5 challenges with screenshots of the web app, the case sheet and the cheat sheet, with music | The jury, inside the 5-minute presentation |
+| [`30-second-video.mp4`](30-second-video.mp4) | **30-second video** of the whole project: a big "Challenge X" title before each of the 5 challenges, then screenshots of the web app, the case sheet and the cheat sheet, with a voice-over (Kokoro TTS) and epic background music, ending with our team logo | The jury, inside the 5-minute presentation |
 | [`project-overview.pdf`](project-overview.pdf) | **Project guide** (32 slides): every part of the project explained in detail, with screenshots | The team, to read; not meant to be presented |
 
-Each PDF has its `.tex` source with the same name. The two project decks share [`common.tex`](common.tex) and use the app screenshots in [`screenshots/`](screenshots/) (demo mode, 6 test players).
+Each PDF has its `.tex` source with the same name. [`firefighter.pdf`](firefighter.pdf) is our team logo (team **Firefighters**), used in the 5-minute presentation and the video. The two project decks share [`common.tex`](common.tex) and use the app screenshots in [`screenshots/`](screenshots/) (demo mode, 6 test players).
 
 ```sh
 cd slides && latexmk -lualatex 60-minute-training.tex   # or 5-minute-presentation.tex, project-overview.tex

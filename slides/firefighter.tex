@@ -1,0 +1,57 @@
+% Our team logo: a firefighter putting out the fire (team "Firefighters").
+% Used in the 5-minute presentation and in the 30-second video. Build: latexmk -lualatex firefighter.tex
+\documentclass[tikz,border=1mm]{standalone}
+\usepackage{fontawesome5}
+\usetikzlibrary{decorations.pathmorphing}
+\definecolor{navy}{HTML}{1F3A5F}
+\definecolor{navydark}{HTML}{12243C}
+\definecolor{alert}{HTML}{E4572E}
+\definecolor{amber}{HTML}{F5B82E}
+\definecolor{water}{HTML}{3D8BFD}
+\definecolor{skin}{HTML}{F2C29B}
+\definecolor{ink}{HTML}{22303F}
+\definecolor{steam}{HTML}{C9D3E0}
+\begin{document}
+\begin{tikzpicture}[x=1mm,y=1mm, line cap=round, line join=round]
+  % ---- hose (behind the firefighter)
+  \draw[ink, line width=1.6mm] (18,14.6) .. controls (12,12) and (9,9) .. (6,5) .. controls (4,2.5) and (1,1.2) .. (-3,1);
+  % ---- legs and boots
+  \fill[navy, rounded corners=.6mm] (6.6,1.4) rectangle (9.2,9.5);
+  \fill[navy, rounded corners=.6mm] (10.8,1.4) rectangle (13.4,9.5);
+  \fill[amber] (6.6,4) rectangle (9.2,4.9);
+  \fill[amber] (10.8,4) rectangle (13.4,4.9);
+  \fill[ink, rounded corners=.6mm] (6,0) rectangle (9.6,1.8);
+  \fill[ink, rounded corners=.6mm] (10.4,0) rectangle (14.6,1.8);
+  % ---- jacket
+  \fill[navy, rounded corners=1.6mm] (5.6,8.6) rectangle (14.4,18.4);
+  \fill[amber] (5.6,11.2) rectangle (14.4,12.2);
+  \fill[amber] (5.6,15.4) rectangle (14.4,16.2);
+  \fill[navydark] (9.6,8.6) rectangle (10.4,18.2);
+  % ---- arms holding the nozzle
+  \draw[navy, line width=2.4mm] (12.6,16.6) -- (17.4,15.4);
+  \draw[navy, line width=2.4mm] (11.6,13.2) -- (16.6,13.6);
+  \fill[amber] (15.6,15.85) circle (.75);
+  \fill[skin] (17.6,15.3) circle (1.1);
+  \fill[skin] (17,13.6) circle (1.1);
+  % nozzle
+  \draw[ink, line width=1.7mm] (16.4,14.2) -- (21.4,15.6);
+  \draw[ink, line width=2.3mm] (21,15.5) -- (22.2,15.85);
+  % ---- head and helmet
+  \fill[skin] (10,21) circle (2.7);
+  \fill[ink] (11.1,21.2) circle (.32);
+  \fill[alert] (6.9,21.3) arc[start angle=180, end angle=0, radius=3.2] -- cycle;
+  \fill[alert, rounded corners=.5mm] (4.8,20.7) -- (15.6,21) -- (15.2,22) -- (5.2,21.9) -- cycle;
+  \fill[amber] (11.4,22.6) circle (.85);
+  \fill[alert!80!black] (9.7,24.5) rectangle (10.4,22.3);
+  % ---- water: three jets and droplets
+  \foreach \dy/\w in {0/1.1, 1.1/.7, -1.1/.7}
+    \draw[water, line width=\w mm] (22.6,{16+\dy/2}) .. controls (30,{23+\dy}) and (38,{21+\dy}) .. (43,{12+\dy/2});
+  \foreach \x/\y/\r in {27/20.6/.5, 31/22.4/.4, 35/22.2/.55, 39/19/.45, 41.5/16.6/.4, 33/18.6/.35, 37.5/23/.35, 44.5/11/.5, 46.5/13.5/.45, 42/9.8/.4}
+    \fill[water] (\x,\y) circle (\r);
+  % ---- the fire going out, with steam
+  \node[text=alert, font=\fontsize{50}{50}\selectfont] at (47,6.2) {\faFire};
+  \node[text=amber, font=\fontsize{17}{17}\selectfont] at (47,3.1) {\faFire};
+  \foreach \x/\y/\r in {44/17/1.6, 47/18.6/2.1, 50.5/17.3/1.7, 48.5/21.5/1.4, 52.5/20.4/1.1}
+    \fill[steam, opacity=.85] (\x,\y) circle (\r);
+\end{tikzpicture}
+\end{document}

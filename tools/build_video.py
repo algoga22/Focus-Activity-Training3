@@ -5,6 +5,7 @@ Shows the 5 challenges with real screenshots of the web app and the PDFs, on a d
 
     uv run --with pillow --with numpy --with scipy --with pymupdf python tools/build_video.py
 
+Voice-over: run tools/build_narration.py first (Kokoro TTS); without it the video has music only.
 Needs ffmpeg and the fonts of the slides (TeX Live: Montserrat, Fira Sans, Font Awesome 5).
 Output: slides/30-second-video.mp4 (1920x1080, 30 fps, AAC audio).
 """
@@ -20,6 +21,7 @@ from scipy.signal import lfilter, fftconvolve
 ROOT = Path(__file__).resolve().parent.parent
 SHOTS = ROOT / 'slides' / 'screenshots'
 OUT = ROOT / 'slides' / '30-second-video.mp4'
+NARRATION = ROOT / 'tools' / 'video-narration.wav'  # made by tools/build_narration.py (Kokoro); optional
 W, H, FPS, DUR = 1920, 1080, 30, 30.0
 N = int(FPS * DUR)
 
@@ -40,11 +42,17 @@ MUTED = (160, 176, 200)
 NAVY = (31, 58, 95)
 
 BEAT = 0.6  # 100 BPM: the cuts fall on the beats
-# sections (start, end): intro, title, C1, C2, C3, C4, C5, results, outro
-T_TITLE, T_C1, T_C2, T_C3, T_C4, T_C5, T_RES, T_OUT, T_END = 3.0, 5.4, 8.4, 12.6, 20.4, 23.4, 25.8, 27.6, 28.9
-GAME_CUTS = [T_C3, 14.4, 15.6, 16.8, 18.0, 19.2, T_C4]
+# sections: intro, title, then for each challenge a big title card (CARD[n]) followed by its content (T_Cn), results, outro
+T_TITLE = 2.4
+CARD = {1: 4.2, 2: 7.5, 3: 12.0, 4: 19.2, 5: 23.1}
+T_C1, T_C2, T_C3, T_C4, T_C5 = 5.1, 8.4, 12.9, 20.1, 24.0
+T_RES, T_OUT, T_END = 26.4, 27.6, 28.9
+Q_CUT = 9.9  # quiz: lobby -> question
+GAME_CUTS = [T_C3, 14.1, 15.3, 16.5, 17.7, CARD[4]]
 STAMPS = [T_OUT + i * 0.3 for i in range(4)]
-HITS = [T_TITLE, T_C1, T_C2, 10.2, *GAME_CUTS[:-1], T_C4, T_C5, T_RES, *STAMPS, T_END]
+CONTENT = [T_C1, T_C2, Q_CUT, *GAME_CUTS[:-1], T_C4, T_C5, T_RES]
+HITS = [T_TITLE, *CARD.values(), *CONTENT, *STAMPS, T_END]
+CHALLENGES = {1: 'TRAINING PLAN', 2: 'LEARNER ASSESSMENT', 3: 'SERIOUS GAME', 4: 'LEARNING BY DOING', 5: 'TAKE-HOME'}
 
 
 # ------------------------------------------------------------------ helpers
@@ -111,6 +119,22 @@ def paste_clip(frame, im, x, y):
     r, b = min(im.width, W - x), min(im.height, H - y)
     if r <= l or b <= t: return
     frame.alpha_composite(im.crop((l, t, r, b)), (x + l, y + t))
+
+
+@lru_cache(None)
+def firefighter(width):
+    """Team logo (slides/firefighter.pdf) on a white disc."""
+    pix = pymupdf.open(ROOT / 'slides' / 'firefighter.pdf')[0].get_pixmap(dpi=400, alpha=True)
+    im = Image.frombytes('RGBA', (pix.width, pix.height), pix.samples)
+    im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+    r = int(width * 0.55)
+    out = Image.new('RGBA', (2 * r + 120, 2 * r + 120), (0, 0, 0, 0))
+    halo = Image.new('RGBA', out.size, (0, 0, 0, 0))
+    ImageDraw.Draw(halo).ellipse((40, 40, out.width - 40, out.height - 40), fill=(*ORANGE, 150))
+    out.alpha_composite(halo.filter(ImageFilter.GaussianBlur(30)))
+    ImageDraw.Draw(out).ellipse((60, 60, out.width - 60, out.height - 60), fill=(255, 255, 255, 255))
+    out.alpha_composite(im, ((out.width - im.width) // 2, (out.height - im.height) // 2 + 10))
+    return out
 
 
 @lru_cache(None)
@@ -290,22 +314,29 @@ def s_intro(fr, t):
     k = 0.6 + 0.9 * ease_in_out(prog(t, 0, T_TITLE))
     flick = 1 + 0.05 * math.sin(t * 23) + 0.04 * math.sin(t * 37)
     put(fr, text_img(I_FIRE, F_ICON, 150, ORANGE, glow=22), W / 2, 420, ease_out(prog(t, 0.1, 0.8)), 'mm', k * flick)
-    a1 = ease_out(prog(t, 0.3, 0.8)) * (1 - prog(t, 1.4, 1.6))
+    a1 = ease_out(prog(t, 0.2, 0.6)) * (1 - prog(t, 1.0, 1.15))
     put(fr, text_img('Something goes wrong.', F_BLACK, 84, WHITE), W / 2, 700 + 20 * (1 - a1), a1, 'mm')
-    a2 = ease_out(prog(t, 1.6, 2.0)) * (1 - prog(t, 2.85, 3.0))
-    put(fr, text_img('Every second counts.', F_BLACK, 84, ORANGE, glow=8), W / 2, 700, a2, 'mm', 1.12 - 0.12 * ease_out(prog(t, 1.6, 2.2)))
+    a2 = ease_out(prog(t, 1.2, 1.5)) * (1 - prog(t, 2.25, 2.4))
+    put(fr, text_img('Every second counts.', F_BLACK, 84, ORANGE, glow=8), W / 2, 700, a2, 'mm', 1.12 - 0.12 * ease_out(prog(t, 1.2, 1.8)))
     # clock
     secs = int(t * 10)
-    put(fr, text_img(f'00:00:0{min(secs // 10, 9)}.{secs % 10}', F_XBOLD, 30, MUTED, spacing=3), W / 2, 820, ease_out(prog(t, 0.3, 0.8)) * (1 - prog(t, 2.85, 3.0)), 'mm')
+    put(fr, text_img(f'00:00:0{min(secs // 10, 9)}.{secs % 10}', F_XBOLD, 30, MUTED, spacing=3), W / 2, 820, ease_out(prog(t, 0.2, 0.6)) * (1 - prog(t, 2.25, 2.4)), 'mm')
 
 
 def s_title(fr, t):
     t0 = T_TITLE
-    put(fr, text_img('CYBERSECURITY FOR NGOs BOOTCAMP  ·  TRAINING 3', F_BOLD, 28, ORANGE, spacing=6), W / 2, 300, ease_out(prog(t, t0 + 0.1, t0 + 0.5)), 'mm')
-    z = 1.12 - 0.12 * ease_out(prog(t, t0, t0 + 2.4))
+    # badge: this video is a recap of the project
+    lbl = text_img('PROJECT RECAP  ·  IN 30 SECONDS', F_BLACK, 34, WHITE, spacing=6)
+    badge = Image.new('RGBA', (lbl.width + 70, 74), (0, 0, 0, 0))
+    ImageDraw.Draw(badge).rounded_rectangle((0, 0, badge.width - 1, 73), 37, fill=ORANGE)
+    badge.alpha_composite(lbl, (35, (74 - lbl.height) // 2 + 2))
+    pb = back_out(prog(t, t0, t0 + 0.3)) if t > t0 else 0
+    put(fr, badge, W / 2, 200, clamp(pb), 'mm', max(0.01, pb))
+    put(fr, text_img('TEAM FIREFIGHTERS  ·  CYBERSECURITY FOR NGOs BOOTCAMP  ·  TRAINING 3', F_BOLD, 28, ORANGE, spacing=6), W / 2, 300, ease_out(prog(t, t0 + 0.1, t0 + 0.5)), 'mm')
+    z = 1.12 - 0.12 * ease_out(prog(t, t0, t0 + 1.8))
     put(fr, text_img('WHEN SOMETHING', F_BLACK, 132, WHITE), W / 2, 430, 1, 'mm', z)
     put(fr, text_img('GOES WRONG', F_BLACK, 132, ORANGE, glow=12), W / 2, 580, 1, 'mm', z)
-    a = ease_out(prog(t, t0 + 0.5, t0 + 0.9))
+    a = ease_out(prog(t, t0 + 0.35, t0 + 0.7))
     put(fr, text_img('A 60-minute incident response training for people with no technical background', F_BODY, 34, MUTED), W / 2, 700, a, 'mm')
     labels = [('1', 'Plan'), ('2', 'Quiz'), ('3', 'Game'), ('4', 'Case'), ('5', 'Cheat sheet')]
     ims = []
@@ -323,9 +354,46 @@ def s_title(fr, t):
     total = sum(i.width for i in ims) + 18 * 4
     x = W / 2 - total / 2
     for i, im in enumerate(ims):
-        p = back_out(prog(t, t0 + 0.9 + i * 0.12, t0 + 1.25 + i * 0.12)) if t > t0 + 0.9 + i * 0.12 else 0
+        p = back_out(prog(t, t0 + 0.6 + i * 0.1, t0 + 0.9 + i * 0.1)) if t > t0 + 0.6 + i * 0.1 else 0
         put(fr, im, x + im.width / 2, 810, clamp(p), 'mm', max(0.01, p))
         x += im.width + 18
+
+
+def s_card(n):
+    def scene(fr, t):
+        t0, t1 = CARD[n], CARD[n] + 0.9
+        out = prog(t, t1 - 0.15, t1)                 # whip out into the content
+        k_out, a_out = 1 + 0.25 * out ** 2, 1 - out
+        # light band behind the title
+        band = Image.new('RGBA', (W, 300), (0, 0, 0, 0))
+        ImageDraw.Draw(band).rectangle((0, 110, W, 190), fill=(*ORANGE, 70))
+        band = band.filter(ImageFilter.GaussianBlur(40))
+        fr.alpha_composite(with_alpha(band, ease_out(prog(t, t0, t0 + 0.2)) * a_out), (0, 270))
+        p = prog(t, t0, t0 + 0.16)
+        put(fr, text_img(f'CHALLENGE {n}', F_BLACK, 170, WHITE, glow=14), W / 2, 420, clamp(p * 2) * a_out, 'mm', (1.6 - 0.6 * ease_out(p)) * k_out)
+        q = ease_out(prog(t, t0 + 0.1, t0 + 0.35))
+        put(fr, text_img(CHALLENGES[n], F_BOLD, 46, ORANGE, spacing=12), W / 2 + 80 * (1 - q), 590, q * a_out, 'mm', k_out)
+        # the 5 challenges: done = green, now = orange (pops), next = dim
+        r, gap = 34, 120
+        x0 = W / 2 - 2 * gap
+        for i in range(1, 6):
+            x = x0 + (i - 1) * gap
+            if i < 5:
+                col = GREEN if i < n else (40, 56, 84)
+                ImageDraw.Draw(fr).line((x + r + 6, 780, x + gap - r - 6, 780), fill=(*col, int(255 * a_out)), width=4)
+            if i == n:
+                pp = back_out(prog(t, t0 + 0.15, t0 + 0.4)) if t > t0 + 0.15 else 0
+                rr = r * 1.3 * max(0.01, pp)
+                dot = Image.new('RGBA', (220, 220), (0, 0, 0, 0))
+                ImageDraw.Draw(dot).ellipse((110 - rr, 110 - rr, 110 + rr, 110 + rr), fill=ORANGE)
+                dot = Image.alpha_composite(dot.filter(ImageFilter.GaussianBlur(14)), dot)
+                put(fr, dot, x, 780, a_out, 'mm', k_out)
+                put(fr, text_img(str(i), F_BLACK, 40, WHITE), x, 780, clamp(pp) * a_out, 'mm', k_out)
+            else:
+                d = ImageDraw.Draw(fr)
+                d.ellipse((x - r, 780 - r, x + r, 780 + r), fill=(*(GREEN if i < n else (40, 56, 84)), int(255 * a_out)))
+                put(fr, text_img(str(i), F_BLACK, 32, WHITE if i < n else MUTED), x, 780, a_out, 'mm')
+    return scene
 
 
 PLAN = [(0, 5, 'Welcome', None, NAVY), (5, 10, 'Quiz', 2, PURPLE), (10, 18, 'Recognise', None, BLUE), (18, 26, 'First steps', None, BLUE),
@@ -365,17 +433,17 @@ def s_plan(fr, t):
 def s_quiz(fr, t):
     t0 = T_C2
     header(fr, t, t0, 'CHALLENGE 2  ·  LEARNER ASSESSMENT', 'What would you do?', 2)
-    if t < 10.2:
+    if t < Q_CUT:
         p = ease_out(prog(t, t0, t0 + 0.5))
-        shot(fr, 'quiz-lobby.png', 860, 620, 1250, p, 1.0 + 0.05 * prog(t, t0, 10.2))
+        shot(fr, 'quiz-lobby.png', 860, 620, 1250, p, 1.0 + 0.05 * prog(t, t0, Q_CUT))
         q = back_out(prog(t, t0 + 0.6, t0 + 1.0)) if t > t0 + 0.6 else 0
         shot(fr, 'quiz-phone-q1.png', 1640 + 300 * (1 - clamp(q)), 640, 330, clamp(q * 2), 1, -4 * clamp(q))
         chip(fr, t, t0 + 0.9, 'Scan the QR code: no account, no app', 140, 990, WHITE, I_QRCODE)
     else:
-        z = 1.0 + 0.25 * ease_in_out(prog(t, 10.2, 12.6))
+        z = 1.0 + 0.25 * ease_in_out(prog(t, Q_CUT, CARD[3]))
         zoom_shot(fr, 'quiz-host-question.png', 960, 620, 1500, 760, (0.42, 0.5), z)
-        chip(fr, t, 10.5, '5 real incidents', 140, 990, WHITE, I_SHIELD)
-        chip(fr, t, 10.8, 'The same quiz at the start and at the end', 520, 990, WHITE, I_CHART)
+        chip(fr, t, Q_CUT + 0.3, '5 real incidents', 140, 990, WHITE, I_SHIELD)
+        chip(fr, t, Q_CUT + 0.6, 'The same quiz at the start and at the end', 520, 990, WHITE, I_CHART)
 
 
 def s_game(fr, t):
@@ -386,9 +454,9 @@ def s_game(fr, t):
     drift = 1.0 + 0.04 * loc
     if t < c[1]:
         shot(fr, 'game-lobby.png', 860, 620, 1250, ease_out(prog(t, t0, t0 + 0.4)), drift)
-        q = back_out(prog(t, t0 + 0.5, t0 + 0.9)) if t > t0 + 0.5 else 0
+        q = back_out(prog(t, t0 + 0.4, t0 + 0.8)) if t > t0 + 0.4 else 0
         shot(fr, 'game-phone-lobby.png', 1640 + 300 * (1 - clamp(q)), 640, 330, clamp(q * 2), 1, -4 * clamp(q))
-        chip(fr, t, t0 + 0.8, '4 rooms of our NGO  ×  the 4 steps', 140, 990, WHITE, I_FIRE)
+        chip(fr, t, t0 + 0.6, '4 rooms of our NGO  ×  the 4 steps', 140, 990, WHITE, I_FIRE)
     elif t < c[2]:
         zoom_shot(fr, 'game-host-question.png', 960, 620, 1500, 760, (0.45, 0.4), 1.08 + 0.15 * prog(t, c[1], c[2]))
         stamp(fr, t, c[1] + 0.25, 'THE FIRE GROWS', ORANGE, 1380, 860, -5, 92)
@@ -402,24 +470,20 @@ def s_game(fr, t):
         shot(fr, 'game-phone-petrol.png', 1600, 640, 330, 1, 1, 4)
         stamp(fr, t, c[3] + 0.15, 'PETROL!', ORANGE, 1560, 900, -7, 120)
         chip(fr, t, c[3] + 0.3, 'Trap card = petrol for the whole team', 140, 990, WHITE, I_FIRE)
-    elif t < c[5]:
-        zoom_shot(fr, 'game-host-hacker.png', 800, 620, 1180, 664, (0.3, 0.4), 1.3 + 0.2 * prog(t, c[4], c[5]))
-        shot(fr, 'game-phone-hacker.png', 1600, 640, 330, 1, 1, -4)
-        stamp(fr, t, c[4] + 0.15, 'SURPRISE!', AMBER, 1000, 930, -6, 110)
     else:
-        zoom_shot(fr, 'game-debrief.png', 960, 620, 1500, 760, (0.3, 0.3), 1.15 + 0.2 * prog(t, c[5], c[6]))
-        chip(fr, t, c[5] + 0.2, 'Results per objective, trap cards, best firefighters', 140, 990, WHITE, I_CHART)
+        zoom_shot(fr, 'game-debrief.png', 960, 620, 1500, 760, (0.3, 0.3), 1.15 + 0.2 * prog(t, c[4], c[5]))
+        chip(fr, t, c[4] + 0.2, 'Results per objective, trap cards, best firefighters', 140, 990, WHITE, I_CHART)
 
 
 def s_case(fr, t):
     t0 = T_C4
     header(fr, t, t0, 'CHALLENGE 4  ·  LEARNING BY DOING', 'The urgent payment', 4)
     p = ease_out(prog(t, t0, t0 + 0.5))
-    shot(fr, '04-learning-by-doing/case-sheet.pdf', 1380 + 200 * (1 - p), 640 - 60 * prog(t, t0, T_C5), 560, p, 1.0 + 0.06 * prog(t, t0, T_C5), 4 * p - 2)
+    shot(fr, '04-learning-by-doing/case-sheet.pdf', 1380 + 200 * (1 - p), 640 - 60 * prog(t, t0, CARD[5]), 560, p, 1.0 + 0.06 * prog(t, t0, CARD[5]), 4 * p - 2)
     chip(fr, t, t0 + 0.4, 'A fake email from the president', 140, 400, WHITE, I_ENVELOPE)
     chip(fr, t, t0 + 0.9, '€2,000 already paid', 140, 500, WHITE, I_EURO)
     chip(fr, t, t0 + 1.4, 'Alone, then in groups, then together', 140, 600, WHITE, I_USERS)
-    stamp(fr, t, t0 + 1.9, 'CALL THE BANK. NOW.', ORANGE, 560, 800, -4, 72)
+    stamp(fr, t, t0 + 1.8, 'CALL THE BANK. NOW.', ORANGE, 560, 800, -4, 72)
 
 
 def s_cheat(fr, t):
@@ -448,8 +512,8 @@ def s_outro(fr, t):
     total = sum(i.width for i in ims) + gap * 3
     fit = min(1.0, 1680 / total)
     up = ease_in_out(prog(t, T_END, T_END + 0.4))
-    y = 520 - 190 * up
-    k = fit * (1 - 0.3 * up)
+    y = 520 - 360 * up
+    k = fit * (1 - 0.4 * up)
     x = W / 2 - total * k / 2
     for i, im in enumerate(ims):
         if t >= STAMPS[i]:
@@ -458,16 +522,22 @@ def s_outro(fr, t):
             put(fr, im, x + im.width * k / 2, y, clamp(p * 2), 'mm', s)
         x += (im.width + gap) * k
     if t >= T_END:
-        a = ease_out(prog(t, T_END + 0.1, T_END + 0.5))
-        put(fr, text_img('One rule. Four steps.', F_BLACK, 110, WHITE), W / 2, 520, a, 'mm', 1.08 - 0.08 * a)
-        put(fr, text_img('TRAINING 3  ·  WHEN SOMETHING GOES WRONG', F_BOLD, 28, ORANGE, spacing=6), W / 2, 650, a, 'mm')
-        b = ease_out(prog(t, T_END + 0.35, T_END + 0.75))
-        put(fr, text_img('Divya Ravichandran  ·  Álvaro Gómez García  ·  Mohammed Krayem', F_BODY, 32, WHITE), W / 2, 780, b, 'mm')
-        put(fr, text_img('University of Luxembourg  ·  Cybersecurity for NGOs Bootcamp', F_BODY, 26, MUTED), W / 2, 830, b, 'mm')
+        # team logo on the left, the message and the team on the right
+        f = back_out(prog(t, T_END + 0.05, T_END + 0.45)) if t > T_END + 0.05 else 0
+        put(fr, firefighter(600), 470, 640, clamp(f), 'mm', max(0.01, f))
+        a = ease_out(prog(t, T_END + 0.15, T_END + 0.5))
+        x = 860 + 60 * (1 - a)
+        put(fr, text_img('One rule. Four steps.', F_BLACK, 78, WHITE), x, 475, a, 'lm')
+        put(fr, text_img('TEAM FIREFIGHTERS', F_BLACK, 40, ORANGE, spacing=8), x, 590, a, 'lm')
+        b = ease_out(prog(t, T_END + 0.3, T_END + 0.7))
+        put(fr, text_img('Divya Ravichandran  ·  Álvaro Gómez García  ·  Mohammed Krayem', F_BODY, 30, WHITE), x, 670, b, 'lm')
+        put(fr, text_img('University of Luxembourg  ·  Cybersecurity for NGOs Bootcamp', F_BODY, 24, MUTED), x, 718, b, 'lm')
+        put(fr, text_img('TRAINING 3  ·  WHEN SOMETHING GOES WRONG', F_BOLD, 22, ORANGE, spacing=5), x, 790, b, 'lm')
 
-
-SCENES = [(0, T_TITLE, s_intro), (T_TITLE, T_C1, s_title), (T_C1, T_C2, s_plan), (T_C2, T_C3, s_quiz), (T_C3, T_C4, s_game),
-          (T_C4, T_C5, s_case), (T_C5, T_RES, s_cheat), (T_RES, T_OUT, s_results), (T_OUT, DUR + 1, s_outro)]
+SCENES = [(0, T_TITLE, s_intro), (T_TITLE, CARD[1], s_title),
+          (CARD[1], T_C1, s_card(1)), (T_C1, CARD[2], s_plan), (CARD[2], T_C2, s_card(2)), (T_C2, CARD[3], s_quiz),
+          (CARD[3], T_C3, s_card(3)), (T_C3, CARD[4], s_game), (CARD[4], T_C4, s_card(4)), (T_C4, CARD[5], s_case),
+          (CARD[5], T_C5, s_card(5)), (T_C5, T_RES, s_cheat), (T_RES, T_OUT, s_results), (T_OUT, DUR + 1, s_outro)]
 
 
 def render(i):
@@ -560,17 +630,18 @@ def soundtrack():
         x = np.arange(int(0.28 * SR)) / SR
         add(lowpass(saw(f, x), 400) * np.exp(-x / 0.12), t0, 0.32)
         k += 1
-    b = T_C2
+    b = CARD[2]
     while b < T_OUT - 0.1:
         add(kick(0.9), b)
-        if b >= T_C3 and round((b - T_C3) / BEAT) % 2 == 1:
+        if b >= CARD[3] and round((b - CARD[3]) / BEAT) % 2 == 1:
             add(snare(), b, 0.45)
         b += BEAT
     # hits on every cut
-    for h in HITS:
-        if h in STAMPS or h == T_END: continue
-        add(braam(1.2 if h != T_TITLE else 2.2), h, 0.55 if h != T_TITLE else 0.9)
-        add(kick(1.0), h)
+    for h in [T_TITLE, *CARD.values()]:
+        add(braam(2.2 if h == T_TITLE else 1.5), h, 0.9 if h == T_TITLE else 0.8)
+        add(kick(1.1), h); add(snare(), h, 0.4)
+    for h in CONTENT:
+        add(braam(0.9), h, 0.4); add(kick(0.9), h)
     # riser + snare roll before the outro
     seg = np.arange(int((T_OUT - T_RES) * SR)) / SR
     nz = np.random.default_rng(3).standard_normal(len(seg))
@@ -585,6 +656,20 @@ def soundtrack():
         add(braam(0.6, 55 * (1, 1.12, 1.33, 1.5)[i]), s, 0.6); add(kick(1.0), s)
     add(braam(3.5, 41.2), T_END, 1.0); add(kick(1.2), T_END); add(snare(), T_END, 0.6)
 
+    # epic pads: Am - F - C - G (one chord per 4 beats), from the first challenge to the end
+    def pad(freqs, dur):
+        x = np.arange(int(dur * SR)) / SR
+        sig = sum(saw(f * (1 + d), x + ph) for f in freqs for d, ph in ((-0.006, 0.0), (0.0, 0.31), (0.006, 0.67)))
+        sig = lowpass(lowpass(sig, 1400), 1400) / (3 * len(freqs))
+        e = np.minimum(x / 0.25, 1) * np.minimum(1, (dur - x) / 0.35).clip(0)
+        return sig * e
+    CHORDS = [(110, 130.8, 164.8, 220), (87.3, 130.8, 174.6, 220), (130.8, 164.8, 196, 261.6), (98, 146.8, 196, 246.9)]
+    c, i = CARD[1], 0
+    while c < T_OUT - 0.1:
+        dur = min(4 * BEAT, T_OUT - c) + 0.3
+        add(pad(CHORDS[i % 4], dur), c, 0.55 + 0.25 * prog(c, CARD[1], T_OUT)); c += 4 * BEAT; i += 1
+    add(pad((110, 130.8, 164.8, 220, 329.6), DUR - T_END), T_END, 0.9)
+
     # space + level
     ir_x = np.arange(int(1.4 * SR)) / SR
     ir = np.random.default_rng(5).standard_normal(len(ir_x)) * np.exp(-ir_x / 0.35)
@@ -595,6 +680,16 @@ def soundtrack():
     mix = np.tanh(1.4 * mix)
     mix *= np.minimum(1, (DUR - tt) / 0.5)  # fade out over the last half second
     mix = 0.89 * mix / np.max(np.abs(mix))
+    if NARRATION.exists():
+        with wave.open(str(NARRATION)) as w:
+            voice = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float64) / 32767
+        voice = np.pad(voice, (0, max(0, n - len(voice))))[:n]
+        # the music ducks under the voice
+        env = lowpass(lowpass(np.abs(voice), 8), 8)
+        duck = 1 - 0.6 * np.clip(env / (env.max() * 0.25 + 1e-9), 0, 1)
+        voice = np.tanh(1.6 * voice) / np.tanh(1.6)
+        mix = 0.62 * mix * duck + 0.95 * voice
+        mix = 0.89 * mix / np.max(np.abs(mix))
     # small stereo width: delay the wet part on the right
     right = np.roll(mix, int(0.012 * SR))
     st = np.stack([mix, 0.85 * right + 0.15 * mix], 1)

@@ -6,7 +6,8 @@ Small Python scripts that generate the files in this repository.
 |---|---|---|
 | `build_session_plan.py` | `01-training-plan/Training3_Session_Plan.pdf` | reportlab |
 | `build_answer_sheet.py` | `02-learner-assessment/answer-sheet.pdf` | reportlab |
-| `build_video.py` | `slides/30-second-video.mp4` (no argument) | pillow, numpy, scipy, pymupdf, ffmpeg |
+| `build_narration.py` | `tools/video-narration.wav`: voice-over of the video with Kokoro TTS (`<python with kokoro-onnx> tools/build_narration.py <kokoro-v1.0.onnx> <voices-v1.0.bin> [voice]`, default voice `am_michael`) | kokoro-onnx and its model files |
+| `build_video.py` | `slides/30-second-video.mp4` (no argument): images, music, and the voice-over if `video-narration.wav` exists | pillow, numpy, scipy, pymupdf, ffmpeg |
 
 Usage: `python tools/<script>.py <output-file>` (for example with uv: `uv run --with reportlab python tools/build_session_plan.py 01-training-plan/Training3_Session_Plan.pdf`)
 

@@ -5,7 +5,7 @@
 Our team's submission for the *Cybersecurity for NGOs Bootcamp* (13 & 16 November 2026), organised by the Digital Learning Hub.
 It is a simple, jargon-free training for NGO staff and volunteers with no technical background: they learn to **recognise an incident** and to **take the right first steps**.
 
-**Team and trainers:** Divya Ravichandran, Álvaro Gómez García and Mohammed Krayem, cybersecurity students at the University of Luxembourg.
+**Team Firefighters:** Divya Ravichandran, Álvaro Gómez García and Mohammed Krayem, cybersecurity students at the University of Luxembourg (also the trainers).
 
 ## The idea in two sentences
 
