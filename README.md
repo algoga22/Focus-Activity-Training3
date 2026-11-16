@@ -21,7 +21,36 @@ It is a simple, jargon-free training for NGO staff and volunteers with no techni
 | 4 | Learning by doing | **"The urgent payment"**: a new case (fake email from the president, €2,000 paid) solved alone, then in groups, then debriefed | [`04-learning-by-doing/`](04-learning-by-doing/), [case sheet](04-learning-by-doing/case-sheet.pdf) |
 | 5 | Take-home | One-page **cheat sheet**: triggers, the 4 steps, phone numbers to fill in, "Never" list, quick decisions | [`05-take-home/`](05-take-home/), [cheat sheet](05-take-home/cheat-sheet.pdf) |
 | – | Slides | The 3 decks: the **60-minute training** (32 slides with speaker notes), the **5-minute presentation** for the jury and the **project overview** for the team (to read) | [`slides/`](slides/): [60-minute training](slides/60-minute-training.pdf), [5-minute presentation](slides/5-minute-presentation.pdf), [project overview](slides/project-overview.pdf) |
-| – | Web app | Our own Kahoot-style app for the quiz, the game and the final quiz: no account, works online and onsite | [`quiz/`](quiz/), <https://algoga22.github.io/Focus-Activity-Training3/> |
+| – | Video | **30-second recap** of the whole project, with voice-over, for the 5-minute presentation | [`slides/30-second-video.mp4`](slides/30-second-video.mp4) |
+| – | Web app | Our own Kahoot-style app for the quiz, the game and the final quiz: no account, works online and onsite (see [below](#the-web-app)) | [`quiz/`](quiz/), <https://algoga22.github.io/Focus-Activity-Training3/> |
+
+## The web app
+
+> ### 🔥 <https://algoga22.github.io/Focus-Activity-Training3/>
+>
+> **Participants** open this link (or scan the QR code on the screen) and pick a nickname: no app, no account, no download.
+> **Trainer:** [`host.html`](https://algoga22.github.io/Focus-Activity-Training3/host.html) on the projected laptop.
+> **Try it alone:** open [`host.html?demo`](https://algoga22.github.io/Focus-Activity-Training3/host.html?demo) and the participant page [`?demo`](https://algoga22.github.io/Focus-Activity-Training3/?demo) in other tabs of the same browser.
+
+We built it ourselves for this training (static site on GitHub Pages + Firebase Realtime Database). The trainer screen opens on a menu with the three activities of the session:
+
+| | Activity | When | What happens |
+|---|---|---|---|
+| ❓ | **Quiz: what would you do?** | Minutes 5–10 (Challenge 2) | 5 real incidents, 1 per learning objective, answered on the phone. The right answers stay hidden; the debrief shows what the group already knows and which beliefs to work on |
+| 🔥 | **Game: Put out the fire** | Minutes 26–41 (Challenge 3) | 4 rooms of our NGO × the 4 steps. One fire for the whole team grows every second: a right move is water, a trap card is petrol. Points, leaderboard and a debrief per objective |
+| 📈 | **Quiz again: what have we learned?** | Minutes 53–56 (Challenge 2) | The same 5 questions. Before / after comparison per objective and per person; every phone shows its own progress |
+
+| Trainer screen | Phone |
+|---|---|
+| <img src="slides/screenshots/menu.png" width="420" alt="Menu of the trainer screen"> | <img src="slides/screenshots/quiz-phone-q1.png" width="150" alt="Quiz question on the phone"> |
+| <img src="slides/screenshots/game-host-question.png" width="420" alt="Game: a phase with the fire meter"> | <img src="slides/screenshots/game-phone-water.png" width="150" alt="Game: right move on the phone"> |
+| <img src="slides/screenshots/quiz-before-after.png" width="420" alt="Before / after comparison"> | <img src="slides/screenshots/quiz-phone-progress.png" width="150" alt="Personal progress on the phone"> |
+
+*Screenshots in demo mode, with test players.*
+
+**Also in the app:** join once with a QR code or a 4-digit room code and stay connected across the three activities · live answer counter and timer · explanation after each answer · CSV export of every activity (evidence of learning) · **Restart** one activity, **Reset room** (new room code, everything deleted) or **Delete data** at the end · only nicknames are stored, on EU servers.
+
+Details, set-up and data model: [`quiz/README.md`](quiz/README.md).
 
 ## The session
 
@@ -53,13 +82,14 @@ Details and rationale: [`01-training-plan/`](01-training-plan/).
 04-learning-by-doing/   Challenge 4 – "The urgent payment": trainer guide, answer key, case sheet
 05-take-home/           Challenge 5 – cheat sheet
 quiz/                   Web app (quiz + game): trainer screen and phone page, Firebase, GitHub Pages
-slides/                 The 3 decks (60-minute training, 5-minute presentation, project overview), theme and screenshots
+slides/                 The 3 decks (60-minute training, 5-minute presentation, project overview), the 30-second video, theme, team logo and screenshots
 docs/                   Evaluation criteria of the bootcamp
-tools/                  Scripts that generate the session plan and answer sheet PDFs
+tools/                  Scripts that generate the session plan and answer sheet PDFs, and the 30-second video
 ```
 
 ## Building the files
 
 - **Slides, concept deck, case sheet, cheat sheet:** LuaLaTeX with the Montserrat and Fira Sans fonts. Build each one with `latexmk -lualatex <file>.tex` in its folder.
 - **Session plan and answer sheet PDFs:** Python with reportlab. See [`tools/`](tools/).
+- **30-second video:** `tools/build_narration.py` (voice, Kokoro TTS) then `tools/build_video.py` (images and music, ffmpeg). See [`tools/`](tools/).
 - **Web app:** static files. GitHub Actions publishes [`quiz/`](quiz/) to GitHub Pages on every push; set-up in [`quiz/README.md`](quiz/README.md).

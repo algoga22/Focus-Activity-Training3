@@ -53,6 +53,7 @@
   \begin{minipage}{100mm}\raggedright
     {\headfont\fontsize{27}{32}\selectfont When something\\ goes wrong\par}\par\vspace{3mm}
     {\lightfont\fontsize{14}{18}\selectfont\color{soft}Everything we built, how it works\\ and why: to read, not to present\par}\par\vspace{8mm}
+    {\headfont\small\color{alert}\faFireExtinguisher\ Team Firefighters\par}\vspace{1.2mm}
     {\small\color{soft}Divya Ravichandran \textbullet{} Álvaro Gómez García\\Mohammed Krayem \textbullet{} University of Luxembourg\par}
   \end{minipage}
 \end{frame}
@@ -548,7 +549,7 @@
   \begin{columns}[T,onlytextwidth]
     \column{.5\textwidth}
     \screen{menu}\par\vspace{1.5mm}
-    \explain{One room for the whole session}{\file{host.html} creates a room and keeps it if you reload. The menu marks the activities already played; results of every activity are kept until you delete the room. Starting an activity again asks for confirmation; Restart only deletes the activity you are in.}
+    \explain{One room for the whole session}{\file{host.html} keeps the room if you reload; results of every activity are kept. \textbf{Restart} deletes only the current activity; \textbf{Reset room} (top right) deletes everything and opens a new room with a new code.}
     \column{.46\textwidth}
     \explain{Steps}{%
       \bul{navy}{\textbf{Before:} open the trainer page (see Useful links) and test that a phone can join.}
@@ -593,13 +594,13 @@
         04-learning-by-doing/ & case + guide\\
         05-take-home/ & cheat sheet\\
         quiz/ & web app (quiz + game)\\
-        slides/ & the 3 decks + theme\\
-        tools/ & PDF generators\\
+        slides/ & 3 decks, 30-s video, theme\\
+        tools/ & PDF and video generators\\
         docs/ & evaluation criteria\\
       \end{tabular}
     \end{card}
     \column{.4\textwidth}
-    \explain{Rebuilding the PDFs}{LaTeX (LuaLaTeX, Montserrat and Fira Sans fonts): \file{latexmk -lualatex <file>.tex} in the folder of the slides, the 5-minute presentation, this guide, the concept deck, the case sheet and the cheat sheet. Python (reportlab): \file{tools/build\_session\_plan.py} and \file{tools/build\_answer\_sheet.py}.}
+    \explain{Rebuilding the PDFs}{LaTeX (LuaLaTeX, Montserrat and Fira Sans fonts): \file{latexmk -lualatex <file>.tex} in the folder of the slides, the 5-minute presentation, this guide, the concept deck, the case sheet and the cheat sheet. Python (reportlab): \file{tools/build\_session\_plan.py} and \file{tools/build\_answer\_sheet.py}. Video: \file{tools/build\_narration.py} (voice, Kokoro) then \file{tools/build\_video.py}.}
     \explain{Every folder has a README}{It explains what the folder contains and how to use it.}
   \end{columns}
 \end{frame}
@@ -629,7 +630,7 @@
     \column{.66\textwidth}
     \explain{Web app}{Participants: \file{algoga22.github.io/Focus-Activity-Training3/}\\ Trainer: \file{algoga22.github.io/Focus-Activity-Training3/host.html}\\ Rehearsal without Firebase: add \file{?demo} to both.}
     \explain{Repository}{\file{github.com/algoga22/Focus-Activity-Training3}}
-    \explain{The three PDFs to open}{60-minute training: \file{slides/60-minute-training.pdf} \textbullet{} 5-minute presentation: \file{slides/5-minute-presentation.pdf} \textbullet{} This guide: \file{slides/project-overview.pdf}}
+    \explain{The files to open}{60-minute training: \file{slides/60-minute-training.pdf} \textbullet{} 5-minute presentation: \file{slides/5-minute-presentation.pdf} and its 30-second recap video \file{slides/30-second-video.mp4} \textbullet{} This guide: \file{slides/project-overview.pdf}}
     \column{.3\textwidth}
     \centering
     \begin{card}[before upper=\centering, top=3mm, bottom=3mm]
